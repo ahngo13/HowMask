@@ -3,7 +3,7 @@ import React from "react";
 const Search = () => {
     return(
         <div>
-            <input id='searchBarInMap'></input>
+            <input id='searchBar'></input>
         </div>
     )
 }
