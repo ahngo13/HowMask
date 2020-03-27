@@ -67,7 +67,7 @@ const Register = () => {
     const year = inputYear.current.value;
 
     // alert(usertype + ":" + email + ":" + pwd + ":" + nick + ":" + year);
-    const send_param = {
+    const sendParam = {
       headers,
       usertype,
       email,
@@ -77,9 +77,12 @@ const Register = () => {
     };
 
     axios
-      .post(`http://${url}:8080/user/join`, send_param)
+      .post(`http://${url}:8080/user/join`, sendParam)
       .then(returnData => {
         alert(returnData.data.message);
+        if (returnData.data.dupYn === "0") {
+          window.location.href = "/#/";
+        }
       })
       .catch(err => {
         console.log(err);
