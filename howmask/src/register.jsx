@@ -13,6 +13,8 @@ const Register = () => {
   const [pwdvalid, setPwdvalid] = useState(false);
   const [nameinvalid, setNameinvalid] = useState(false);
   const [namevalid, setNamevalid] = useState(false);
+  const [yearinvalid, setYearinvalid] = useState(false);
+  const [yearvalid, setYearvalid] = useState(false);
 
   const inputNick = useRef();
   const inputEmail = useRef();
@@ -52,10 +54,20 @@ const Register = () => {
       setNamevalid(false);
     }
   };
+  const validateYear = yearEntered => {
+    const yearRegExp = /^\d{1}$/;
+    if (yearEntered.match(yearRegExp)) {
+      setYearinvalid(false);
+      setYearvalid(true);
+    } else {
+      setYearinvalid(true);
+      setYearvalid(false);
+    }
+  };
 
   const joinInsert = event => {
     event.preventDefault();
-    if (!emailvalid || !pwdvalid || !namevalid) {
+    if (!emailvalid || !pwdvalid || !namevalid || !yearvalid) {
       alert("필수 항목을 입력하세요");
       return;
     }
@@ -164,10 +176,20 @@ const Register = () => {
 
           <Form.Group as={Row} controlId="yearForm">
             <Form.Label column sm={2}>
-              태어난 년도
+              태어난 년도 끝자리
             </Form.Label>
             <Col sm={10}>
-              <Form.Control ref={inputYear} required />
+              <Form.Control
+                ref={inputYear}
+                isInvalid={yearinvalid}
+                isValid={yearvalid}
+                onChange={e => validateYear(e.target.value)}
+                maxLength="1"
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                숫자만 입력해주세요
+              </Form.Control.Feedback>
             </Col>
           </Form.Group>
 
