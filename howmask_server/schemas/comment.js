@@ -19,6 +19,11 @@ const commentSchema = new Schema({
     type: String,
     required: true
   },
+  // 컬럼 추가 : text
+  text: {
+    type: String,
+    required: true
+  },
   image: {
     type: String
   },
