@@ -1,0 +1,26 @@
+#mainSearch{
+    width: 60%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+    transform:translate(-50%, -100%);
+
+}
+
+#searchBar{
+    width: 100%;
+    height: 40px;
+    border-radius: 15px;
+}
+
+#buyMask{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    
+    transform:translate(-50%, -100%);
+
+    font-size:30px;
+    
+}
