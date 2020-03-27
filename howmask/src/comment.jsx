@@ -1,40 +1,26 @@
 import React, { Component, useRef } from "react";
 import { InputGroup, Form, Button } from "react-bootstrap";
+import axios from "axios";
 import "./css/grade.css";
 import "./js/grade.js";
 
-/* function insertComment() {
-  alert(this.comment);
-    const send_param = {
-      comment: this.comment.value,
-      postId: this.props.postId,
-      memberId: $.cookie("login_id")
-    };
-    try {
-      await axios.post("http://210.107.78.152:8081/comment/insert", send_param).then(returnData => {
-        if (returnData.data.message) {
-          alert("댓글 등록완료");
-          this.ShowComments();
-        } else {
-          alert("댓글 등록실패");
-        }
-        this.commentE.value = "";
-        this.commentE.focus();
-      });
-    } catch (err) {
-      alert("error");
-    }
-} */
+const url = "localhost";
 
 function Comment() {
   function insertComment() {
     const sendParam = {
+      email: "test email",
+      code: 111,
+      grade: 5,
       text: commentTag.current.value
     };
+    axios
+      .post(`http://${url}:8080/comment/write`, sendParam)
+      .then()
+      .catch();
   }
 
   const commentTag = useRef();
-  const gradeScore = useRef();
   return (
     <div>
       <Form>

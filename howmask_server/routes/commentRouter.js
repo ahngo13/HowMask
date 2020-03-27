@@ -50,12 +50,19 @@ router.post("/update", async (req, res) => {
   }
 });
 
-router.post("/write", upload.single("imgFile"), async (req, res) => {
-  try {
-    const file = req.file;
-    console.log(file);
-    let obj;
-
+router.post(
+  "/write",
+  /* upload.single("imgFile"), */ async (req, res) => {
+    try {
+      const param = req.body;
+      console.log(param);
+      let obj;
+      obj = {
+        code: req.body.code,
+        grade: req.body.grade,
+        text: req.body.text
+      };
+      /* 
     if (file == undefined) {
       obj = {
         writer: req.body._id,
@@ -69,16 +76,17 @@ router.post("/write", upload.single("imgFile"), async (req, res) => {
         content: req.body.content,
         imgPath: file.filename
       };
-    }
+    } */
 
-    const comment = new Comment(obj);
-    await comment.save();
-    res.json({ message: "게시글이 업로드 되었습니다." });
-  } catch (err) {
-    console.log(err);
-    res.json({ message: false });
+      const comment = new Comment(obj);
+      await comment.save();
+      res.json({ message: "댓글이 업로드 되었습니다." });
+    } catch (err) {
+      console.log(err);
+      res.json({ message: false });
+    }
   }
-});
+);
 
 router.post("/getCommentList", async (req, res) => {
   try {
