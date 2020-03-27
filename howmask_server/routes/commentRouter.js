@@ -54,10 +54,9 @@ router.post(
   "/write",
   /* upload.single("imgFile"), */ async (req, res) => {
     try {
-      const param = req.body;
-      console.log(param);
       let obj;
       obj = {
+        email: req.session.email,
         code: req.body.code,
         grade: req.body.grade,
         text: req.body.text
@@ -90,8 +89,8 @@ router.post(
 
 router.post("/getCommentList", async (req, res) => {
   try {
-    const _id = req.body._id;
-    const comment = await Comment.find({ writer: _id }, null, {
+    /* const _id = req.body._id; */
+    const comment = await Comment.find({ code: 111 }, null, {
       sort: { createdAt: -1 }
     });
     res.json({ list: comment });

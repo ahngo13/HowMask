@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button, Badge, Table, Card } from "react-bootstrap";
 import Comment from "./comment";
 
+//판매처 상세정보 Modal
 function MyVerticallyCenteredModal(props) {
   const TableName = {
     backgroundColor: "#b3ffe7"
@@ -57,6 +58,7 @@ function MyVerticallyCenteredModal(props) {
   );
 }
 
+//판매처 Icon
 function App() {
   const [modalShow, setModalShow] = React.useState(false);
 
