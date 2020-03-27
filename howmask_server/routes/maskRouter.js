@@ -1,5 +1,50 @@
 const express = require("express");
 const router = express.Router();
+const axios = require("axios");
+
+router.post("/storesByGeo", async (req, res) => {
+  const send_param = {
+    lat: req.body.lat,
+    lng: req.body.lng,
+    m: req.body.m
+  };
+
+  axios
+    .get(
+      "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json",
+      send_param
+    )
+    //정상 수행
+    .then(returnData => {
+      console.log(returnData.data.stores);
+      res.json({ storeList: returnData.data.stores });
+    })
+    //에러
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+router.post("/storesByAddr", async (req, res) => {
+  const send_param = {
+    address: req.body.address
+  };
+
+  axios
+    .get(
+      "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByAddr/json",
+      send_param
+    )
+    //정상 수행
+    .then(returnData => {
+      console.log(returnData.data.stores);
+      res.json({ storeList: returnData.data.stores });
+    })
+    //에러
+    .catch(err => {
+      console.log(err);
+    });
+});
 
 router.post("/delete", async (req, res) => {
   try {
