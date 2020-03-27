@@ -4,6 +4,7 @@ import { HashRouter, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar } from "react-bootstrap";
 import Router from "./router";
+import LoginBtn from "./login_btn";
 
 import "./css/main.css";
 import "./css/map.css";
@@ -29,6 +30,7 @@ ReactDOM.render(
           />{" "}
           마스크 어때?
         </Navbar.Brand>
+        <LoginBtn />
         <NavLink style={navLinkStyle} to="/map_p">
           map_p
         </NavLink>
@@ -37,9 +39,6 @@ ReactDOM.render(
         </NavLink>
         <NavLink style={navLinkStyle} to="/register">
           register
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/login">
-          login
         </NavLink>
         <NavLink style={navLinkStyle} to="/modify">
           modify
@@ -71,7 +70,6 @@ ReactDOM.render(
       </Navbar>
       <Router />
     </HashRouter>
-    
   </div>,
   document.getElementById("container")
 );
