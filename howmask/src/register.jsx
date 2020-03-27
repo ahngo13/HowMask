@@ -18,6 +18,7 @@ const Register = () => {
   const inputEmail = useRef();
   const inputPwd = useRef();
   const inputYear = useRef();
+  const inputUsertype = useRef();
 
   const validateEmail = emailEntered => {
     const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
@@ -59,14 +60,18 @@ const Register = () => {
       return;
     }
 
+    const usertype = inputUsertype.current.value;
     const email = inputEmail.current.value;
-    const pwd = inputPwd.current.value;
+    const password = inputPwd.current.value;
     const nick = inputNick.current.value;
     const year = inputYear.current.value;
+
+    // alert(usertype + ":" + email + ":" + pwd + ":" + nick + ":" + year);
     const send_param = {
       headers,
+      usertype,
       email,
-      pwd,
+      password,
       nick,
       year
     };
@@ -75,21 +80,27 @@ const Register = () => {
       .post(`http://${url}:8080/user/join`, send_param)
       .then(returnData => {
         alert(returnData.data.message);
-        if (returnData.data.href) {
-          window.location.href = "/login#/login";
-        }
       })
       .catch(err => {
         console.log(err);
       });
-
-    alert(email + ":" + pwd + ":" + nick + ":" + year);
   };
 
   return (
     <div>
       <p>회원가입</p>
       <Form noValidate onSubmit={joinInsert}>
+        <Form.Group as={Row} controlId="formUsertype">
+          <Form.Label column sm={2}>
+            가입형식
+          </Form.Label>
+          <Col sm={10}>
+            <Form.Control as="select" ref={inputUsertype}>
+              <option>개인</option>
+              <option>판매점</option>
+            </Form.Control>
+          </Col>
+        </Form.Group>
         <Form.Group as={Row} controlId="formEmail">
           <Form.Label column sm={2}>
             이메일
