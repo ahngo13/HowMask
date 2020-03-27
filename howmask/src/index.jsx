@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar } from "react-bootstrap";
 import Router from "./router";
 
-import './css/map.css';
+import "./css/map.css";
 
 const navbarStyle = {
   margin: "0 auto"
@@ -18,7 +18,13 @@ ReactDOM.render(
   <HashRouter>
     <Navbar bg="light" variant="light">
       <Navbar.Brand href="/" style={navbarStyle}>
-        <img alt="" src="/logo.svg" width="30" height="30" className="d-inline-block align-top" />{" "}
+        <img
+          alt=""
+          src="/logo.svg"
+          width="30"
+          height="30"
+          className="d-inline-block align-top"
+        />{" "}
         마스크 어때?
       </Navbar.Brand>
       <NavLink style={navLinkStyle} to="/map_p">
@@ -29,6 +35,9 @@ ReactDOM.render(
       </NavLink>
       <NavLink style={navLinkStyle} to="/register">
         register
+      </NavLink>
+      <NavLink style={navLinkStyle} to="/login">
+        login
       </NavLink>
       <NavLink style={navLinkStyle} to="/modify">
         modify

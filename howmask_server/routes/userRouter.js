@@ -101,7 +101,8 @@ router.post("/login", async (req, res) => {
                   res.json({
                     message: "로그인 되었습니다!",
                     _id: user2._id,
-                    email: user2.email
+                    email: user2.email,
+                    dupYn: "0"
                   });
                 } else {
                   //없으면 로그인 실패횟수 추가
