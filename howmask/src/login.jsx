@@ -61,7 +61,7 @@ const Login = () => {
         alert(returnData.data.message);
         if (returnData.data.dupYn === "0") {
           sessionStorage.setItem("login", true);
-          window.location.href = "/#/";
+          window.location.href = "/";
         }
       })
       .catch(err => {
