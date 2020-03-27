@@ -4,7 +4,6 @@ import { HashRouter, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar } from "react-bootstrap";
 import Router from "./router";
-import Search from './search';
 
 import './css/main.css';
 import './css/map.css';
@@ -63,12 +62,7 @@ ReactDOM.render(
       </Navbar>
       <Router />
     </HashRouter>
-    <div id="buyMask">
-      오늘 마스크 구입 끝자리 0, 5
-    </div>
-    <div id="mainSearch">
-      <Search />
-    </div>
+    
   </div>,
   document.getElementById("container")
 );

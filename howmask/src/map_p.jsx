@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import Map from './map';
 import Search from './search';
 
+
 const MapP = () => {
+
+
     return(
         <div id="mapPage">
             <div id='searchDiv'>
