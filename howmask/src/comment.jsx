@@ -1,7 +1,8 @@
 import React, { Component, useRef } from "react";
 import { InputGroup, Form, Button } from "react-bootstrap";
 import "./css/grade.css";
-import $ from "jquery";
+import "./js/grade.js";
+
 /* function insertComment() {
   alert(this.comment);
     const send_param = {
@@ -27,69 +28,44 @@ import $ from "jquery";
 
 function Comment() {
   function insertComment() {
-    alert(comment_tag.current.value);
+    const sendParam = {
+      text: commentTag.current.value
+    };
   }
-  $(".starRev span").click(function() {
-    $(this)
-      .parent()
-      .children("span")
-      .removeClass("on");
-    $(this)
-      .addClass("on")
-      .prevAll("span")
-      .addClass("on");
-    return false;
-  });
-  const comment_tag = useRef();
+
+  const commentTag = useRef();
+  const gradeScore = useRef();
   return (
     <div>
       <Form>
+        <div className="starRev">
+          <span className="starR1 on"></span>
+          <span className="starR2 on"></span>
+          <span className="starR1 on"></span>
+          <span className="starR2 on"></span>
+          <span className="starR1 on"></span>
+          <span className="starR2 on"></span>
+          <span className="starR1 on"></span>
+          <span className="starR2 on"></span>
+          <span className="starR1 on"></span>
+          <span className="starR2 on"></span>
+          <span>()</span>
+        </div>
         <InputGroup size="sm" className="mb-3">
-          <div class="starRev">
-            <span class="starR1 on"></span>
-            <span class="starR2"></span>
-          </div>
           <Form.Control
             as="textarea"
             aria-label="Small"
             aria-describedby="inputGroup-sizing-sm"
             placeholder="댓글을 입력하세요"
-            ref={comment_tag}
+            ref={commentTag}
           />
           <Button onClick={insertComment} size="sm" variant="outline-dark">
             댓글 등록
           </Button>
         </InputGroup>
-        <commentItems />
       </Form>
     </div>
   );
 }
-/* class Comment extends Component {
-  insertComment = () => {
-    alert();
-  };
-  render() {
-    return (
-      <div>
-        <Form>
-          <InputGroup size="sm" className="mb-3">
-            <Form.Control
-              as="textarea"
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-              placeholder="댓글을 입력하세요"
-              ref={ref => (this.comment = ref)}
-            />
-            <Button onClick={this.insertComment} size="sm" variant="outline-dark">
-              댓글 등록
-            </Button>
-          </InputGroup>
-          <commentItems />
-        </Form>
-      </div>
-    );
-  }
-} */
 
 export default Comment;
