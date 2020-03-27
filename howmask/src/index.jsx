@@ -5,6 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar } from "react-bootstrap";
 import Router from "./router";
 
+import './css/map.css';
+
 const navbarStyle = {
   margin: "0 auto"
 };

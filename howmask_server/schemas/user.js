@@ -29,7 +29,6 @@ const userSchema = new Schema({
   },
   code: {
     type: String,
-    required: true,
     ref: "Store"
   },
   loginCnt: {

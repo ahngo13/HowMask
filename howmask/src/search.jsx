@@ -2,9 +2,9 @@ import React from "react";
 
 const Search = () => {
     return(
-        <>
-           Search
-        </>
+        <div>
+            <input id='searchBarInMap'></input>
+        </div>
     )
 }
 

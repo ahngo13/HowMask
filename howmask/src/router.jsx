@@ -18,7 +18,6 @@ import StoreInfo from "./store_info";
 const Router = () => {
   return (
     <>
-      라우터
       <Route exact path="/" component={Home}></Route>
       <Route path="/map_p" component={MapP}></Route>
       <Route path="/store" component={Store}></Route>

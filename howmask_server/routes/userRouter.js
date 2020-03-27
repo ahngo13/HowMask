@@ -15,7 +15,7 @@ router.post("/join", async (req, res) => {
       res.json({
         message: "이메일이 중복되었습니다. 새로운 이메일을 입력해주세요.",
         dupYn: "1"
-      }); 
+      });
     } else {
       crypto.randomBytes(64, (err, buf) => {
         if (err) {
@@ -35,7 +35,9 @@ router.post("/join", async (req, res) => {
                 buf.toString("base64");
                 obj = {
                   email: req.body.email,
-                  name: req.body.name,
+                  nickname: req.body.nick,
+                  user_type: req.body.usertype,
+                  year: req.body.year,
                   password: key.toString("base64"),
                   salt: buf.toString("base64")
                 };
