@@ -2,9 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter, NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./css/common.css";
 import { Navbar } from "react-bootstrap";
 import Router from "./router";
 import LoginBtn from "./login_btn";
+
 
 import "./css/main.css";
 import "./css/map.css";
@@ -17,18 +19,17 @@ const navLinkStyle = {
 };
 
 ReactDOM.render(
-  <div>
     <HashRouter>
       <Navbar bg="light" variant="light">
         <Navbar.Brand href="/" style={navbarStyle}>
           <img
             alt=""
-            src="/logo.svg"
+            src="/white_mask.png"
             width="30"
             height="30"
             className="d-inline-block align-top"
-          />{" "}
-          마스크 어때?
+          />
+          <span>마스크 어때?</span>
         </Navbar.Brand>
         <LoginBtn />
         <NavLink style={navLinkStyle} to="/map_p">
@@ -69,7 +70,6 @@ ReactDOM.render(
         </NavLink>
       </Navbar>
       <Router />
-    </HashRouter>
-  </div>,
+    </HashRouter>,
   document.getElementById("container")
 );

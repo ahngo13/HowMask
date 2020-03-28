@@ -33,3 +33,27 @@
     transform:translate(-50%, -50%);
 
 }
+
+.dayOfWeek{
+    text-align: center;
+}
+
+.mainTitle{
+    font-size: 70px;
+}
+
+.mainContent{
+    font-size: 30px;
+}
+
+.red{
+    color: red;
+}
+
+.searchNotice{
+    margin: 5px;
+}
+
+.addressSearchBtn{
+    margin-bottom: 5px;
+}
