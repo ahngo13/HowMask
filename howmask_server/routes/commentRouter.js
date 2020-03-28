@@ -76,10 +76,15 @@ router.post(
         imgPath: file.filename
       };
     } */
-
-      const comment = new Comment(obj);
-      await comment.save();
-      res.json({ message: "댓글이 업로드 되었습니다." });
+      /* console.log("nickname :" + req.session.nickname); */
+      if (req.session.email) {
+        const comment = new Comment(obj);
+        console.log("1 comment inserted");
+        await comment.save();
+        res.json({ message: "ok" });
+      } else {
+        res.json({ message: "login" });
+      }
     } catch (err) {
       console.log(err);
       res.json({ message: false });
@@ -93,6 +98,7 @@ router.post("/getCommentList", async (req, res) => {
     const comment = await Comment.find({ code: 111 }, null, {
       sort: { createdAt: -1 }
     });
+
     res.json({ list: comment });
   } catch (err) {
     console.log(err);
