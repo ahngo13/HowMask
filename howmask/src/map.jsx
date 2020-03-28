@@ -10,6 +10,7 @@ const headers={withCredentials:true};
 const Map = () => {
 
     const {latitude, longitude, error} = usePosition();
+
     
     console.log("latitude:" +latitude);
     console.log("longitude:" +longitude);
@@ -19,7 +20,8 @@ const Map = () => {
         const send_param={
             headers,
             lat:latitude,
-            lng:longitude
+            lng:longitude,
+            m:5000,
         }
         const result = await axios.post('http://localhost:8080/mask/storesByGeo', send_param);
         if(result.data.storeList){
@@ -58,9 +60,11 @@ const Map = () => {
         return positions;
     }
 
+
     useEffect(() =>{
+
         let positions=[];
-        if(!(latitude || longitude)){
+        if(latitude && longitude){
             positions = getStoreInfo();
         }
         
@@ -81,8 +85,8 @@ const Map = () => {
 
         var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
-       positions=secondPosition();
-        console.log(positions);
+        //positions=secondPosition();
+        //console.log(positions);
 
 
         for (var i = 0; i < positions.length; i ++) {

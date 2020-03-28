@@ -8,7 +8,8 @@ router.post("/storesByGeo", async (req, res) => {
     lng: req.body.lng,
     m: req.body.m
   };
-
+  console.log(req.body.lat);
+  console.log(req.body.lng);
   axios
     .get(
       "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json",
@@ -16,7 +17,7 @@ router.post("/storesByGeo", async (req, res) => {
     )
     //정상 수행
     .then(returnData => {
-      // console.log(returnData.data.stores);
+      //console.log(returnData.data.stores);
       res.json({ storeList: returnData.data.stores });
     })
     //에러
