@@ -14,6 +14,7 @@ import Marker from "./marker";
 import Search from "./search";
 import StoreInfoUpdate from "./store_info_update";
 import StoreInfo from "./store_info";
+import RegisterSeller from "./register_seller";
 
 const Router = () => {
   return (
@@ -22,7 +23,7 @@ const Router = () => {
       <Route path="/map_p" component={MapP}></Route>
       <Route path="/store" component={Store}></Route>
       <Route path="/login" component={Login}></Route>
-      <Route path="/register" component={Register}></Route>
+      <Route exact path="/register" component={Register}></Route>
       <Route path="/modify" component={Modify}></Route>
       <Route path="/checkPw" component={CheckPw}></Route>
       <Route path="/birth" component={Birth}></Route>
@@ -32,6 +33,7 @@ const Router = () => {
       <Route path="/search" component={Search}></Route>
       <Route path="/storeInfoUpdate" component={StoreInfoUpdate}></Route>
       <Route path="/storeInfo" component={StoreInfo}></Route>
+      <Route path="/register/seller" component={RegisterSeller}></Route>
     </>
   );
 };

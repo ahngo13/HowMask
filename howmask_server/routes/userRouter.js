@@ -153,7 +153,7 @@ router.post("/login", async (req, res) => {
 router.get("/logout", (req, res) => {
   console.log("/logout" + req.sessionID);
   req.session.destroy(() => {
-    res.json({ message: true });
+    res.json({ message: "logout 되었습니다." });
   });
 });
 

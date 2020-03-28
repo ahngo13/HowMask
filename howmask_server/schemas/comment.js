@@ -6,7 +6,7 @@ const {
 } = Schema;
 const commentSchema = new Schema({
   email: {
-    type: ObjectId,
+    type: String,
     required: true,
     ref: "User"
   },

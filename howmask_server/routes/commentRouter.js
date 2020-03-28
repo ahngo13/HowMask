@@ -50,12 +50,18 @@ router.post("/update", async (req, res) => {
   }
 });
 
-router.post("/write", upload.single("imgFile"), async (req, res) => {
-  try {
-    const file = req.file;
-    console.log(file);
-    let obj;
-
+router.post(
+  "/write",
+  /* upload.single("imgFile"), */ async (req, res) => {
+    try {
+      let obj;
+      obj = {
+        email: req.session.email,
+        code: req.body.code,
+        grade: req.body.grade,
+        text: req.body.text
+      };
+      /* 
     if (file == undefined) {
       obj = {
         writer: req.body._id,
@@ -69,23 +75,30 @@ router.post("/write", upload.single("imgFile"), async (req, res) => {
         content: req.body.content,
         imgPath: file.filename
       };
+    } */
+      /* console.log("nickname :" + req.session.nickname); */
+      if (req.session.email) {
+        const comment = new Comment(obj);
+        console.log("1 comment inserted");
+        await comment.save();
+        res.json({ message: "ok" });
+      } else {
+        res.json({ message: "login" });
+      }
+    } catch (err) {
+      console.log(err);
+      res.json({ message: false });
     }
-
-    const comment = new Comment(obj);
-    await comment.save();
-    res.json({ message: "게시글이 업로드 되었습니다." });
-  } catch (err) {
-    console.log(err);
-    res.json({ message: false });
   }
-});
+);
 
 router.post("/getCommentList", async (req, res) => {
   try {
-    const _id = req.body._id;
-    const comment = await Comment.find({ writer: _id }, null, {
+    /* const _id = req.body._id; */
+    const comment = await Comment.find({ code: 111 }, null, {
       sort: { createdAt: -1 }
     });
+
     res.json({ list: comment });
   } catch (err) {
     console.log(err);

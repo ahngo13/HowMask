@@ -1,71 +1,111 @@
-import React, { Component } from "react";
-import { Modal, Button, Form, Row, Col, InputGroup, Badge } from "react-bootstrap";
+import React from "react";
+import { Modal, Button, Badge, Table, Card, Container, Col, Row } from "react-bootstrap";
 import Comment from "./comment";
 
-function MyVerticallyCenteredModal(props) {
+// 판매처 정보 수정 제안
+function suggestStoreInfo() {
+  alert("c");
+}
+function RegisterStoreAccount() {
+  window.location.href = "/#/register/seller";
+}
+
+//판매처 상세정보 Modal
+function StoreInfoModal(props) {
   return (
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">한서 약국</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          한서 약국 <Badge variant="success">재고많음</Badge>
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h5>
-          판매처 상세정보 <Badge variant="success">재고많음</Badge>
-        </h5>
-
-        <Form>
-          <Form.Group as={Row} controlId="">
-            <Row>
-              <Form.Label column>판매처 종류</Form.Label>
-              <Col>
-                <Form.Control plaintext readOnly defaultValue="약국" /> {/* api value */}
-              </Col>
-            </Row>
-            <Form.Label column>주소</Form.Label>
+        <Table responsive borderless>
+          <tbody>
+            <tr>
+              <td>
+                <strong>
+                  <font color="#1a0066">판매처 종류</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; 약국
+              </td>
+              <td>
+                <strong>
+                  <font color="#1a0066">주소</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; 서울특별시 강남구 테헤란로
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>
+                  <font color="#1a0066">영업시간</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; (월~금) 9:00 ~ 18:00
+              </td>
+              <td>
+                <strong>
+                  <font color="#1a0066">판매예정시간</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; 12:00 ~ 18:00
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>
+                  <font color="#1a0066">평균 재고수량</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; 200개
+              </td>
+              <td>
+                <strong>
+                  <font color="#1a0066">유아용 마스크 판매여부</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; <Badge variant="primary">있음</Badge>
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+        <Table responsive borderless>
+          <tBody>
+            <tr>
+              <td>
+                <font color="#1a0066">
+                  {" "}
+                  <strong>공지사항</strong>
+                </font>
+                <Card>
+                  <Card.Body>
+                    <p>금일 KP94 100개 입고 되었습니다.</p>
+                  </Card.Body>
+                </Card>
+              </td>
+            </tr>
+          </tBody>
+        </Table>
+        <Container>
+          <Row>
             <Col>
-              <Form.Control plaintext readOnly defaultValue="서울특별시 강남구 테헤란로" />{" "}
-              {/* api value */}
+              <Button onClick={() => suggestStoreInfo(true)} variant="warning" size="lg" block>
+                판매처정보가 잘못되었어요!
+              </Button>
             </Col>
-          </Form.Group>
-          <Form.Group as={Row} controlId="">
-            <Form.Label colum>평균 재고수량</Form.Label>
             <Col>
-              <Form.Control plaintext readOnly defaultValue="200개" /> {/* api value */}
+              <Button onClick={() => RegisterStoreAccount(true)} variant="info" size="lg" block>
+                무료 판매처계정 생성하기
+              </Button>
             </Col>
-            <Form.Label colum>운영시간</Form.Label>
-            <Col>
-              <Form.Control plaintext readOnly defaultValue="9:00 ~ 18:00" /> {/* api value */}
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} controlId="">
-            <Form.Label colum>유아용 마스크 판매여부</Form.Label>
-            <Col>
-              <Form.Control plaintext readOnly defaultValue="있음" /> {/* api value */}
-            </Col>
-            <Form.Label colum>판매 예정시간</Form.Label>
-            <Col>
-              <Form.Control plaintext readOnly defaultValue="1차: 10시~12시 / 2차: 16시~18시" />{" "}
-              {/* api value */}
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} controlId="">
-            <Form.Label colum>공지사항</Form.Label>
-            <Col>
-              <Form.Control plaintext readOnly defaultValue="금일 KP94 100개 입고 되었습니다." />{" "}
-              {/* api value */}
-            </Col>
-          </Form.Group>
-        </Form>
-        <h5>댓글</h5>
+          </Row>
+        </Container>
+        <br />
+        <strong>댓글</strong>
         <Comment />
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
     </Modal>
   );
 }
 
+//판매처 상세정보 Component
 function App() {
   const [modalShow, setModalShow] = React.useState(false);
 
@@ -75,7 +115,7 @@ function App() {
         약국 정보 보기
       </Button>
 
-      <MyVerticallyCenteredModal show={modalShow} onHide={() => setModalShow(false)} />
+      <StoreInfoModal show={modalShow} onHide={() => setModalShow(false)} />
     </>
   );
 }
