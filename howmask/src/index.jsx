@@ -41,6 +41,9 @@ ReactDOM.render(
         <NavLink style={navLinkStyle} to="/register">
           register
         </NavLink>
+        <NavLink style={navLinkStyle} to="/register/seller">
+          register_seller
+        </NavLink>
         <NavLink style={navLinkStyle} to="/modify">
           modify
         </NavLink>
