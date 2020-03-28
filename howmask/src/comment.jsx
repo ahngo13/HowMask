@@ -11,9 +11,6 @@ const url = "localhost";
 function Comment() {
   const [comments, setComments] = useState();
 
-  // 댓글창 활성화 여부 : True/False
-  const [active, setActive] = useState(false);
-
   //모든 댓글 출력
   async function showComment() {
     const result = await axios.post(`http://${url}:8080/comment/getCommentList`);

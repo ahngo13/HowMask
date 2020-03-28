@@ -10,10 +10,7 @@ router.post("/storesByGeo", async (req, res) => {
   };
 
   axios
-    .get(
-      "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json",
-      send_param
-    )
+    .get("https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json", send_param)
     //정상 수행
     .then(returnData => {
       console.log(returnData.data.stores);
@@ -30,10 +27,9 @@ router.post("/storesByAddr", async (req, res) => {
     address: req.body.address
   };
 
-  axios
+  await axios
     .get(
-      "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByAddr/json",
-      send_param
+      `https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByAddr/json?address=${req.body.address}`
     )
     //정상 수행
     .then(returnData => {

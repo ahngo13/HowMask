@@ -2,9 +2,17 @@ import React from "react";
 import { Modal, Button, Badge, Table, Card, Container, Col, Row } from "react-bootstrap";
 import Comment from "./comment";
 
+const url = "localhost";
+
+// 판매처 정보
+var storeInfo = {
+  storeName: "한서약국",
+  howMany: "재고많음"
+};
+
 // 판매처 정보 수정 제안
 function suggestStoreInfo() {
-  alert("c");
+  window.location.href = "/#/suggest";
 }
 function RegisterStoreAccount() {
   window.location.href = "/#/register/seller";
@@ -16,7 +24,7 @@ function StoreInfoModal(props) {
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          한서 약국 <Badge variant="success">재고많음</Badge>
+          {storeInfo.storeName} <Badge variant="success">{storeInfo.howMany}</Badge>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
