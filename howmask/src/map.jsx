@@ -10,15 +10,14 @@ const headers={withCredentials:true};
 const Map = () => {
 
     const {latitude, longitude, error} = usePosition();
-
     const [positions, setPositions] = useState();
 
     
     console.log("latitude:" +latitude);
     console.log("longitude:" +longitude);
 
-    async function getStoreInfo () {
-        const positions = []
+    async function getInfoByGeo () {
+        const info = []
         const send_param={
             headers,
             lat:latitude,
@@ -28,45 +27,39 @@ const Map = () => {
         const result = await axios.post('http://localhost:8080/mask/storesByGeo', send_param);
         if(result.data.storeList){
             result.data.storeList.forEach((item)=>{  
-                positions.push({
+                info.push({
                     title: item.name, 
                     latlng: new kakao.maps.LatLng(item.lat, item.lng),
                 })
             })
         }
 
-        setPositions(positions);
+        setPositions(info);
         
     }
+    async function getInfoByAddr () {
+        const info = []
+        const send_param={
+            headers,
+            address:"고양시 덕양구 신원동",
+        }
+        const result = await axios.post('http://localhost:8080/mask/storesByAddr', send_param);
+        if(result.data.storeList){
+            result.data.storeList.forEach((item)=>{  
+                info.push({
+                    title: item.name, 
+                    latlng: new kakao.maps.LatLng(item.lat, item.lng),
+                })
+            })
+        }
 
-    function secondPosition () {
-        let positions = [
-            {
-                title: '카카오', 
-                latlng: new kakao.maps.LatLng(37.6481337, 126.8843092)
-            },
-            {
-                title: '생태연못', 
-                latlng: new kakao.maps.LatLng(37.6500901, 126.8838239)
-            },
-            {
-                title: '텃밭', 
-                latlng: new kakao.maps.LatLng(37.6502208, 126.8837453)
-            },
-            {
-                title: '근린공원',
-                latlng: new kakao.maps.LatLng(37.6503383, 126.8841003)
-            }
-        ];
-
+        setPositions(info);
         
-        console.log(positions);
-        return positions;
     }
 
     useEffect(() => {       
         if(latitude && longitude){
-            getStoreInfo();
+            getInfoByGeo();
             console.log(positions);
         }
     },[latitude, longitude])
@@ -123,7 +116,7 @@ const Map = () => {
             });
         }
         
-    });
+    },[positions]);
 
     return(
         <div className="App" id="map"></div>
