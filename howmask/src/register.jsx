@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import axios from "axios";
+import "./css/registerlogin.css";
 
 axios.defaults.withCredentials = true;
 const url = "localhost";
@@ -113,7 +114,9 @@ const Register = () => {
             <Col sm={10}>
               <Form.Control as="select" ref={inputUsertype}>
                 <option>개인</option>
-                <option>판매점</option>
+                <option>판매처</option>
+              {/* 관리자옵션은 임시로 만듬 */}
+                <option>관리자</option>
               </Form.Control>
             </Col>
           </Form.Group>
@@ -144,6 +147,7 @@ const Register = () => {
             <Col sm={10}>
               <Form.Control
                 type="password"
+                className="pwdfont"
                 isInvalid={pwdinvalid}
                 isValid={pwdvalid}
                 ref={inputPwd}
