@@ -49,7 +49,12 @@ function Comment() {
     const result = await axios.post(`http://${url}:8080/comment/write`, sendParam);
     if (result.data.message === "login") {
       alert("로그인이 필요합니다.");
+      commentTag.current.value = "";
+      commentTag.current.focus();
     } else if (result.data.message === "ok") {
+      commentTag.current.value = "";
+      commentTag.current.focus();
+      showComment();
     } else {
       alert("오류");
     }

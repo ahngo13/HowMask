@@ -1,86 +1,113 @@
-import React from "react";
-import { ButtonGroup, Button, Form, Row, Col } from "react-bootstrap";
+import React, { useRef } from "react";
+import { Button, Form, Col } from "react-bootstrap";
+import axios from "axios";
 
-// 메인화면 돌아가기
-function RouterMain() {
-  window.location.href = "/";
+const url = "localhost";
+
+// 판매처 조회화면 돌아가기
+function RouterStore() {
+  window.location.href = "/#/storeInfo";
 }
+
+// 로그인 화면 돌아가기
+function RouterLogin() {
+  window.location.href = "/#/login";
+}
+
 // 판매처 정보수정 제안 Form
 function Suggest() {
-  const SuggestFormStyle = {
-    position: "absolute",
-    height: 500,
-    width: 1000,
-    top: "15%",
-    left: "25%"
+  const suggestType = useRef();
+  const Text = useRef();
+
+  async function registerSuggestion() {
+    if (!Text.current.value) {
+      alert("제안 내용을 입력해주세요");
+      Text.current.focus();
+      return;
+    }
+    const sendParam = {
+      suggestType: suggestType.current.value,
+      Text: Text.current.value
+    };
+    const result = await axios.post(`http://${url}:8080/store/suggest`, sendParam);
+    if (result.data.message === "login") {
+      alert("로그인이 필요합니다.");
+      Text.current.value = "";
+      Text.current.focus();
+      RouterLogin();
+    } else if (result.data.message === "ok") {
+      Text.current.value = "";
+      RouterStore();
+    } else {
+      alert("오류");
+    }
+  }
+
+  const suggestTitle = {
+    display: "inline-block",
+    width: "50%",
+    position: "fixed",
+    top: 90,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    margin: "auto",
+    textAlign: "center"
+  };
+  const suggestForm = {
+    display: "inline-block",
+    width: "50%",
+    position: "fixed",
+    top: 150,
+    right: 0,
+    bottom: 0,
+    left: 100,
+    margin: "auto"
   };
   return (
     <>
-      <Form.Group as={Row} style={SuggestFormStyle}>
+      <h2 style={suggestTitle}>판매처 정보수정 제안</h2>
+      <Form style={suggestForm}>
         <Col sm={10}>
           <Form.Label>수정 제안할 항목을 선택하세요.</Form.Label>
-          <Form.Check
-            type="radio"
-            label="폐업되었습니다."
-            name="formHorizontalRadios"
-            id="formHorizontalRadios1"
-          />
-          <Form.Check
-            type="radio"
-            label="판매처명"
-            name="formHorizontalRadios"
-            id="formHorizontalRadios2"
-          />
-          <Form.Check
-            type="radio"
-            label="주소 및 위치"
-            name="formHorizontalRadios"
-            id="formHorizontalRadios3"
-          />
-          <Form.Check
-            type="radio"
-            label="전화번호"
-            name="formHorizontalRadios"
-            id="formHorizontalRadios3"
-          />
-          <Form.Check
-            type="radio"
-            label="진료/영업시간"
-            name="formHorizontalRadios"
-            id="formHorizontalRadios3"
-          />
-          <Form.Check
-            type="radio"
-            label="진료과목"
-            name="formHorizontalRadios"
-            id="formHorizontalRadios3"
-          />
-          <Form.Check
-            type="radio"
-            label="기타(약국 등 판매처 정보에 대한 제보만 가능)"
-            name="formHorizontalRadios"
-            id="formHorizontalRadios3"
-          />{" "}
+          <Form.Control as="select" ref={suggestType}>
+            <option>폐업</option>
+            <option>판매처명</option>
+            <option>주소 및 위치</option>
+            <option>전화번호</option>
+            <option>진료 및 영업시간</option>
+            <option>마스크 종류 및 재고</option>
+            <option>기타(약국 등 판매처 정보에 대한 제보만 가능)</option>
+          </Form.Control>
           <br />
           <Form.Label>제안 상세 내용</Form.Label>
+          <Form.Text className="text-muted">반드시 입력해주세요.</Form.Text>
           <Form.Control
             as="textarea"
             rows="3"
+            ref={Text}
             placeholder="진료시간이 오후 5시까지인데 6시까지로 되어 있습니다."
           />
+          <br />
+          <Col>
+            <Button
+              onClick={() => {
+                RouterStore(true);
+              }}
+              variant="warning"
+              size="lg"
+              block
+            >
+              돌아가기
+            </Button>
+          </Col>
+          <Col>
+            <Button variant="info" size="lg" block onClick={registerSuggestion}>
+              등록하기
+            </Button>
+          </Col>
         </Col>
-        <div>
-          <Button size="sm">등록하기</Button>
-          <Button
-            size="sm"
-            onClick={() => {
-              RouterMain(true);
-            }}
-          >
-            돌아가기
-          </Button>
-        </div>
-      </Form.Group>
+      </Form>
     </>
   );
 }

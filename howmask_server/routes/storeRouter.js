@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Store = require("../schemas/store");
+const Suggest = require("../schemas/suggest");
 
 router.post("/delete", async (req, res) => {
   try {
@@ -27,6 +28,29 @@ router.post("/update", async (req, res) => {
       }
     );
     res.json({ message: "게시글이 수정 되었습니다." });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+});
+
+// 판매처 정보수정 제안 응답
+router.post("/suggest", async (req, res) => {
+  try {
+    let obj;
+    obj = {
+      email: req.session.email,
+      suggestType: req.body.suggestType,
+      Text: req.body.Text
+    };
+    if (req.session.email) {
+      const suggest = new Suggest(obj);
+      console.log("1 suggest inserted");
+      await suggest.save();
+      res.json({ message: "ok" });
+    } else {
+      res.json({ message: "login" });
+    }
   } catch (err) {
     console.log(err);
     res.json({ message: false });

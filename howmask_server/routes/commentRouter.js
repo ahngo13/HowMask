@@ -50,47 +50,29 @@ router.post("/update", async (req, res) => {
   }
 });
 
-router.post(
-  "/write",
-  /* upload.single("imgFile"), */ async (req, res) => {
-    try {
-      let obj;
-      obj = {
-        email: req.session.email,
-        code: req.body.code,
-        grade: req.body.grade,
-        text: req.body.text
-      };
-      /* 
-    if (file == undefined) {
-      obj = {
-        writer: req.body._id,
-        title: req.body.title,
-        content: req.body.content
-      };
+router.post("/write", async (req, res) => {
+  try {
+    let obj;
+    obj = {
+      email: req.session.email,
+      code: req.body.code,
+      grade: req.body.grade,
+      text: req.body.text
+    };
+
+    if (req.session.email) {
+      const comment = new Comment(obj);
+      console.log("1 comment inserted");
+      await comment.save();
+      res.json({ message: "ok" });
     } else {
-      obj = {
-        writer: req.body._id,
-        title: req.body.title,
-        content: req.body.content,
-        imgPath: file.filename
-      };
-    } */
-      /* console.log("nickname :" + req.session.nickname); */
-      if (req.session.email) {
-        const comment = new Comment(obj);
-        console.log("1 comment inserted");
-        await comment.save();
-        res.json({ message: "ok" });
-      } else {
-        res.json({ message: "login" });
-      }
-    } catch (err) {
-      console.log(err);
-      res.json({ message: false });
+      res.json({ message: "login" });
     }
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
   }
-);
+});
 
 router.post("/getCommentList", async (req, res) => {
   try {

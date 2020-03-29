@@ -23,7 +23,6 @@ app.use(
   })
 );
 
-
 app.use(cors(corsOptions));
 
 app.use(express.json());
@@ -37,5 +36,3 @@ app.use("/mask", require("./routes/maskRouter"));
 app.listen(8080, () => {
   console.log("listen umm..umm..um...");
 });
-
-

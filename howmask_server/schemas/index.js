@@ -30,4 +30,5 @@ module.exports = () => {
   require("./user");
   require("./store");
   require("./comment");
+  require("./suggest");
 };
