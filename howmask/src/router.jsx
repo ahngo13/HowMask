@@ -16,6 +16,7 @@ import StoreInfoUpdate from "./store_info_update";
 import StoreInfo from "./store_info";
 import RegisterSeller from "./register_seller";
 import Suggest from "./suggest";
+import Admin from "./admin";
 
 const Router = () => {
   return (
@@ -36,6 +37,7 @@ const Router = () => {
       <Route path="/storeInfo" component={StoreInfo}></Route>
       <Route path="/register/seller" component={RegisterSeller}></Route>
       <Route path="/suggest" component={Suggest}></Route>
+      <Route path="/admin" component={Admin}></Route>
     </>
   );
 };

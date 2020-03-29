@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
+import "./css/registerlogin.css";
 
 axios.defaults.withCredentials = true;
 const url = "localhost";
@@ -62,6 +63,10 @@ const Login = () => {
         if (returnData.data.dupYn === "0") {
           sessionStorage.setItem("login", true);
           window.location.href = "/";
+        } else if (returnData.data.dupYn === "2"){
+          sessionStorage.setItem("login", true);
+          window.location.href = "/#/admin";
+          window.location.reload();
         }
       })
       .catch(err => {
@@ -91,6 +96,7 @@ const Login = () => {
             <Form.Label>비밀번호</Form.Label>
             <Form.Control
               type="password"
+              className="pwdfont"
               isInvalid={pwdinvalid}
               isValid={pwdvalid}
               ref={inputPwd}
