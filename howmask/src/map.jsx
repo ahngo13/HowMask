@@ -108,13 +108,25 @@ const Map = props => {
       });
       // 현재 위치에 표시될 마커의 위치입니다
       var markerPosition = new kakao.maps.LatLng(latitude, longitude);
-      var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+      let imageSrc;
       console.log(positions);
       if (positions) {
         let selectedMarker = null;
         for (var i = 0; i < positions.length; i++) {
+          
+          if(positions[i].storeInfo.stock === "plenty"){
+            imageSrc = "/green_mask.png";
+          }else if(positions[i].storeInfo.stock === "some"){
+            imageSrc = "/yellow_mask.png";
+          }else if(positions[i].storeInfo.stock === "few"){
+            imageSrc = "/red_mask.png";
+          }else{//1개 이하 empty, 판매중지 break
+            imageSrc = "/gray_mask.png";
+            console.log(positions[i].storeInfo.stock);
+          }
+
           // 마커 이미지의 이미지 크기 입니다
-          var imageSize = new kakao.maps.Size(24, 35);
+          var imageSize = new kakao.maps.Size(35, 35);
 
           // 마커 이미지를 생성합니다
           var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
