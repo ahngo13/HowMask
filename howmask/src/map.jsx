@@ -18,7 +18,7 @@ const Map = (props) => {
     });
     const [level, setLevel] = useState(3);
     const [modalShow, setModalShow] = useState(false);
-    const [content, setContent] = useState();
+    const [storeInfo, setStoreInfo] = useState();
 
 
     
@@ -39,7 +39,11 @@ const Map = (props) => {
                 info.push({
                     title: item.name, 
                     latlng: new kakao.maps.LatLng(item.lat, item.lng),
-                    content: item.addr
+                    storeInfo: {
+                        addr: item.addr,
+                        name: item.name,
+                        stock: item.remain_stat,
+                    }
                 })
             })
         }
@@ -131,13 +135,13 @@ const Map = (props) => {
                     // 마커에 클릭이벤트를 등록합니다
                     //kakao.maps.event.addListener(marker, 'click', makeClickListener(map, marker, infowindow));
                    
-                    (function(marker, content) {
+                    (function(marker, info) {
                         // 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다 
                         kakao.maps.event.addListener(marker, 'click', function() {
                            setModalShow(true);
-                           setContent(content);
+                           setStoreInfo(info);
                         });                       
-                    })(marker, positions[i].content);
+                    })(marker, positions[i].storeInfo);
                 }
 
 
@@ -166,7 +170,6 @@ const Map = (props) => {
                 
                 setLevel(level);
             });
-
             
         }
         
@@ -175,7 +178,7 @@ const Map = (props) => {
     return(
         <div>
             <div className="App" id="map"></div>
-            <StoreModal show={modalShow} content={content} onHide={() => setModalShow(false)} />
+            <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
         </div>
     )
 }

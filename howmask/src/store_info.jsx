@@ -41,7 +41,7 @@ function StoreInfoModal(props) {
                 <strong>
                   <font color="#1a0066">주소</font>
                 </strong>
-                &nbsp;&nbsp;&nbsp; {props.content}
+                &nbsp;&nbsp;&nbsp; {props.storeInfo.name}
               </td>
             </tr>
             <tr>
@@ -116,10 +116,15 @@ function StoreInfoModal(props) {
 
 
 function StoreInfo(props) {
+  
+  let modal
+  if(props.storeInfo){
+    modal = <StoreInfoModal show={props.show} storeInfo={props.storeInfo} onHide={props.onHide} />
+  }
 
   return (
     <>
-      <StoreInfoModal show={props.show} content={props.content} onHide={props.onHide} />
+      {modal}
     </>
   );
 }
