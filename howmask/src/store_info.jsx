@@ -41,7 +41,7 @@ function StoreInfoModal(props) {
                 <strong>
                   <font color="#1a0066">주소</font>
                 </strong>
-                &nbsp;&nbsp;&nbsp; {storeInfo.storeLocation}
+                &nbsp;&nbsp;&nbsp; {props.content}
               </td>
             </tr>
             <tr>
@@ -113,21 +113,15 @@ function StoreInfoModal(props) {
   );
 }
 
-//판매처 상세정보 Component
-function App() {
-  const [modalShow, setModalShow] = React.useState(false);
+
+
+function StoreInfo(props) {
+
   return (
     <>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
-        약국 정보 보기
-      </Button>
-      <StoreInfoModal show={modalShow} onHide={() => setModalShow(false)} />
+      <StoreInfoModal show={props.show} content={props.content} onHide={props.onHide} />
     </>
   );
-}
-
-function StoreInfo() {
-  return <App />;
 }
 
 export default StoreInfo;
