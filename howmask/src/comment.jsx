@@ -136,7 +136,7 @@ function Comment() {
         </InputGroup>
         <br />
         <InputGroup>
-          <FormControl placeholder="선택된 파일 명" readonly="readonly" />
+          <FormControl placeholder="선택된 파일 명" readOnly />
           <InputGroup.Append>
             <Button variant="outline-dark">사진 첨부</Button>
           </InputGroup.Append>

@@ -27,7 +27,7 @@ function StoreInfoModal(props) {
   const [stockColor, setStockColor] = useState();
   const [stockText, setStockText] = useState();
   function howMany() {
-    const stock = props.storeInfo.stock;
+    const stock = props.info.stock;
     return (
       <div>
         {(() => {
@@ -64,7 +64,7 @@ function StoreInfoModal(props) {
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          {props.storeInfo.name}
+          {props.info.name}
           &nbsp;&nbsp;&nbsp;<Badge variant={stockColor}>{stockText}</Badge>
         </Modal.Title>
       </Modal.Header>
@@ -82,7 +82,7 @@ function StoreInfoModal(props) {
                 <strong>
                   <font color="#1a0066">주소</font>
                 </strong>
-                &nbsp;&nbsp;&nbsp; {props.storeInfo.addr}
+                &nbsp;&nbsp;&nbsp; {props.info.addr}
               </td>
             </tr>
             <tr>
@@ -116,7 +116,7 @@ function StoreInfoModal(props) {
           </tbody>
         </Table>
         <Table responsive borderless>
-          <tBody>
+          <tbody>
             <tr>
               <td>
                 <font color="#1a0066">
@@ -129,7 +129,7 @@ function StoreInfoModal(props) {
                 </Card>
               </td>
             </tr>
-          </tBody>
+          </tbody>
         </Table>
         <Container>
           <Row>
@@ -156,7 +156,7 @@ function StoreInfoModal(props) {
 function StoreInfo(props) {
   let modal;
   if (props.storeInfo) {
-    modal = <StoreInfoModal show={props.show} storeInfo={props.storeInfo} onHide={props.onHide} />;
+    modal = <StoreInfoModal show={props.show} info={props.storeInfo} onHide={props.onHide} />;
   }
 
   return <>{modal}</>;
