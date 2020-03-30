@@ -110,6 +110,7 @@ const Map = (props) => {
             console.log(positions);
 
             if(positions){
+                let selectedMarker = null;
                 for (var i = 0; i < positions.length; i ++) {
                     // 마커 이미지의 이미지 크기 입니다
                     var imageSize = new kakao.maps.Size(24, 35); 

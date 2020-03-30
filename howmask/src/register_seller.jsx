@@ -2,9 +2,12 @@ import React, { useState, useRef } from "react";
 import { Form, Col, Button } from "react-bootstrap";
 import Register from "./register";
 
-// 메인화면 돌아가기
-function RouterMain() {
-  window.location.href = "/";
+// 판매처 조회화면 돌아가기
+function RouterStore() {
+  const confirm = window.confirm("판매처 조회화면으로 이동하시겠습니까?");
+  if (confirm) {
+    window.location.href = "/#/storeInfo";
+  }
 }
 
 // 판매처 계정 등록 Form
@@ -120,7 +123,7 @@ function RegisterSeller() {
         <Button onClick={RegisterSellerBtn}>신청하기</Button>
         <Button
           onClick={() => {
-            RouterMain(true);
+            RouterStore(true);
           }}
         >
           돌아가기

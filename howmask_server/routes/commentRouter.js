@@ -73,7 +73,19 @@ router.post("/write", async (req, res) => {
     res.json({ message: false });
   }
 });
-
+router.post("/getCommentAggregation", async (req, res) => {
+  try {
+    const code = req.body.storeCode;
+    const comment = await Comment.aggregate([
+      { $match: { code: { code } } },
+      { $group: { count: { $text: 1 } } }
+    ]);
+    console.log(comment);
+    res.json({ count: comment });
+  } catch (err) {
+    res.json({ message: false });
+  }
+});
 router.post("/getCommentList", async (req, res) => {
   try {
     /* const _id = req.body._id; */
