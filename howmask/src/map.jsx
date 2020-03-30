@@ -21,11 +21,6 @@ const Map = (props) => {
     const [storeInfo, setStoreInfo] = useState();
     const [word, setWord] = useState(props.keyWord);
 
-
-    
-    console.log("latitude:" +latitude);
-    console.log("longitude:" +longitude);
-
     async function getInfoByGeo (lat, lng) {
         const info = []
         const send_param={

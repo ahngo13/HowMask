@@ -25,7 +25,7 @@ router.post("/storesByAddr", async (req, res) => {
     .get(`https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByAddr/json?address=${addr}`)
     //정상 수행
     .then(returnData => {
-      console.log(returnData.data.stores);
+      // console.log(returnData.data.stores);
       res.json({ storeList: returnData.data.stores });
     })
     //에러
