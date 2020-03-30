@@ -4,16 +4,20 @@ import Comment from "./comment";
 
 const url = "localhost";
 
-// 판매처 정보
-var storeInfo = {
-  storeName: "한서약국",
-  howMany: "재고많음"
-};
-
-// 판매처 정보 수정 제안
+// 판매처 정보 수정 제안 이동
 function suggestStoreInfo() {
-  window.location.href = "/#/suggest";
+  if (!sessionStorage.getItem("login")) {
+    const confirm = window.confirm(
+      "로그인이 필요한 서비스입니다.\n로그인 화면으로 이동하겠습니까? "
+    );
+    if (confirm) {
+      window.location.href = "/#/login";
+    }
+  } else {
+    window.location.href = "/#/suggest";
+  }
 }
+// 판매처 계정 등록 이동
 function RegisterStoreAccount() {
   window.location.href = "/#/register/seller";
 }
@@ -32,15 +36,15 @@ function StoreInfoModal(props) {
             setStockText("100개 이상");
             return;
           } else if (stock === "some") {
-            setStockColor("primary");
+            setStockColor("warning");
             setStockText("30개 이상~100개 미만");
             return;
           } else if (stock === "few") {
-            setStockColor("warning");
+            setStockColor("danger");
             setStockText("2개 이상~30개 미만");
             return;
           } else if (stock === "empty") {
-            setStockColor("danger");
+            setStockColor("secondary");
             setStockText("1개 이하");
             return;
           } else {
@@ -120,7 +124,7 @@ function StoreInfoModal(props) {
                 </font>
                 <Card>
                   <Card.Body>
-                    <p>{storeInfo.notice}</p>
+                    <p>공지사항 내용</p>
                   </Card.Body>
                 </Card>
               </td>

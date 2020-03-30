@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { InputGroup, Form, Button, Badge, FormControl, Card } from "react-bootstrap";
+import { InputGroup, Form, Button, Badge, FormControl, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Moment from "react-moment";
 import "./css/grade.css";
@@ -18,6 +18,16 @@ function Comment() {
       showComment();
     } else {
       alert("오류");
+    }
+  }
+  //댓글 수정
+  async function updateComment(_id) {
+    const sendParam = { _id };
+    const result = axios.post(`http://${url}:8080/comment/update`, sendParam);
+    if (result) {
+      console.log((await result).data.comment[0].text);
+      commentTag.current.value = (await result).data.comment[0].text;
+      commentTag.current.focus();
     }
   }
 
@@ -60,14 +70,25 @@ function Comment() {
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Moment format="YYYY-MM-DD HH:mm">{comment.createdAt}</Moment>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <div
-                className="myButton"
+              <Button
+                size="sm"
+                variant="warning"
+                onClick={() => {
+                  updateComment(commentId);
+                }}
+              >
+                수정
+              </Button>
+              <span>&nbsp;</span>
+              <Button
+                size="sm"
+                variant="danger"
                 onClick={() => {
                   deleteComment(commentId);
                 }}
               >
-                x
-              </div>
+                삭제
+              </Button>
               <br />
               <Button variant="light">답글</Button>
               <hr />
@@ -83,7 +104,6 @@ function Comment() {
   useEffect(() => {
     showComment();
   }, []);
-
   const commentTag = useRef();
   return (
     <div>
@@ -104,7 +124,12 @@ function Comment() {
         <InputGroup>
           <FormControl placeholder="댓글을 입력하세요" ref={commentTag} />
           <InputGroup.Append>
-            <Button onClick={insertComment} variant="outline-dark">
+            <Button
+              onClick={() => {
+                insertComment(true);
+              }}
+              variant="outline-dark"
+            >
               댓글 등록
             </Button>
           </InputGroup.Append>

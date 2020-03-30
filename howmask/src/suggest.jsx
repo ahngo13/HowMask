@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Button, Form, Col } from "react-bootstrap";
+import { Button, Form, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
 const url = "localhost";
@@ -8,7 +8,7 @@ const url = "localhost";
 function RouterStore1() {
   const confirm = window.confirm("판매처 조회화면으로 이동하시겠습니까?");
   if (confirm) {
-    window.location.href = "/#/storeInfo";
+    window.location.href = "/#/map";
   }
 }
 function RouterStore2() {
@@ -85,23 +85,25 @@ function Suggest() {
             placeholder="진료시간이 오후 5시까지인데 6시까지로 되어 있습니다."
           />
           <br />
-          <Col>
-            <Button
-              onClick={() => {
-                RouterStore1(true);
-              }}
-              variant="warning"
-              size="lg"
-              block
-            >
-              돌아가기
-            </Button>
-          </Col>
-          <Col>
-            <Button variant="info" size="lg" block onClick={registerSuggestion}>
-              등록하기
-            </Button>
-          </Col>
+          <Row>
+            <Col>
+              <Button
+                onClick={() => {
+                  RouterStore1(true);
+                }}
+                variant="warning"
+                size="lg"
+                block
+              >
+                돌아가기
+              </Button>
+            </Col>
+            <Col>
+              <Button variant="info" size="lg" block onClick={registerSuggestion}>
+                등록하기
+              </Button>
+            </Col>
+          </Row>
         </Col>
       </Form>
     </>

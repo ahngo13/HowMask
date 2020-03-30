@@ -1,12 +1,12 @@
 import React, { useState, useRef } from "react";
-import { Form, Col, Button } from "react-bootstrap";
+import { Form, Row, Col, Button } from "react-bootstrap";
 import Register from "./register";
 
 // 판매처 조회화면 돌아가기
 function RouterStore() {
   const confirm = window.confirm("판매처 조회화면으로 이동하시겠습니까?");
   if (confirm) {
-    window.location.href = "/#/storeInfo";
+    window.location.href = "/#/map";
   }
 }
 
@@ -88,7 +88,7 @@ function RegisterSeller() {
           </Form.Group>
         </Form.Row>
         <Form>
-          <Button variant="primary" size="lg" block>
+          <Button variant="info" size="lg" block>
             사업자등록증 첨부
           </Button>
           <Form.Text className="text-muted">
@@ -120,15 +120,24 @@ function RegisterSeller() {
             />
           </Form.Group>
         </Form.Row>
-        <Button onClick={RegisterSellerBtn}>신청하기</Button>
-        <Button
-          onClick={() => {
-            RouterStore(true);
-          }}
-        >
-          돌아가기
-        </Button>
-        <br />
+        <Row>
+          <Col>
+            <Button
+              as={Col}
+              variant="warning"
+              onClick={() => {
+                RouterStore(true);
+              }}
+            >
+              돌아가기
+            </Button>
+          </Col>
+          <Col>
+            <Button variant="info" as={Col} onClick={RegisterSellerBtn}>
+              신청하기
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </>
   );
