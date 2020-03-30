@@ -4,14 +4,15 @@ import axios from "axios";
 
 const url = "localhost";
 
-// 판매처 조회화면 돌아가기
-function RouterStore() {
-  window.location.href = "/#/storeInfo";
+// 판매처 조회화면 돌아가기 (confirm)
+function RouterStore1() {
+  const confirm = window.confirm("판매처 조회화면으로 이동하시겠습니까?");
+  if (confirm) {
+    window.location.href = "/#/storeInfo";
+  }
 }
-
-// 로그인 화면 돌아가기
-function RouterLogin() {
-  window.location.href = "/#/login";
+function RouterStore2() {
+  window.location.href = "/#/storeInfo";
 }
 
 // 판매처 정보수정 제안 Form
@@ -30,14 +31,9 @@ function Suggest() {
       Text: Text.current.value
     };
     const result = await axios.post(`http://${url}:8080/store/suggest`, sendParam);
-    if (result.data.message === "login") {
-      alert("로그인이 필요합니다.");
+    if (result.data.message === "ok") {
       Text.current.value = "";
-      Text.current.focus();
-      RouterLogin();
-    } else if (result.data.message === "ok") {
-      Text.current.value = "";
-      RouterStore();
+      RouterStore2();
     } else {
       alert("오류");
     }
@@ -92,7 +88,7 @@ function Suggest() {
           <Col>
             <Button
               onClick={() => {
-                RouterStore(true);
+                RouterStore1(true);
               }}
               variant="warning"
               size="lg"
