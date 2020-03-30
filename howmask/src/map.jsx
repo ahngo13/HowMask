@@ -15,6 +15,7 @@ const Map = () => {
         lat: null,
         lng: null,
     });
+    const [level, setLevel] = useState(3);
 
 
     
@@ -76,13 +77,12 @@ const Map = () => {
         }
     },[coords])
     
-
-
-    
     useEffect(() =>{
 
         if(latitude && longitude){
             // getStoreInfo();
+            
+            // 지도의 중심 위치 지정
             let lat, lng;
             if(coords.lat === null){
                 lat = latitude
@@ -91,11 +91,11 @@ const Map = () => {
                 lat = coords.lat
                 lng = coords.lng
             }
-            console.log(lat);
-            console.log(lng);
+
             let el = document.getElementById('map');
             let map = new daum.maps.Map(el, {
-            center: new daum.maps.LatLng(lat, lng)
+                center: new daum.maps.LatLng(lat, lng),
+                level,
             });
 
             // 현재 위치에 표시될 마커의 위치입니다 
@@ -129,20 +129,28 @@ const Map = () => {
                 position: markerPosition
             });
 
+
             // 마우스 드래그로 지도 이동이 완료되었을 때 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
             kakao.maps.event.addListener(map, 'dragend', function() {        
                 
                 // 지도 중심좌표를 얻어옵니다 
-                var latlng = map.getCenter(); 
+                let latlng = map.getCenter(); 
 
                 setCoords({lat: latlng.getLat(), lng: latlng.getLng()});
-                console.log(coords);
-                var message = '변경된 지도 중심좌표는 ' + coords.lat + ' 이고, ';
-                message += '경도는 ' + coords.lng + ' 입니다';
-                
-                console.log(message);
                 
             });
+
+            // 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+            kakao.maps.event.addListener(map, 'zoom_changed', function() {        
+                
+                // 지도의 현재 레벨을 얻어옵니다
+                let level = map.getLevel();
+                
+                setLevel(level);
+            });
+
+            
+
         }
         
     },[positions]);
