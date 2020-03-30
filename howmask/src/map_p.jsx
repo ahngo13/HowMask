@@ -9,7 +9,6 @@ const MapP = () => {
 
     function search(word) {
         setKeyWord(word);
-        console.log(word);
     }
 
     return(
