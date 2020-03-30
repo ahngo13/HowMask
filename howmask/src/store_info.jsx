@@ -112,7 +112,7 @@ function StoreInfoModal(props) {
           </tbody>
         </Table>
         <Table responsive borderless>
-          <tBody>
+          <tbody>
             <tr>
               <td>
                 <font color="#1a0066">
@@ -125,7 +125,7 @@ function StoreInfoModal(props) {
                 </Card>
               </td>
             </tr>
-          </tBody>
+          </tbody>
         </Table>
         <Container>
           <Row>

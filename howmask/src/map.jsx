@@ -197,10 +197,10 @@ const Map = props => {
     }
   }, [positions]);
   return (
-    <div>
+    <>
       <div className="App" id="map"></div>
       <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
-    </div>
+    </>
   );
 };
 export default Map;
