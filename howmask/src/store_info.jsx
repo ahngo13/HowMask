@@ -132,6 +132,7 @@ function StoreInfoModal(props) {
   );
 }
 
+//판매처 상세정보 Component
 function App() {
   const [modalShow, setModalShow] = React.useState(false);
   return (
@@ -139,12 +140,13 @@ function App() {
       <Button variant="primary" onClick={() => setModalShow(true)}>
         약국 정보 보기
       </Button>
-
       <StoreInfoModal show={modalShow} onHide={() => setModalShow(false)} />
     </>
   );
 }
+
 function StoreInfo() {
   return <App />;
 }
+
 export default StoreInfo;
