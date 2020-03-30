@@ -122,7 +122,6 @@ const Map = props => {
             imageSrc = "/red_mask.png";
           }else{//1개 이하 empty, 판매중지 break
             imageSrc = "/gray_mask.png";
-            console.log(positions[i].storeInfo.stock);
           }
 
           // 마커 이미지의 이미지 크기 입니다
