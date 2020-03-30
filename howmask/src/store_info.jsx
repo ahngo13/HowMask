@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Modal, Button, Badge, Table, Card, Container, Col, Row } from "react-bootstrap";
 import Comment from "./comment";
 
@@ -41,7 +41,7 @@ function StoreInfoModal(props) {
                 <strong>
                   <font color="#1a0066">주소</font>
                 </strong>
-                &nbsp;&nbsp;&nbsp; 서울특별시 강남구 테헤란로
+                &nbsp;&nbsp;&nbsp; {props.content}
               </td>
             </tr>
             <tr>
@@ -113,23 +113,18 @@ function StoreInfoModal(props) {
   );
 }
 
-//판매처 상세정보 Component
-function App() {
-  const [modalShow, setModalShow] = React.useState(false);
+function StoreInfo(props) {
+  
+  const [modalShow, setModalShow] = useState(false);
+
+  useEffect(()=>{
+    setModalShow(props.show);
+  },[props.show])
 
   return (
     <>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
-        약국 정보 보기
-      </Button>
-
-      <StoreInfoModal show={modalShow} onHide={() => setModalShow(false)} />
+      <StoreInfoModal show={modalShow} content={props.content} onHide={props.onHide} />
     </>
   );
 }
-
-function StoreInfo() {
-  return <App />;
-}
-
 export default StoreInfo;

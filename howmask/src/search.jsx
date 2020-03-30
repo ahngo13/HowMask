@@ -1,9 +1,19 @@
-import React from "react";
+import React, {useRef} from "react";
+import {Button} from 'react-bootstrap';
 
-const Search = () => {
+const Search = (props) => {
+
+    const inputWord = useRef();
+
+    function clickSearch () {
+        
+        const word = inputWord.current.value;
+        props.search(word);
+    }
+
     return(
         <div>
-            <input id='searchBar'></input>
+            <input id='searchBar' ref={inputWord}></input> <Button onClick={clickSearch}>검색</Button>
         </div>
     )
 }
