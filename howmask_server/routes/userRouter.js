@@ -25,6 +25,18 @@ router.get("/adminViewList", async (req, res)=>{
   }
 
 })
+//관리자 회원 삭제
+router.post("/admindelete", async (req, res) => {
+  try {
+    await User.remove({
+      email: req.body.email
+    });
+    res.json({ message: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+});
 
 
 //회원가입
@@ -204,11 +216,14 @@ router.post("/delete", async (req, res) => {
   }
 });
 
-router.post("/update", async (req, res) => {
+router.post("/modify", async (req, res) => {
   try {
-    await User.update({
+    await User.modify({
       _id: req.body._id,
-      name: req.body.name
+      email: req.body.email,
+      password: req.body.password,
+      nick: req.body.nick,
+      year: req.body.year
     });
     res.json({ message: true });
   } catch (err) {
