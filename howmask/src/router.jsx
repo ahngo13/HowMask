@@ -11,7 +11,6 @@ import Birth from "./birth";
 import Locaiton from "./location";
 import Map from "./map";
 import Marker from "./marker";
-import Search from "./search";
 import StoreInfoUpdate from "./store_info_update";
 import StoreInfo from "./store_info";
 import RegisterSeller from "./register_seller";
@@ -32,7 +31,6 @@ const Router = () => {
       <Route path="/location" component={Locaiton}></Route>
       <Route path="/map" component={Map}></Route>
       <Route path="/marker" component={Marker}></Route>
-      <Route path="/search" component={Search}></Route>
       <Route path="/storeInfoUpdate" component={StoreInfoUpdate}></Route>
       <Route path="/storeInfo" component={StoreInfo}></Route>
       <Route path="/register/seller" component={RegisterSeller}></Route>

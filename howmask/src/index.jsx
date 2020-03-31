@@ -62,9 +62,6 @@ ReactDOM.render(
         <NavLink style={navLinkStyle} to="/marker">
           marker
         </NavLink>
-        <NavLink style={navLinkStyle} to="/search">
-          search
-        </NavLink>
         <NavLink style={navLinkStyle} to="/storeInfoUpdate">
           storeInfoUpdate
         </NavLink>
