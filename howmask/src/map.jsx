@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { usePosition } from "use-position";
 import axios from "axios";
 import StoreModal from "./store_info";
+import {Button} from 'react-bootstrap';
 const { kakao } = window;
 const { daum } = window;
 axios.defaults.withCredentials = true;
 const headers = { withCredentials: true };
+
+
 const Map = props => {
   const { latitude, longitude } = usePosition();
   const [positions, setPositions] = useState();
@@ -65,7 +68,17 @@ const Map = props => {
     }
     setPositions(info);
   }
+
+  
+
+    function current () {
+        setWord(null);
+        props.search(null);
+        setCoords({ lat: coords.lat, lng:coords.lng });
+    }
+
   useEffect(() => {
+      console.log(props.keyWord);
     setWord(props.keyWord);
   }, [props.keyWord]);
   useEffect(() => {
@@ -110,8 +123,8 @@ const Map = props => {
       var markerPosition = new kakao.maps.LatLng(latitude, longitude);
       let imageSrc;
       console.log(positions);
+
       if (positions) {
-        let selectedMarker = null;
         for (var i = 0; i < positions.length; i++) {
           
           if(positions[i].storeInfo.stock === "plenty"){
@@ -175,12 +188,12 @@ const Map = props => {
         geocoder.addressSearch(word, function(result, status) {
           // 정상적으로 검색이 완료됐으면
           if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            let latlng = new kakao.maps.LatLng(result[0].y, result[0].x);
 
             // 결과값으로 받은 위치를 마커로 표시합니다
             var marker = new kakao.maps.Marker({
               map: map,
-              position: coords
+              position: latlng
             });
 
             // 인포윈도우로 장소에 대한 설명을 표시합니다
@@ -190,7 +203,9 @@ const Map = props => {
             infowindow.open(map, marker);
 
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-            map.setCenter(coords);
+            
+            setCoords({ lat: latlng.getLat(), lng: latlng.getLng() });
+            map.setCenter(latlng);
           }
         });
       }
@@ -198,8 +213,9 @@ const Map = props => {
   }, [positions]);
   return (
     <>
-      <div className="App" id="map"></div>
-      <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
+        <Button id='current' onClick={current}>현재위치로 다시 검색</Button>
+        <div className="App" id="map"></div>
+        <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
     </>
   );
 };

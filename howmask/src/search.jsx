@@ -6,8 +6,8 @@ const Search = (props) => {
     const inputWord = useRef();
 
     function clickSearch () {
-        
         const word = inputWord.current.value;
+        console.log(word);
         props.search(word);
     }
 
