@@ -1,23 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
 const Comment = require("../schemas/comment");
+const multer = require("multer");
+const moment = require("moment");
 
-let storage = multer.diskStorage({
-  destination: function(req, file, callback) {
-    callback(null, "public/upload/");
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "./upload/"); // 파일이 저장되는 경로입니다.
   },
-  filename: function(req, file, callback) {
-    let extension = path.extname(file.originalname);
-    let basename = path.basename(file.originalname, extension);
-    callback(null, Date.now() + extension);
+  filename: function(req, file, cb) {
+    cb(null, moment().format("YYYYMMDDHHmmss") + "_" + file.originalname); // 저장되는 파일명
   }
 });
 
-const upload = multer({
-  dest: "public/upload/",
-  storage: storage
-});
+const upload = multer({ storage: storage });
 
 router.post("/delete", async (req, res) => {
   try {
@@ -52,17 +48,25 @@ router.post("/update", async (req, res) => {
     res.json({ message: false });
   }
 });
-
-router.post("/write", async (req, res) => {
+router.post("/write_file", upload.single("img"), async (req, res) => {
+  // FormData의 경우 req로 부터 데이터를 얻을수 없다.
+  // upload 핸들러(multer)를 통해서 데이터를 읽을 수 있다
+  try {
+    console.log(req);
+  } catch (err) {
+    console.log(err);
+  }
+});
+router.post("/write", upload.single("img"), async (req, res) => {
   try {
     let obj;
     obj = {
       email: req.session.email,
       code: req.body.code,
       grade: req.body.grade,
-      text: req.body.text
+      text: req.body.text,
+      image: req.file.path
     };
-
     if (req.session.email) {
       const comment = new Comment(obj);
       console.log("1 comment inserted");

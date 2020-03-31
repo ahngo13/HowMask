@@ -10,6 +10,13 @@ import { useState } from "react";
 const url = "localhost";
 
 function Comment() {
+  const [comments, setComments] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  // 파일 업로드
+  function handleFileInput(e) {
+    setSelectedFile(e.target.files[0]);
+  }
   //댓글 삭제
   async function deleteComment(_id) {
     const sendParam = { _id };
@@ -30,21 +37,21 @@ function Comment() {
       commentTag.current.focus();
     }
   }
-
   //댓글 입력
   async function insertComment() {
-    const sendParam = {
-      code: 111,
-      grade: 5,
-      text: commentTag.current.value
-    };
-    const result = await axios.post(`http://${url}:8080/comment/write`, sendParam);
+    let formData = new FormData();
+    formData.append("img", selectedFile);
+    formData.append("code", 111);
+    formData.append("grade", 5);
+    formData.append("text", commentTag.current.value);
+
+    const result = await axios.post(`http://${url}:8080/comment/write`, formData);
     if (result.data.message === "login") {
       alert("로그인이 필요합니다.");
-      commentTag.current.value = "";
       commentTag.current.focus();
     } else if (result.data.message === "ok") {
       commentTag.current.value = "";
+      fileTag.current.value = "";
       commentTag.current.focus();
       showComment();
     } else {
@@ -52,7 +59,6 @@ function Comment() {
     }
   }
 
-  const [comments, setComments] = useState();
   //모든 댓글 출력
   async function showComment() {
     const result = await axios.post(`http://${url}:8080/comment/getCommentList`);
@@ -104,7 +110,9 @@ function Comment() {
   useEffect(() => {
     showComment();
   }, []);
+
   const commentTag = useRef();
+  const fileTag = useRef();
   return (
     <div>
       <Form>
@@ -136,10 +144,9 @@ function Comment() {
         </InputGroup>
         <br />
         <InputGroup>
-          <FormControl placeholder="선택된 파일 명" readOnly />
-          <InputGroup.Append>
-            <Button variant="outline-dark">사진 첨부</Button>
-          </InputGroup.Append>
+          <Form.File>
+            <Form.File.Input ref={fileTag} onChange={e => handleFileInput(e)} />
+          </Form.File>
         </InputGroup>
       </Form>
       <br />
