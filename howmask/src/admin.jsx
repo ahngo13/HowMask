@@ -11,6 +11,7 @@ const Admin = () => {
 
   const [list, setList] = useState([]);
 
+
   const viewList = ()=>{
     if (!sessionStorage.getItem("login")) {
       alert("다시 로그인해주세요");
@@ -22,7 +23,7 @@ const Admin = () => {
     axios
     .get(`http://${url}:8080/user/adminViewList`, { headers })
     .then(returnData => {      
-      alert(returnData.data.message);
+      // alert(returnData.data.message);
       // console.log(returnData.data.result);
       if(returnData.data.result){
         setList(returnData.data.result);
@@ -35,20 +36,39 @@ const Admin = () => {
 
   }
 
+  const deleteList= (email)=>{
+    const sendParam = { email, headers }
+
+    axios
+      .post(`http://${url}:8080/user/admindelete`, sendParam)
+      .then(returnData => {
+        if (returnData.data.message) {
+          alert("삭제완료");
+          viewList();
+        } else {
+          alert("삭제실패");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 
 
 
-  let listForm = list.map(lists =>(
-    
-    <tr key={lists.email}>
+    let listForm = list.map(lists =>{
+    const listsEmail = lists.email;
+    return(
+    <tr key={listsEmail}>
     <td>{lists.user_type}</td>
     <td>{lists.email}</td>
     <td>{lists.nickname}</td>
     <td>{lists.lockYn}</td>
     <td><Button>승인</Button></td>
     <td><Button>승인취소</Button></td>
+    <td><Button onClick={()=>{deleteList(listsEmail)}}>회원삭제</Button></td>
     </tr> 
-  ));
+  )});
 
     return(
         <Container>
@@ -62,6 +82,7 @@ const Admin = () => {
          <th>잠금여부</th>
          <th>승인</th>
          <th>승인취소</th>
+         <th></th>
          </tr>
           </thead>
           <tbody>

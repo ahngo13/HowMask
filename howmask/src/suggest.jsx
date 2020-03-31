@@ -1,17 +1,18 @@
 import React, { useRef } from "react";
-import { Button, Form, Col } from "react-bootstrap";
+import { Button, Form, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
 const url = "localhost";
 
-// 판매처 조회화면 돌아가기
-function RouterStore() {
-  window.location.href = "/#/storeInfo";
+// 판매처 조회화면 돌아가기 (confirm)
+function RouterStore1() {
+  const confirm = window.confirm("판매처 조회화면으로 이동하시겠습니까?");
+  if (confirm) {
+    window.location.href = "/#/map";
+  }
 }
-
-// 로그인 화면 돌아가기
-function RouterLogin() {
-  window.location.href = "/#/login";
+function RouterStore2() {
+  window.location.href = "/#/storeInfo";
 }
 
 // 판매처 정보수정 제안 Form
@@ -30,14 +31,9 @@ function Suggest() {
       Text: Text.current.value
     };
     const result = await axios.post(`http://${url}:8080/store/suggest`, sendParam);
-    if (result.data.message === "login") {
-      alert("로그인이 필요합니다.");
+    if (result.data.message === "ok") {
       Text.current.value = "";
-      Text.current.focus();
-      RouterLogin();
-    } else if (result.data.message === "ok") {
-      Text.current.value = "";
-      RouterStore();
+      RouterStore2();
     } else {
       alert("오류");
     }
@@ -89,23 +85,25 @@ function Suggest() {
             placeholder="진료시간이 오후 5시까지인데 6시까지로 되어 있습니다."
           />
           <br />
-          <Col>
-            <Button
-              onClick={() => {
-                RouterStore(true);
-              }}
-              variant="warning"
-              size="lg"
-              block
-            >
-              돌아가기
-            </Button>
-          </Col>
-          <Col>
-            <Button variant="info" size="lg" block onClick={registerSuggestion}>
-              등록하기
-            </Button>
-          </Col>
+          <Row>
+            <Col>
+              <Button
+                onClick={() => {
+                  RouterStore1(true);
+                }}
+                variant="warning"
+                size="lg"
+                block
+              >
+                돌아가기
+              </Button>
+            </Col>
+            <Col>
+              <Button variant="info" size="lg" block onClick={registerSuggestion}>
+                등록하기
+              </Button>
+            </Col>
+          </Row>
         </Col>
       </Form>
     </>

@@ -32,13 +32,26 @@ const LoginBtn = () => {
         login
       </NavLink>
     );
-  } else {
+  } else if(sessionStorage.getItem("login")==="hamletshu") {
+    btn = (
+      <>
+      <Button style={navLinkStyle} onClick={memberLogout}>
+        logout
+      </Button>
+      <NavLink style={navLinkStyle} to="/admin">
+      가입된 회원정보 보기
+    </NavLink>
+      </>
+    );
+
+   }else{
     btn = (
       <Button style={navLinkStyle} onClick={memberLogout}>
         logout
       </Button>
     );
-  }
+    }
+  
 
   return <div>{btn}</div>;
 };
