@@ -86,7 +86,7 @@ const Register = () => {
       .then(returnData => {
         alert(returnData.data.message);
         if (returnData.data.dupYn === "0") {
-          window.location.href = "/#/";
+          window.location.href = "/";
         }
       })
       .catch(err => {

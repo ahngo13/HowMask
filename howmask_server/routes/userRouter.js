@@ -25,6 +25,18 @@ router.get("/adminViewList", async (req, res)=>{
   }
 
 })
+//관리자 회원 삭제
+router.post("/admindelete", async (req, res) => {
+  try {
+    await User.remove({
+      email: req.body.email
+    });
+    res.json({ message: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+});
 
 
 //회원가입
