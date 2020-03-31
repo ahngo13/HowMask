@@ -3,6 +3,8 @@ import { usePosition } from "use-position";
 import axios from "axios";
 import StoreModal from "./store_info";
 import {Button} from 'react-bootstrap';
+import Search from './search';
+
 const { kakao } = window;
 const { daum } = window;
 axios.defaults.withCredentials = true;
@@ -71,15 +73,18 @@ const Map = props => {
 
   
 
+    function search(word) {
+        setWord(word);
+    }
     function current () {
         setWord(null);
-        props.search(null);
+        // props.search(null);
         setCoords({ lat: coords.lat, lng:coords.lng });
     }
 
-  useEffect(() => {
+  /* useEffect(() => {
     setWord(props.keyWord);
-  }, [props.keyWord]);
+  }, [props.keyWord]); */
   useEffect(() => {
     if (word) {
       getInfoByAddr(word);
@@ -212,6 +217,9 @@ const Map = props => {
   }, [positions]);
   return (
     <>
+        <div id='searchDiv'>
+            <Search search={search} />
+        </div>
         <Button id='current' onClick={current}>현재위치로 다시 검색</Button>
         <div className="App" id="map"></div>
         <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
