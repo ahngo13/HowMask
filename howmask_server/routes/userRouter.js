@@ -204,11 +204,14 @@ router.post("/delete", async (req, res) => {
   }
 });
 
-router.post("/update", async (req, res) => {
+router.post("/modify", async (req, res) => {
   try {
-    await User.update({
+    await User.modify({
       _id: req.body._id,
-      name: req.body.name
+      email: req.body.email,
+      password: req.body.password,
+      nick: req.body.nick,
+      year: req.body.year
     });
     res.json({ message: true });
   } catch (err) {
