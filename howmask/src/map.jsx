@@ -78,7 +78,6 @@ const Map = props => {
     }
 
   useEffect(() => {
-      console.log(props.keyWord);
     setWord(props.keyWord);
   }, [props.keyWord]);
   useEffect(() => {

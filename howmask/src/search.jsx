@@ -7,13 +7,12 @@ const Search = (props) => {
 
     function clickSearch () {
         const word = inputWord.current.value;
-        console.log(word);
         props.search(word);
     }
 
     return(
         <div>
-            <input id='searchBar' ref={inputWord}></input> <Button onClick={clickSearch}>검색</Button>
+            <input id='searchBar' ref={inputWord}></input> <Button id='searchBtn' onClick={clickSearch}>검색</Button>
         </div>
     )
 }

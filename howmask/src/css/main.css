@@ -8,12 +8,6 @@
 
 }
 
-#searchBar{
-    width: 94%;
-    height: 40px;
-    border-radius: 15px;
-}
-
 #buyMask{
     position: absolute;
     top: 40%;
