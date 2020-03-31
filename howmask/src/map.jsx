@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { usePosition } from "use-position";
 import axios from "axios";
 import StoreModal from "./store_info";
 import {Button} from 'react-bootstrap';
-import Search from './search';
 
 const { kakao } = window;
 const { daum } = window;
@@ -22,7 +21,9 @@ const Map = props => {
   const [modalShow, setModalShow] = useState(false);
   const [storeInfo, setStoreInfo] = useState();
   const [word, setWord] = useState(props.keyWord);
+  const inputWord = useRef();
 
+ 
   async function getInfoByGeo(lat, lng) {
     const info = [];
     const send_param = {
@@ -71,20 +72,16 @@ const Map = props => {
     setPositions(info);
   }
 
-  
-
-    function search(word) {
+    function clickSearch () {
+        const word = inputWord.current.value;
         setWord(word);
     }
+
     function current () {
         setWord(null);
-        // props.search(null);
         setCoords({ lat: coords.lat, lng:coords.lng });
     }
 
-  /* useEffect(() => {
-    setWord(props.keyWord);
-  }, [props.keyWord]); */
   useEffect(() => {
     if (word) {
       getInfoByAddr(word);
@@ -218,7 +215,7 @@ const Map = props => {
   return (
     <>
         <div id='searchDiv'>
-            <Search search={search} />
+            <input id='searchBar' ref={inputWord}></input> <Button id='searchBtn' onClick={clickSearch}>검색</Button>
         </div>
         <Button id='current' onClick={current}>현재위치로 다시 검색</Button>
         <div className="App" id="map"></div>
