@@ -8,14 +8,12 @@ const url = "localhost";
 const headers = { withCredentials: true };
 
 const Register = () => {
-  const [emailinvalid, setEmailinvalid] = useState(false);
-  const [emailvalid, setEmailvalid] = useState(false);
-  const [pwdinvalid, setPwdinvalid] = useState(false);
-  const [pwdvalid, setPwdvalid] = useState(false);
-  const [nameinvalid, setNameinvalid] = useState(false);
-  const [namevalid, setNamevalid] = useState(false);
-  const [yearinvalid, setYearinvalid] = useState(false);
-  const [yearvalid, setYearvalid] = useState(false);
+  const [emailstate, setEmailstate] = useState({valid:false, invalid:false});
+  const [pwstate, setPwstate] = useState({valid:false, invalid:false});
+  const [namestate, setNamestate] = useState({valid:false, invalid:false});
+  const [yearstate, setYearstate] = useState({valid:false, invalid:false});
+  const [userformstate, setUserformstate] = useState(false);
+
 
   const inputNick = useRef();
   const inputEmail = useRef();
@@ -23,14 +21,14 @@ const Register = () => {
   const inputYear = useRef();
   const inputUsertype = useRef();
 
+  let userRegisterform;
+
   const validateEmail = emailEntered => {
     const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
     if (emailEntered.match(emailRegExp)) {
-      setEmailinvalid(false);
-      setEmailvalid(true);
+      setEmailstate({valid:true,invalid:false})
     } else {
-      setEmailinvalid(true);
-      setEmailvalid(false);
+      setEmailstate({valid:false,invalid:true})
     }
   };
 
@@ -39,36 +37,30 @@ const Register = () => {
     const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
-      setPwdinvalid(false);
-      setPwdvalid(true);
+      setPwstate({valid:true,invalid:false})
     } else {
-      setPwdinvalid(true);
-      setPwdvalid(false);
+      setPwstate({valid:false,invalid:true})
     }
   };
   const validateName = nameEntered => {
     if (nameEntered.length > 1) {
-      setNameinvalid(false);
-      setNamevalid(true);
+      setNamestate({valid:true,invalid:false})
     } else {
-      setNameinvalid(true);
-      setNamevalid(false);
+      setNamestate({valid:false,invalid:true})
     }
   };
   const validateYear = yearEntered => {
     const yearRegExp = /^\d{1}$/;
     if (yearEntered.match(yearRegExp)) {
-      setYearinvalid(false);
-      setYearvalid(true);
+      setYearstate({valid:true,invalid:false})
     } else {
-      setYearinvalid(true);
-      setYearvalid(false);
+      setYearstate({valid:false,invalid:true})
     }
   };
 
   const joinInsert = event => {
     event.preventDefault();
-    if (!emailvalid || !pwdvalid || !namevalid || !yearvalid) {
+    if (!emailstate.valid || !pwstate.valid || !namestate.valid || !yearstate.valid) {
       alert("필수 항목을 입력하세요");
       return;
     }
@@ -102,113 +94,167 @@ const Register = () => {
       });
   };
 
+  const userForm = () => {
+    setUserformstate(true);
+  }
+  const storeForm = () => {
+    window.location.href="/#/register/seller";
+  }
+
+  const registerTitle = {
+    display: "inline-block",
+    width: "50%",
+    position: "fixed",
+    top: 90,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    margin: "auto",
+    textAlign: "center"
+  };
+  const registerForm = {
+    display: "inline-block",
+    width: "50%",
+    position: "fixed",
+    top: 150,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    margin: "auto"
+  };
+  const registerType = {
+    display: "inline-block",
+    width: "50%",
+    position: "fixed",
+    top: 90,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    margin: "auto",
+    textAlign: "center"
+  };
+
+
+  if(!userformstate){
+     userRegisterform = (
+    <Container style={registerType}>      
+      <Button onClick = {userForm} variant="info" block>개인회원 가입</Button>
+      <Button onClick = {storeForm} variant="warning" block>판매처 가입</Button>
+    </Container>
+  )
+  }else{
+    userRegisterform = (<Container>
+    <h2 style={registerTitle}>회원가입</h2>
+    <Form noValidate style={registerForm} onSubmit={joinInsert}>
+      <Form.Group as={Row} controlId="formUsertype">
+        <Form.Label column sm={3}>
+          가입형식
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control as="select" ref={inputUsertype}>
+            <option>개인</option>
+          {/* 관리자옵션은 임시로 만듬 */}
+            <option>관리자</option>
+          </Form.Control>
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} controlId="formEmail">
+        <Form.Label column sm={3}>
+          이메일
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control
+            type="email"
+            placeholder="이메일을 입력해주세요"
+            isInvalid={emailstate.invalid}
+            isValid={emailstate.valid}
+            ref={inputEmail}
+            onChange={e => validateEmail(e.target.value)}
+            maxLength="40"
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            주소를 양식에 맞게 입력해주세요
+          </Form.Control.Feedback>
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formPassword">
+        <Form.Label column sm={3}>
+          비밀번호
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control
+            type="password"
+            className="pwdfont"
+            isInvalid={pwstate.invalid}
+            isValid={pwstate.valid}
+            ref={inputPwd}
+            onChange={e => validatePwd(e.target.value)}
+            maxLength="16"
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            비밀번호는 영문자 및 숫자, 특수문자 포함 8자 이상이어야합니다
+          </Form.Control.Feedback>
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="formNickname">
+        <Form.Label column sm={3}>
+          닉네임
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control
+            isInvalid={namestate.invalid}
+            isValid={namestate.valid}
+            ref={inputNick}
+            onChange={e => validateName(e.target.value)}
+            maxLength="24"
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            닉네임을 입력해주세요
+          </Form.Control.Feedback>
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row} controlId="yearForm">
+        <Form.Label column sm={3}>
+          태어난 년도 끝자리
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control
+            ref={inputYear}
+            isInvalid={yearstate.invalid}
+            isValid={yearstate.valid}
+            onChange={e => validateYear(e.target.value)}
+            maxLength="1"
+            required
+          />
+          <Form.Control.Feedback type="invalid">
+            숫자만 입력해주세요
+          </Form.Control.Feedback>
+        </Col>
+      </Form.Group>
+
+      <Form.Group as={Row}>
+        <Form.Check
+          required
+          label="Agree to terms and conditions"
+          feedback="You must agree before submitting."
+        />
+      </Form.Group>
+      <Button variant="info" type="submit">
+        회원가입
+      </Button>
+    </Form>
+  </Container>)
+  }
+
   return (
     <div>
-      <Container>
-        <p>회원가입</p>
-        <Form noValidate onSubmit={joinInsert}>
-          <Form.Group as={Row} controlId="formUsertype">
-            <Form.Label column sm={2}>
-              가입형식
-            </Form.Label>
-            <Col sm={10}>
-              <Form.Control as="select" ref={inputUsertype}>
-                <option>개인</option>
-                <option>판매처</option>
-              {/* 관리자옵션은 임시로 만듬 */}
-                <option>관리자</option>
-              </Form.Control>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} controlId="formEmail">
-            <Form.Label column sm={2}>
-              이메일
-            </Form.Label>
-            <Col sm={10}>
-              <Form.Control
-                type="email"
-                placeholder="이메일을 입력해주세요"
-                isInvalid={emailinvalid}
-                isValid={emailvalid}
-                ref={inputEmail}
-                onChange={e => validateEmail(e.target.value)}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                주소를 양식에 맞게 입력해주세요
-              </Form.Control.Feedback>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId="formPassword">
-            <Form.Label column sm={2}>
-              비밀번호
-            </Form.Label>
-            <Col sm={10}>
-              <Form.Control
-                type="password"
-                className="pwdfont"
-                isInvalid={pwdinvalid}
-                isValid={pwdvalid}
-                ref={inputPwd}
-                onChange={e => validatePwd(e.target.value)}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                비밀번호는 영문자 및 숫자, 특수문자 포함 8자 이상이어야합니다
-              </Form.Control.Feedback>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId="formNickname">
-            <Form.Label column sm={2}>
-              닉네임
-            </Form.Label>
-            <Col sm={10}>
-              <Form.Control
-                isInvalid={nameinvalid}
-                isValid={namevalid}
-                ref={inputNick}
-                onChange={e => validateName(e.target.value)}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                닉네임을 입력해주세요
-              </Form.Control.Feedback>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId="yearForm">
-            <Form.Label column sm={2}>
-              태어난 년도 끝자리
-            </Form.Label>
-            <Col sm={10}>
-              <Form.Control
-                ref={inputYear}
-                isInvalid={yearinvalid}
-                isValid={yearvalid}
-                onChange={e => validateYear(e.target.value)}
-                maxLength="1"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                숫자만 입력해주세요
-              </Form.Control.Feedback>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Check
-              required
-              label="Agree to terms and conditions"
-              feedback="You must agree before submitting."
-            />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            회원가입
-          </Button>
-        </Form>
-      </Container>
+      {userRegisterform}
     </div>
   );
 };
