@@ -18,22 +18,15 @@ const upload = multer({ storage: storage });
 
 router.post("/delete", async (req, res) => {
   try {
-    const result = await Comment.aggregate([
-      { $match: { _id: req.body._id } },
-      { $out: "jointable" }
-    ]);
-    console.log(result);
-    console.log(JSON.stringify(result));
-    console.log("===========================");
-    const image = result.image;
-    console.log(JSON.stringify(image));
-    fs.unlink(`${image}`, err => {
+
+    fs.unlink(`./upload/${req.body.image}`, err => {
       if (err) {
         console.log(err);
       } else {
         console.log("디렉토리 파일 삭제 성공");
       }
     });
+
     await Comment.remove({
       _id: req.body._id
     });

@@ -28,10 +28,17 @@ router.get("/adminViewList", async (req, res)=>{
 //관리자 회원 삭제
 router.post("/admindelete", async (req, res) => {
   try {
+    let user_type = req.session.user_type;
+ 
+    console.log(user_type);
+    if(user_type !== "관리자" || !req.session.email){
+      res.json({message: false,noSession:true});
+    } else{
     await User.remove({
       email: req.body.email
     });
     res.json({ message: true });
+  }
   } catch (err) {
     console.log(err);
     res.json({ message: false });

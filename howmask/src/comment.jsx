@@ -39,8 +39,8 @@ function Comment() {
     }
   }
   //댓글 삭제
-  async function deleteComment(_id) {
-    const sendParam = { _id };
+  async function deleteComment(_id, image) {
+    const sendParam = { _id, image};
     const result = axios.post(`http://${url}:8080/comment/delete`, sendParam);
     if ((await result).data.message) {
       showComment();
@@ -99,6 +99,8 @@ function Comment() {
       if (result.data.list) {
         const allComments = result.data.list.map(comment => {
           const commentId = comment._id;
+          const image = comment.image;
+
           return (
             <div key={comment._id}>
               <Badge pill variant="dark">
@@ -124,7 +126,7 @@ function Comment() {
                 size="sm"
                 variant="danger"
                 onClick={() => {
-                  deleteComment(commentId);
+                  deleteComment(commentId, image);
                 }}
               >
                 삭제

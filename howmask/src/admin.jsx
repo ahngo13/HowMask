@@ -45,7 +45,12 @@ const Admin = () => {
         if (returnData.data.message) {
           alert("삭제완료");
           viewList();
-        } else {
+        } else if(returnData.data.noSession){
+          alert("다시 로그인해주세요");
+          sessionStorage.removeItem("login");
+          window.location.href = "/";
+
+        } else{
           alert("삭제실패");
         }
       })
