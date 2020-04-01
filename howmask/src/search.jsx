@@ -1,12 +1,19 @@
 import React, {useState, useEffect, useRef} from "react";
-import { NavLink } from "react-router-dom";
-import { Button, Container, Form, FormControl } from "react-bootstrap";
+import { Button, Form, FormControl, Col } from "react-bootstrap";
 
-const Search = () => {
+const Search = (props) => {
 
 
     const [siGu, setSiGu] = useState();
     const si = useRef();
+    
+    function handleSubmit(event) {
+        
+        event.preventDefault();
+        const data = new FormData(event.target);
+        console.log(data);
+        // props.clickSearch()
+    }
 
     useEffect(() => {
         getSiGuList();
@@ -57,54 +64,77 @@ const Search = () => {
         
         setSiGu(siGuList);
     }
+
+
+    const selectCity =
+        <Form.Control as="select" ref={si} onChange={getSiGuList}>
+            <option value="1">서울특별시</option>
+            <option value="2">부산광역시</option>
+            <option value="3">대구광역시</option>
+            <option value="4">인천광역시</option>
+            <option value="5">광주광역시</option>
+            <option value="6">대전광역시</option>
+            <option value="7">울산광역시</option>
+            <option value="8">세종특별자치시</option>
+            <option value="9">경기도</option>
+            <option value="10">강원도</option>
+            <option value="11">충청북도</option>
+            <option value="12">충청남도</option>
+            <option value="13">전라북도</option>
+            <option value="14">전라남도</option>
+            <option value="15">경상북도</option>
+            <option value="16">경상남도</option>
+            <option value="17">제주특별자치도</option>
+        </Form.Control>
+
+    let searchForm;
+
+    if(props.page === "main"){
+        searchForm = 
+            <Form>
+                {/* <div id="mainSearch"> */}
+                <Form.Group controlId="siDo">
+                    {selectCity}
+                </Form.Group>
+                <Form.Control as="select">
+                    {siGu}
+                </Form.Control>
+                <FormControl placeholder="읍면동을 입력해주세요." />
+                <Form.Text className="text-muted searchNotice">
+                    <div>읍면동을 정확히 입력해주세요.</div>
+                    <div>리까지 입력하시는 경우 띄어쓰기를 해주세요.</div>
+                    <div>올바른 예) 역삼동 or 시종면 구산리</div>
+                    <div>틀린 예) 관악 or 부산 or 여의도 or 시종구산</div>
+                </Form.Text>
+                <Button type="submit" className="addressSearchBtn" variant="primary" block>주소로 검색</Button>
+            </Form>
+    }else{
+        searchForm = 
+            <Form onSubmit={handleSubmit}>
+                <Form.Row>
+                    {/* <div id="mainSearch"> */}
+                    <Form.Group as={Col} md="1" controlId="siDo">
+                        {selectCity}
+                    </Form.Group>
+                    <Form.Group as={Col} md="1">
+                        <Form.Control as="select">
+                            {siGu}
+                        </Form.Control>
+                    </Form.Group>
+                    <Form.Group as={Col} md="9">
+                        <FormControl placeholder="읍면동을 입력해주세요." />
+                    </Form.Group>
+                    <Form.Group as={Col} md="0.5">
+                        <Button type="submit" className="addressSearchBtn" variant="primary" block>주소로 검색</Button>
+                    </Form.Group>
+                </Form.Row>
+            </Form>
+    }
+
     
     return(
         <>
-        <Container>
-           
-            {/* {<div id="mainSearch">} */}
-            <Form.Group controlId="siDo">
-                <Form.Control as="select" ref={si} onChange={getSiGuList}>
-                <option value="1">서울특별시</option>
-                <option value="2">부산광역시</option>
-                <option value="3">대구광역시</option>
-                <option value="4">인천광역시</option>
-                <option value="5">광주광역시</option>
-                <option value="6">대전광역시</option>
-                <option value="7">울산광역시</option>
-                <option value="8">세종특별자치시</option>
-                <option value="9">경기도</option>
-                <option value="10">강원도</option>
-                <option value="11">충청북도</option>
-                <option value="12">충청남도</option>
-                <option value="13">전라북도</option>
-                <option value="14">전라남도</option>
-                <option value="15">경상북도</option>
-                <option value="16">경상남도</option>
-                <option value="17">제주특별자치도</option>
-                </Form.Control>
-            </Form.Group>
-            <Form.Control as="select">
-                {siGu}
-            </Form.Control>
-        <FormControl
-          placeholder="읍면동을 입력해주세요."
-        />
-        <Form.Text className="text-muted searchNotice">
-        <div>읍면동을 정확히 입력해주세요.</div>
-        <div>리까지 입력하시는 경우 띄어쓰기를 해주세요.</div>
-        <div>올바른 예) 역삼동 or 시종면 구산리</div>
-        <div>틀린 예) 관악 or 부산 or 여의도 or 시종구산</div>
-        </Form.Text>
-        <Button className="addressSearchBtn" variant="primary" block>주소로 검색</Button>
-      
-            {/* <div id="searchLocation"> */}
-            <div>
-            <NavLink to="/map">
-                <Button variant="primary" block>현재 위치로 검색</Button>
-            </NavLink>
-            </div>
-        </Container>    
+            {searchForm}
         </>
     )
 }

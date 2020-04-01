@@ -22,7 +22,14 @@ const Home = () => {
                 <div className="mainContent red">{dayOfWeek}</div>
             </div>
             {/* {<div id="mainSearch">} */}
-            <Search />
+            <Search page={"main"} />
+
+            {/* <div id="searchLocation"> */}
+            <div>
+            <NavLink to="/map">
+                <Button variant="primary" block>현재 위치로 검색</Button>
+            </NavLink>
+            </div>
         </Container>    
         </>
     )

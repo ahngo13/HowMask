@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { usePosition } from "use-position";
 import axios from "axios";
 import StoreModal from "./store_info";
-import {Button, Form, Col} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import Search from './search';
 
 const { kakao } = window;
@@ -22,7 +22,7 @@ const Map = props => {
   const [modalShow, setModalShow] = useState(false);
   const [storeInfo, setStoreInfo] = useState();
   const [word, setWord] = useState(props.keyWord);
-  const inputWord = useRef();
+  // const inputWord = useRef();
 
  
   async function getInfoByGeo(lat, lng) {
@@ -73,11 +73,8 @@ const Map = props => {
     setPositions(info);
   }
 
-  function handleSubmit (event) {
-
-  }
-  function clickSearch () {
-      const word = inputWord.current.value;
+  function clickSearch (word) {
+      // const word = inputWord.current.value;
       setWord(word);
   }
 
@@ -221,9 +218,11 @@ const Map = props => {
         {/* <div id='searchDiv'>
             <input id='searchBar' ref={inputWord}></input> <Button id='searchBtn' onClick={clickSearch}>검색</Button>
         </div>
-        <Button id='current' onClick={current}>현재위치로 다시 검색</Button> */}
+         */}
 
-        <Search />
+        <Search page={"map"} clickSearch={clickSearch} />
+        
+        <Button id='current' onClick={current}>현재위치로 다시 검색</Button>
 
         <div className="App" id="map"></div>
         <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
