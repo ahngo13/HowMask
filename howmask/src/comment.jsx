@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { InputGroup, Form, Button, Badge, FormControl, Row, Col } from "react-bootstrap";
+import { InputGroup, Form, Button, Badge, FormControl } from "react-bootstrap";
 import axios from "axios";
 import Moment from "react-moment";
 import "./css/grade.css";
@@ -10,12 +10,30 @@ import { useState } from "react";
 const url = "localhost";
 
 function Comment() {
-  const [comments, setComments] = useState();
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [comments, setComments] = useState(); // 댓글
+  const [selectedFile, setSelectedFile] = useState(null); // 파일
+  const [imgBase64, setImgBase64] = useState(null); // 파일 base64
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 미리보기 파일 경로
 
   // 파일 업로드
   function handleFileInput(e) {
-    setSelectedFile(e.target.files[0]);
+    e.preventDefault();
+    let reader = new FileReader(); // 파일 읽기
+    let file = e.target.files[0];
+    reader.onload = function(e) {
+      const base64 = e.target.result;
+      if (base64) {
+        setImgBase64(base64.toString()); // 파일 base64 상태 업데이트
+        // alert("base64");
+      }
+      // console.log(e.target.result);
+      setImagePreviewUrl(e.target.result);
+    };
+    if (file) {
+      reader.readAsDataURL(file); // 1. 파일을 읽어 버퍼에 저장합니다.
+      setSelectedFile(e.target.files[0]); // 파일 상태 업데이트
+      // alert("read Data URL");
+    }
   }
   //댓글 삭제
   async function deleteComment(_id) {
@@ -40,11 +58,18 @@ function Comment() {
   //댓글 입력
   async function insertComment() {
     let formData = new FormData();
-    formData.append("img", selectedFile);
-    formData.append("code", 111);
-    formData.append("grade", 5);
-    formData.append("text", commentTag.current.value);
-
+    if (!commentTag.current.value) {
+      alert("댓글 내용을 입력하세요");
+      commentTag.current.focus();
+      return;
+    } else {
+      if (selectedFile) {
+        formData.append("img", selectedFile);
+      }
+      formData.append("code", 111);
+      formData.append("grade", 5);
+      formData.append("text", commentTag.current.value);
+    }
     const result = await axios.post(`http://${url}:8080/comment/write`, formData);
     if (result.data.message === "login") {
       alert("로그인이 필요합니다.");
@@ -52,10 +77,12 @@ function Comment() {
     } else if (result.data.message === "ok") {
       commentTag.current.value = "";
       fileTag.current.value = "";
+      setSelectedFile(null);
       commentTag.current.focus();
       showComment();
     } else {
       alert("오류");
+      setSelectedFile(null);
     }
   }
 
@@ -107,12 +134,14 @@ function Comment() {
       console.log(err);
     }
   }
+
   useEffect(() => {
     showComment();
   }, []);
 
   const commentTag = useRef();
   const fileTag = useRef();
+
   return (
     <div>
       <Form>
@@ -145,7 +174,7 @@ function Comment() {
         <br />
         <InputGroup>
           <Form.File>
-            <Form.File.Input ref={fileTag} onChange={e => handleFileInput(e)} />
+            <Form.File.Input accept="image/" ref={fileTag} onChange={e => handleFileInput(e)} />
           </Form.File>
         </InputGroup>
       </Form>

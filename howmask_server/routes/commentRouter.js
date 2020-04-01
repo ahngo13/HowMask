@@ -60,14 +60,23 @@ router.post("/write_file", upload.single("img"), async (req, res) => {
 router.post("/write", upload.single("img"), async (req, res) => {
   try {
     let obj;
-    obj = {
-      email: req.session.email,
-      code: req.body.code,
-      grade: req.body.grade,
-      text: req.body.text,
-      image: req.file.path
-    };
     if (req.session.email) {
+      if (req.file) {
+        obj = {
+          email: req.session.email,
+          code: req.body.code,
+          grade: req.body.grade,
+          text: req.body.text,
+          image: req.file.path
+        };
+      } else {
+        obj = {
+          email: req.session.email,
+          code: req.body.code,
+          grade: req.body.grade,
+          text: req.body.text
+        };
+      }
       const comment = new Comment(obj);
       console.log("1 comment inserted");
       await comment.save();
