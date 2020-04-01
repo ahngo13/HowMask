@@ -70,7 +70,11 @@ const Map = props => {
           storeInfo: {
             addr: item.addr,
             name: item.name,
-            stock: item.remain_stat
+            stock: item.remain_stat,
+            code: item.code,
+            type: item.type,
+            createdAt: item.created_at,
+            stockAt: item.stock_at
           }
         });
       });
@@ -79,7 +83,6 @@ const Map = props => {
   }
 
   function clickSearch (word) {
-      // const word = inputWord.current.value;
       setWord(word);
   }
 
@@ -90,6 +93,7 @@ const Map = props => {
 
   useEffect(() => {
     if (word) {
+      console.log(word);
       getInfoByAddr(word);
     }
   }, [word]);
