@@ -1,7 +1,6 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import Home from "./home";
-import MapP from "./map_p";
 import Store from "./store";
 import Login from "./login";
 import Register from "./register";
@@ -21,7 +20,7 @@ const Router = () => {
   return (
     <>
       <Route exact path="/" component={Home}></Route>
-      <Route path="/map_p" component={MapP}></Route>
+      <Route path="/map" component={Map}></Route>
       <Route path="/store" component={Store}></Route>
       <Route path="/login" component={Login}></Route>
       <Route exact path="/register" component={Register}></Route>
@@ -29,7 +28,6 @@ const Router = () => {
       <Route path="/checkPw" component={CheckPw}></Route>
       <Route path="/birth" component={Birth}></Route>
       <Route path="/location" component={Locaiton}></Route>
-      <Route path="/map" component={Map}></Route>
       <Route path="/marker" component={Marker}></Route>
       <Route path="/storeInfoUpdate" component={StoreInfoUpdate}></Route>
       <Route path="/storeInfo" component={StoreInfo}></Route>

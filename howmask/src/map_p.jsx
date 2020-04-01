@@ -6,9 +6,6 @@ const MapP = () => {
 
     return(
         <div id="mapPage">
-            {/* <div id='searchDiv'>
-                <Search search={search} />
-            </div> */}
             <Map  />
         </div>
         
