@@ -18,7 +18,7 @@ function Comment() {
 
   // 평점 값
   function handleGradeInput(e) {
-    setGradeValue(e.target.value);
+    setGradeValue(e.target.textContent);
   }
   // 파일 업로드
   function handleFileInput(e) {
@@ -155,19 +155,19 @@ function Comment() {
   return (
     <div>
       <Form>
-        {/* <div className="starRev">
-          <span className="starR1 on" value="0.5"></span>
-          <span className="starR2 on" value="0.5"></span>
-          <span className="starR1 on" value="0.5"></span>
-          <span className="starR2 on" value="0.5"></span>
-          <span className="starR1 on" value="0.5"></span>
-          <span className="starR2 on" value="0.5"></span>
-          <span className="starR1 on" value="0.5"></span>
-          <span className="starR2 on" value="0.5"></span>
-          <span className="starR1 on" value="0.5"></span>
-          <span className="starR2 on" value="0.5"></span>
-        </div> */}
-        평점 :
+         <div className="starRev">
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>0.5</span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>1</span>
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>1.5</span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>2</span>
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>2.5</span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>3</span>
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>3.5</span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>4</span>
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>4.5</span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>5</span>
+        </div>
+{/*         평점 :
         <input
           style={{ width: "100px" }}
           type="number"
@@ -176,7 +176,7 @@ function Comment() {
           max={5}
           ref={grade}
           onChange={e => handleGradeInput(e)}
-        />
+        /> */}
         <InputGroup>
           <FormControl placeholder="댓글을 입력하세요" ref={commentTag}></FormControl>
           <InputGroup.Append>
