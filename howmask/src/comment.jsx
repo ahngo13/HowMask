@@ -9,12 +9,18 @@ import { useState } from "react";
 
 const url = "localhost";
 
-function Comment() {
+function Comment(props) {
+  const code = props.code; // 판매처코드
+  // const [code, setCode] = useState(); // 판매처코드
   const [comments, setComments] = useState(); // 댓글
   const [selectedFile, setSelectedFile] = useState(null); // 파일
   const [imgBase64, setImgBase64] = useState(null); // 파일 base64
   const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 미리보기 파일 경로
   const [gradeValue, setGradeValue] = useState(5);
+
+  useEffect(() => {
+    showComment();
+  }, []);
 
   // 평점 값
   function handleGradeInput(e) {
@@ -40,7 +46,7 @@ function Comment() {
   }
   //댓글 삭제
   async function deleteComment(_id, image) {
-    const sendParam = { _id, image};
+    const sendParam = { _id, image };
     const result = axios.post(`http://${url}:8080/comment/delete`, sendParam);
     if ((await result).data.message) {
       showComment();
@@ -59,7 +65,7 @@ function Comment() {
     }
   }
   //댓글 입력
-  async function insertComment() {
+  async function insertComment(props) {
     let formData = new FormData();
     if (!commentTag.current.value) {
       alert("댓글 내용을 입력하세요");
@@ -69,7 +75,7 @@ function Comment() {
       if (selectedFile) {
         formData.append("img", selectedFile);
       }
-      formData.append("code", 111);
+      formData.append("code", code);
       formData.append("grade", gradeValue);
       formData.append("text", commentTag.current.value);
     }
@@ -93,9 +99,11 @@ function Comment() {
   }
 
   //모든 댓글 출력
-  async function showComment() {
-    const result = await axios.post(`http://${url}:8080/comment/getCommentList`);
+  async function showComment(props) {
     try {
+      const sendParam = { code };
+      const result = await axios.post(`http://${url}:8080/comment/getCommentList`, sendParam);
+
       if (result.data.list) {
         const allComments = result.data.list.map(comment => {
           const commentId = comment._id;
@@ -131,6 +139,7 @@ function Comment() {
               >
                 삭제
               </Button>
+              {comment.code}
               <br />
               <Button variant="light">답글</Button>
               <hr />
@@ -144,10 +153,6 @@ function Comment() {
     }
   }
 
-  useEffect(() => {
-    showComment();
-  }, []);
-
   const commentTag = useRef();
   const fileTag = useRef();
   const grade = useRef();
@@ -155,19 +160,39 @@ function Comment() {
   return (
     <div>
       <Form>
-         <div className="starRev">
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>0.5</span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>1</span>
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>1.5</span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>2</span>
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>2.5</span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>3</span>
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>3.5</span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>4</span>
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>4.5</span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>5</span>
+        <div className="starRev">
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+            0.5
+          </span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+            1
+          </span>
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+            1.5
+          </span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+            2
+          </span>
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+            2.5
+          </span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+            3
+          </span>
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+            3.5
+          </span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+            4
+          </span>
+          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+            4.5
+          </span>
+          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+            5
+          </span>
         </div>
-{/*         평점 :
+        {/*         평점 :
         <input
           style={{ width: "100px" }}
           type="number"
@@ -191,7 +216,11 @@ function Comment() {
           </InputGroup.Append>
         </InputGroup>
         <img
-          style={{ backgroundColor: "#efefef", width: "150px", height: "150px" }}
+          style={{
+            backgroundColor: "#efefef",
+            width: "150px",
+            height: "150px"
+          }}
           src={imagePreviewUrl}
         />
         <br />

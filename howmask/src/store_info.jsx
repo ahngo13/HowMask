@@ -26,6 +26,8 @@ function RegisterStoreAccount() {
 function StoreInfoModal(props) {
   const [stockColor, setStockColor] = useState();
   const [stockText, setStockText] = useState();
+  const [stockType, setStockType] = useState();
+
   function howMany() {
     const stock = props.info.stock;
     return (
@@ -56,8 +58,28 @@ function StoreInfoModal(props) {
       </div>
     );
   }
+  function storeType() {
+    const type = props.info.type;
+    return (
+      <div>
+        {(() => {
+          if (type === "01") {
+            setStockType("약국");
+            return;
+          } else if (type === "02") {
+            setStockType("우체국");
+            return;
+          } else if (type === "03") {
+            setStockType("농협");
+            return;
+          }
+        })()}
+      </div>
+    );
+  }
   useEffect(() => {
     howMany();
+    storeType();
   });
 
   return (
@@ -66,6 +88,7 @@ function StoreInfoModal(props) {
         <Modal.Title id="contained-modal-title-vcenter">
           {props.info.name}
           &nbsp;&nbsp;&nbsp;<Badge variant={stockColor}>{stockText}</Badge>
+          code : {props.info.code}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -76,7 +99,7 @@ function StoreInfoModal(props) {
                 <strong>
                   <font color="#1a0066">판매처 종류</font>
                 </strong>
-                &nbsp;&nbsp;&nbsp; 약국/하나로마트/우체국/기타
+                &nbsp;&nbsp;&nbsp; {stockType}
               </td>
               <td>
                 <strong>
@@ -94,22 +117,34 @@ function StoreInfoModal(props) {
               </td>
               <td>
                 <strong>
+                  <font color="#1a0066">입고시간</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; {props.info.stockAt}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>
                   <font color="#1a0066">판매예정시간</font>
                 </strong>
                 &nbsp;&nbsp;&nbsp; 실제 마스크 판매시간
               </td>
-            </tr>
-            <tr>
               <td>
                 <strong>
                   <font color="#1a0066">평균 재고수량</font>
                 </strong>
                 &nbsp;&nbsp;&nbsp; 000개
               </td>
+            </tr>
+          </tbody>
+        </Table>
+        <Table responsive borderless>
+          <tbody>
+            <tr>
               <td>
-                <strong>
-                  <font color="#1a0066">유아용 마스크 판매여부</font>
-                </strong>
+                <font color="#1a0066">
+                  <strong>유아용 마스크 판매여부</strong>
+                </font>
                 &nbsp;&nbsp;&nbsp; <Badge variant="primary">유(무)</Badge>
               </td>
             </tr>
@@ -146,7 +181,7 @@ function StoreInfoModal(props) {
           </Row>
         </Container>
         <br />
-        <Comment />
+        <Comment code={props.info.code} />
       </Modal.Body>
     </Modal>
   );

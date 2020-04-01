@@ -18,7 +18,6 @@ const upload = multer({ storage: storage });
 
 router.post("/delete", async (req, res) => {
   try {
-
     fs.unlink(`./upload/${req.body.image}`, err => {
       if (err) {
         console.log(err);
@@ -94,7 +93,8 @@ router.post("/write", upload.single("img"), async (req, res) => {
 });
 router.post("/getCommentList", async (req, res) => {
   try {
-    const comment = await Comment.find({ code: 111 }, null, {
+    console.log(req.body);
+    const comment = await Comment.find({ code: req.body.code }, null, {
       sort: { createdAt: -1 }
     });
     res.json({ list: comment });
