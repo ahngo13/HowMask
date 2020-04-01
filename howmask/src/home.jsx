@@ -14,17 +14,14 @@ const Home = () => {
     return(
         <>
         <Container>
-            {/* <div id="buyMask"> */}
             <div className="dayOfWeek">
                 <div className="mainTitle">마스크 어때?</div>
                 <div className="mainContent">오늘의 공적 마스크</div>
                 <div className="mainContent">구입 생년 끝자리</div>
                 <div className="mainContent red">{dayOfWeek}</div>
             </div>
-            {/* {<div id="mainSearch">} */}
             <Search page={"main"} />
 
-            {/* <div id="searchLocation"> */}
             <div>
             <NavLink to="/map">
                 <Button variant="primary" block>현재 위치로 검색</Button>

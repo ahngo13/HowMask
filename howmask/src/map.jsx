@@ -224,14 +224,10 @@ const Map = props => {
   }, [positions]);
   return (
     <div id="mapPage">
-        {/* <div id='searchDiv'>
-            <input id='searchBar' ref={inputWord}></input> <Button id='searchBtn' onClick={clickSearch}>검색</Button>
+        <div id="searchDiv">
+          <Search page={"map"} clickSearch={clickSearch} />
+          <Button id='current' onClick={current}>현재위치로 다시 검색</Button>
         </div>
-         */}
-
-        <Search page={"map"} clickSearch={clickSearch} />
-        
-        <Button id='current' onClick={current}>현재위치로 다시 검색</Button>
 
         <div className="App" id="map"></div>
         <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
