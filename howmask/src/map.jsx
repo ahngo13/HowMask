@@ -11,7 +11,7 @@ axios.defaults.withCredentials = true;
 const headers = { withCredentials: true };
 
 
-const Map = (props) => {
+const Map = () => {
   const { latitude, longitude } = usePosition();
   const [positions, setPositions] = useState();
   const [coords, setCoords] = useState({
@@ -90,15 +90,8 @@ const Map = (props) => {
       setCoords({ lat: coords.lat, lng:coords.lng });
   }
 
-  useEffect(()=>{
-    if(props.location.query){
-      console.log(props.location.query.id)
-      setWord(props.location.query.id);
-    }
-  },[])
   useEffect(() => {
     if (word) {
-      console.log(word);
       getInfoByAddr(word);
     }
   }, [word]);

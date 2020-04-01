@@ -20,11 +20,10 @@ const Home = () => {
                 <div className="mainContent">구입 생년 끝자리</div>
                 <div className="mainContent red">{dayOfWeek}</div>
             </div>
-            <Search page={"main"} />
 
             <div>
             <NavLink to="/map">
-                <Button variant="primary" block>현재 위치로 검색</Button>
+                <Button id="goMapBtn" variant="primary" block>마스크<br/>찾으로<br/>가기</Button>
             </NavLink>
             </div>
         </Container>    

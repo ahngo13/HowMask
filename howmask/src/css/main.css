@@ -1,6 +1,7 @@
 
 .dayOfWeek{
     text-align: center;
+    margin-top: 100px;
 }
 
 .mainTitle{
@@ -21,4 +22,17 @@
 
 .addressSearchBtn{
     margin-bottom: 5px;
+}
+
+#goMapBtn{
+    width: 100px;
+    height: 100px;
+    padding: 10px 16px;
+    border-radius: 50px;
+    font-size: 18px;
+    line-height: 1.33;
+    left:50%;
+    position: absolute;
+    transform:translate(-50%, 100%);
+
 }

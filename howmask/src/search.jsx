@@ -6,7 +6,6 @@ const Search = (props) => {
 
 
     const [siGu, setSiGu] = useState();
-    const [word, setWord] = useState();
     const si = useRef();
     
     function handleSubmit(event) {
@@ -16,15 +15,8 @@ const Search = (props) => {
         
         const name = data.getAll('name');
         const space = (name[2] === "") ? "" : " ";
-        const searchWord = cityName[name[0]] + " " + name[1] + space + name[2];
+        props.clickSearch(cityName[name[0]] + " " + name[1] + space + name[2]);
 
-        console.log(searchWord);
-
-        if(props.page !== "main"){
-            props.clickSearch(searchWord);
-        }else{
-            setWord(searchWord);
-        }
     }
 
     useEffect(() => {
@@ -103,57 +95,28 @@ const Search = (props) => {
         );
     });
 
-    let searchForm;
-    if(props.page === "main"){
-        searchForm = 
-            <Form onSubmit={handleSubmit}>
-                {/* <div id="mainSearch"> */}
-                <Form.Group controlId="siDoData">
-                    <Form.Control as="select" ref={si} onChange={getSiGuList} name="siDoName"  >
+    let searchForm = 
+        <Form onSubmit={handleSubmit}>
+            <Form.Row>
+                <Form.Group as={Col} md="1" >
+                    <Form.Control as="select" ref={si} onChange={getSiGuList} name="name" >
                         {siDoList}
                     </Form.Control>
                 </Form.Group>
-                <Form.Control as="select" name="siGuName">
-                    {siGu}
-                </Form.Control>
-                <FormControl placeholder="읍면동을 입력해주세요."  name="areaName" />
-                <Form.Text className="text-muted searchNotice">
-                    <div>읍면동을 정확히 입력해주세요.</div>
-                    <div>리까지 입력하시는 경우 띄어쓰기를 해주세요.</div>
-                    <div>올바른 예) 역삼동 or 시종면 구산리</div>
-                    <div>틀린 예) 관악 or 부산 or 여의도 or 시종구산</div>
-                </Form.Text>
-                <NavLink to={{pathname:'/map', query:{id:word}}} > 
-                    <Form.Group>
-                        <Button id="searchBtn" type="submit" className="addressSearchBtn" variant="primary" block>주소로 검색</Button>
-                    </Form.Group>
-                </NavLink>
-            </Form>
-    }else{
-        searchForm = 
-            <Form onSubmit={handleSubmit}>
-                <Form.Row>
-                    {/* <div id="mainSearch"> */}
-                    <Form.Group as={Col} md="1" >
-                        <Form.Control as="select" ref={si} onChange={getSiGuList} name="name" value={0}>
-                            {siDoList}
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group as={Col} md="1" >
-                        <Form.Control as="select" name="name">
-                            {siGu}
-                        </Form.Control>
-                    </Form.Group>
-                    <Form.Group as={Col} md="9" > 
-                        <FormControl placeholder="읍면동을 입력해주세요." name="name" />
-                    </Form.Group>
-                    <Form.Group as={Col} md="1">
-                        <Button id="searchBtn" type="submit" className="addressSearchBtn" variant="primary" block>주소로 검색</Button>
-                    </Form.Group>
-                </Form.Row>
-            </Form>
-    }
-    
+                <Form.Group as={Col} md="1" >
+                    <Form.Control as="select" name="name">
+                        {siGu}
+                    </Form.Control>
+                </Form.Group>
+                <Form.Group as={Col} md="9" > 
+                    <FormControl placeholder="읍면동을 입력해주세요." name="name" />
+                </Form.Group>
+                <Form.Group as={Col} md="1">
+                    <Button id="searchBtn" type="submit" className="addressSearchBtn" variant="primary" block>주소로 검색</Button>
+                </Form.Group>
+            </Form.Row>
+        </Form>
+
     return(
         <>
             {searchForm}
