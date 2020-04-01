@@ -165,8 +165,8 @@ const Map = () => {
           (function(marker, info) {
             // 마커에 mouseover 이벤트를 등록하고 마우스 오버 시 인포윈도우를 표시합니다
             kakao.maps.event.addListener(marker, "click", function() {
-              setModalShow(true);
               setStoreInfo(info);
+              setModalShow(true);
             });
           })(marker, positions[i].storeInfo);
         }
@@ -220,6 +220,11 @@ const Map = () => {
       }
     }
   }, [positions]);
+
+  let modal
+  if(modalShow){
+    modal = <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
+  }
   return (
     <div id="mapPage">
         <div id="searchDiv">
@@ -228,7 +233,7 @@ const Map = () => {
         </div>
 
         <div className="App" id="map"></div>
-        <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
+        {modal}
     </div>
   );
 };
