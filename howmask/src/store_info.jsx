@@ -146,7 +146,6 @@ function StoreInfoModal(props) {
           </Row>
         </Container>
         <br />
-        <strong>댓글</strong>
         <Comment />
       </Modal.Body>
     </Modal>

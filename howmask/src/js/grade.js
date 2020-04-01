@@ -6,6 +6,7 @@ $(document).ready(function() {
       .parent()
       .children("span")
       .removeClass("on");
+
     $(this)
       .addClass("on")
       .prevAll("span")

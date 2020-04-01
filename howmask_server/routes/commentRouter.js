@@ -3,13 +3,14 @@ const router = express.Router();
 const Comment = require("../schemas/comment");
 const multer = require("multer");
 const moment = require("moment");
+const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, "./upload/"); // 파일이 저장되는 경로입니다.
   },
   filename: function(req, file, cb) {
-    cb(null, moment().format("YYYYMMDDHHmmss") + "_" + file.originalname); // 저장되는 파일명
+    cb(null, new Date().valueOf() + moment().format("YYYYMMDDHHmmss") + "_" + file.originalname); // 저장되는 파일명
   }
 });
 
@@ -17,6 +18,22 @@ const upload = multer({ storage: storage });
 
 router.post("/delete", async (req, res) => {
   try {
+    const result = await Comment.aggregate([
+      { $match: { _id: req.body._id } },
+      { $out: "jointable" }
+    ]);
+    console.log(result);
+    console.log(JSON.stringify(result));
+    console.log("===========================");
+    const image = result.image;
+    console.log(JSON.stringify(image));
+    fs.unlink(`${image}`, err => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("디렉토리 파일 삭제 성공");
+      }
+    });
     await Comment.remove({
       _id: req.body._id
     });
@@ -48,26 +65,19 @@ router.post("/update", async (req, res) => {
     res.json({ message: false });
   }
 });
-router.post("/write_file", upload.single("img"), async (req, res) => {
-  // FormData의 경우 req로 부터 데이터를 얻을수 없다.
-  // upload 핸들러(multer)를 통해서 데이터를 읽을 수 있다
-  try {
-    console.log(req);
-  } catch (err) {
-    console.log(err);
-  }
-});
+
 router.post("/write", upload.single("img"), async (req, res) => {
   try {
     let obj;
     if (req.session.email) {
       if (req.file) {
+        console.log(req.file.filename);
         obj = {
           email: req.session.email,
           code: req.body.code,
           grade: req.body.grade,
           text: req.body.text,
-          image: req.file.path
+          image: req.file.filename
         };
       } else {
         obj = {
@@ -86,19 +96,6 @@ router.post("/write", upload.single("img"), async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.json({ message: false });
-  }
-});
-router.post("/getCommentAggregation", async (req, res) => {
-  try {
-    const code = req.body.storeCode;
-    const comment = await Comment.aggregate([
-      { $match: { code: { code } } },
-      { $group: { count: { $text: 1 } } }
-    ]);
-    console.log(comment);
-    res.json({ count: comment });
-  } catch (err) {
     res.json({ message: false });
   }
 });

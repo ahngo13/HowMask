@@ -14,25 +14,28 @@ function Comment() {
   const [selectedFile, setSelectedFile] = useState(null); // 파일
   const [imgBase64, setImgBase64] = useState(null); // 파일 base64
   const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 미리보기 파일 경로
+  const [gradeValue, setGradeValue] = useState(5);
 
+  // 평점 값
+  function handleGradeInput(e) {
+    setGradeValue(e.target.value);
+  }
   // 파일 업로드
   function handleFileInput(e) {
     e.preventDefault();
     let reader = new FileReader(); // 파일 읽기
     let file = e.target.files[0];
-    reader.onload = function(e) {
+    reader.onloadend = function(e) {
+      // 파일 load가 성공인 경우
       const base64 = e.target.result;
       if (base64) {
         setImgBase64(base64.toString()); // 파일 base64 상태 업데이트
-        // alert("base64");
       }
-      // console.log(e.target.result);
       setImagePreviewUrl(e.target.result);
     };
     if (file) {
       reader.readAsDataURL(file); // 1. 파일을 읽어 버퍼에 저장합니다.
       setSelectedFile(e.target.files[0]); // 파일 상태 업데이트
-      // alert("read Data URL");
     }
   }
   //댓글 삭제
@@ -67,7 +70,7 @@ function Comment() {
         formData.append("img", selectedFile);
       }
       formData.append("code", 111);
-      formData.append("grade", 5);
+      formData.append("grade", gradeValue);
       formData.append("text", commentTag.current.value);
     }
     const result = await axios.post(`http://${url}:8080/comment/write`, formData);
@@ -79,10 +82,13 @@ function Comment() {
       fileTag.current.value = "";
       setSelectedFile(null);
       commentTag.current.focus();
+      setImagePreviewUrl("");
+      setGradeValue(5);
       showComment();
     } else {
       alert("오류");
       setSelectedFile(null);
+      setImagePreviewUrl("");
     }
   }
 
@@ -103,6 +109,7 @@ function Comment() {
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Moment format="YYYY-MM-DD HH:mm">{comment.createdAt}</Moment>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <img src={comment.image} />
               <Button
                 size="sm"
                 variant="warning"
@@ -141,11 +148,12 @@ function Comment() {
 
   const commentTag = useRef();
   const fileTag = useRef();
+  const grade = useRef();
 
   return (
     <div>
       <Form>
-        <div className="starRev">
+        {/* <div className="starRev">
           <span className="starR1 on" value="0.5"></span>
           <span className="starR2 on" value="0.5"></span>
           <span className="starR1 on" value="0.5"></span>
@@ -156,10 +164,19 @@ function Comment() {
           <span className="starR2 on" value="0.5"></span>
           <span className="starR1 on" value="0.5"></span>
           <span className="starR2 on" value="0.5"></span>
-          <span>()</span>
-        </div>
+        </div> */}
+        평점 :
+        <input
+          style={{ width: "100px" }}
+          type="number"
+          name="name"
+          min={1}
+          max={5}
+          ref={grade}
+          onChange={e => handleGradeInput(e)}
+        />
         <InputGroup>
-          <FormControl placeholder="댓글을 입력하세요" ref={commentTag} />
+          <FormControl placeholder="댓글을 입력하세요" ref={commentTag}></FormControl>
           <InputGroup.Append>
             <Button
               onClick={() => {
@@ -171,6 +188,10 @@ function Comment() {
             </Button>
           </InputGroup.Append>
         </InputGroup>
+        <img
+          style={{ backgroundColor: "#efefef", width: "150px", height: "150px" }}
+          src={imagePreviewUrl}
+        />
         <br />
         <InputGroup>
           <Form.File>
