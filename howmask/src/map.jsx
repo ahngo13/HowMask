@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { usePosition } from "use-position";
 import axios from "axios";
 import StoreModal from "./store_info";
@@ -11,7 +11,7 @@ axios.defaults.withCredentials = true;
 const headers = { withCredentials: true };
 
 
-const Map = props => {
+const Map = (props) => {
   const { latitude, longitude } = usePosition();
   const [positions, setPositions] = useState();
   const [coords, setCoords] = useState({
@@ -21,8 +21,7 @@ const Map = props => {
   const [level, setLevel] = useState(3);
   const [modalShow, setModalShow] = useState(false);
   const [storeInfo, setStoreInfo] = useState();
-  const [word, setWord] = useState(props.keyWord);
-  // const inputWord = useRef();
+  const [word, setWord] = useState(null);
 
  
   async function getInfoByGeo(lat, lng) {
@@ -91,6 +90,12 @@ const Map = props => {
       setCoords({ lat: coords.lat, lng:coords.lng });
   }
 
+  useEffect(()=>{
+    if(props.location.query){
+      console.log(props.location.query.id)
+      setWord(props.location.query.id);
+    }
+  },[])
   useEffect(() => {
     if (word) {
       console.log(word);

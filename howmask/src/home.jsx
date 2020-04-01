@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useRef} from "react";
+import React from "react";
 import "./css/main.css";
 import { NavLink } from "react-router-dom";
-import { Button, Container, Form, FormControl } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import Search from './search';
 
 const Home = () => {

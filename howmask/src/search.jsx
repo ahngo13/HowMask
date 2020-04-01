@@ -6,19 +6,25 @@ const Search = (props) => {
 
 
     const [siGu, setSiGu] = useState();
+    const [word, setWord] = useState();
     const si = useRef();
     
     function handleSubmit(event) {
         event.preventDefault();
+
         const data = new FormData(event.target);
-        let name = cityName[data.get('siDoName')];
-        name += " " + data.get('siGuName');
-        const areaName = data.get('areaName');
-        if(areaName !== ""){
-            name += " " + areaName;
+        
+        const name = data.getAll('name');
+        const space = (name[2] === "") ? "" : " ";
+        const searchWord = cityName[name[0]] + " " + name[1] + space + name[2];
+
+        console.log(searchWord);
+
+        if(props.page !== "main"){
+            props.clickSearch(searchWord);
+        }else{
+            setWord(searchWord);
         }
-        console.log(name);
-        props.clickSearch(name)
     }
 
     useEffect(() => {
@@ -55,10 +61,10 @@ const Search = (props) => {
         siGuName.push(['군산시','김제시','남원시','익산시','전주시 덕진구','전주시 완산구','정읍시','고창군','무주군','부안군','순창군','완주군','임실군','장수군','진안군']);
         //전라남도
         siGuName.push(['광양시','나주시','목포시','순천시','여수시','강진군','고흥군','곡성군','구례군','담양군','무안군','보성군','신안군','영광군','영암군','완도군','장성군','장흥군','진도군','함평군','해남군','화순군']);
-        //경상남도
-        siGuName.push(['거제시','김해시','마산시','밀양시','사천시','양산시','진주시','진해시','창원시','통영시','거창군','고성군','남해군','산청군','의령군','창녕군','하동군','함안군','함양군','합천군']);
         //경상북도
         siGuName.push(['경산시','경주시','구미시','김천시','문경시','상주시','안동시','영주시','영천시','포항시 남구','포항시 북구','고령군','군위군','봉화군','성주군','영덕군','영양군','예천군','울릉군','울진군','의성군','청도군','청송군','칠곡군']);
+        //경상남도
+        siGuName.push(['거제시','김해시','마산시','밀양시','사천시','양산시','진주시','진해시','창원시','통영시','거창군','고성군','남해군','산청군','의령군','창녕군','하동군','함안군','함양군','합천군']);
         //제주도
         siGuName.push(['서귀포시','제주시','남제주군','북제주군']);
 
@@ -100,10 +106,10 @@ const Search = (props) => {
     let searchForm;
     if(props.page === "main"){
         searchForm = 
-            <Form>
+            <Form onSubmit={handleSubmit}>
                 {/* <div id="mainSearch"> */}
                 <Form.Group controlId="siDoData">
-                    <Form.Control as="select" ref={si} onChange={getSiGuList} name="siDoName">
+                    <Form.Control as="select" ref={si} onChange={getSiGuList} name="siDoName"  >
                         {siDoList}
                     </Form.Control>
                 </Form.Group>
@@ -117,8 +123,8 @@ const Search = (props) => {
                     <div>올바른 예) 역삼동 or 시종면 구산리</div>
                     <div>틀린 예) 관악 or 부산 or 여의도 or 시종구산</div>
                 </Form.Text>
-                <NavLink to="/map">
-                    <Form.Group as={Col} md="1">
+                <NavLink to={{pathname:'/map', query:{id:word}}} > 
+                    <Form.Group>
                         <Button id="searchBtn" type="submit" className="addressSearchBtn" variant="primary" block>주소로 검색</Button>
                     </Form.Group>
                 </NavLink>
@@ -129,17 +135,17 @@ const Search = (props) => {
                 <Form.Row>
                     {/* <div id="mainSearch"> */}
                     <Form.Group as={Col} md="1" >
-                        <Form.Control as="select" ref={si} onChange={getSiGuList} name="siDoName">
+                        <Form.Control as="select" ref={si} onChange={getSiGuList} name="name" value={0}>
                             {siDoList}
                         </Form.Control>
                     </Form.Group>
                     <Form.Group as={Col} md="1" >
-                        <Form.Control as="select" name="siGuName">
+                        <Form.Control as="select" name="name">
                             {siGu}
                         </Form.Control>
                     </Form.Group>
                     <Form.Group as={Col} md="9" > 
-                        <FormControl placeholder="읍면동을 입력해주세요." name="areaName" />
+                        <FormControl placeholder="읍면동을 입력해주세요." name="name" />
                     </Form.Group>
                     <Form.Group as={Col} md="1">
                         <Button id="searchBtn" type="submit" className="addressSearchBtn" variant="primary" block>주소로 검색</Button>
