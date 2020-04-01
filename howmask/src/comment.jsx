@@ -17,6 +17,7 @@ function Comment(props) {
   const [imgBase64, setImgBase64] = useState(null); // 파일 base64
   const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 미리보기 파일 경로
   const [gradeValue, setGradeValue] = useState(5);
+  const [commentCnt, setCommentCnt] = useState();
 
   useEffect(() => {
     showComment();
@@ -90,6 +91,7 @@ function Comment(props) {
       commentTag.current.focus();
       setImagePreviewUrl("");
       setGradeValue(5);
+      setCommentCnt(commentCnt+1);
       showComment();
     } else {
       alert("오류");
@@ -104,11 +106,13 @@ function Comment(props) {
       const sendParam = { code };
       const result = await axios.post(`http://${url}:8080/comment/getCommentList`, sendParam);
 
+      setCommentCnt(result.data.list.length);
+      
       if (result.data.list) {
         const allComments = result.data.list.map(comment => {
           const commentId = comment._id;
           const image = comment.image;
-
+          
           return (
             <div key={comment._id}>
               <Badge pill variant="dark">
@@ -231,6 +235,7 @@ function Comment(props) {
         </InputGroup>
       </Form>
       <br />
+      <div>총 댓글 갯수 : {commentCnt}</div>
       {comments}
     </div>
   );
