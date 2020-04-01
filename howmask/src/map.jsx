@@ -39,10 +39,15 @@ const Map = props => {
         info.push({
           title: item.name,
           latlng: new kakao.maps.LatLng(item.lat, item.lng),
+          //약국 정보
           storeInfo: {
             addr: item.addr,
             name: item.name,
-            stock: item.remain_stat
+            stock: item.remain_stat,
+            code: item.code,
+            type: item.type,
+            createdAt: item.created_at,
+            stockAt: item.stock_at
           }
         });
       });
