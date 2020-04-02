@@ -11,8 +11,13 @@
 }
 
 .mainContent{
-    font-size: 20px;
+    font-size: 25px;
     text-align: center;
+}
+
+.mainContentLeft{
+    font-size: 20px;
+    text-align: left;
 }
 
 .red{
