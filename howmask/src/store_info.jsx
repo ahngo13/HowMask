@@ -174,7 +174,10 @@ function StoreInfoModal(props) {
                 to={{
                   pathname: `/register/seller`,
                   state: {
-                    name: props.info.name
+                    code: props.info.code,
+                    name: props.info.name,
+                    addr: props.info.addr,
+                    type: props.info.type
                   }
                 }}
               >
