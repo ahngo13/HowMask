@@ -25,3 +25,9 @@
     /* white-space : nowrap;  */
     min-width: 100px;
 }
+
+.modalStyles{
+    text-align:center;
+    
+    margin:auto;
+}

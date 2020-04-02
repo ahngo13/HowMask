@@ -1,6 +1,5 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import Home from "./home";
 import Store from "./store";
 import Login from "./login";
 import Register from "./register";
@@ -19,8 +18,7 @@ import Admin from "./admin";
 const Router = () => {
   return (
     <>
-      <Route exact path="/" component={Home}></Route>
-      <Route path="/map" component={Map}></Route>
+      <Route exact path="/" component={Map}></Route>
       <Route path="/store" component={Store}></Route>
       <Route path="/login" component={Login}></Route>
       <Route exact path="/register" component={Register}></Route>

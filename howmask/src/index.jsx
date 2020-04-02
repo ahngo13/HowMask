@@ -32,9 +32,6 @@ ReactDOM.render(
           <span>마스크 어때?</span>
         </Navbar.Brand>
         <LoginBtn />
-        <NavLink style={navLinkStyle} to={{pathname:'/map', query:{id:""}}}>
-          map
-        </NavLink>
         <NavLink style={navLinkStyle} to="/store">
           store
         </NavLink>

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { usePosition } from "use-position";
+import {Button} from 'react-bootstrap';
 import axios from "axios";
 import StoreModal from "./store_info";
-import {Button} from 'react-bootstrap';
 import Search from './search';
+import Notice from './notice';
 
 const { kakao } = window;
 const { daum } = window;
@@ -20,6 +21,7 @@ const Map = () => {
   });
   const [level, setLevel] = useState(3);
   const [modalShow, setModalShow] = useState(false);
+  const [noticeShow, setNoticeShow] = useState(true);
   const [storeInfo, setStoreInfo] = useState();
   const [word, setWord] = useState(null);
 
@@ -225,6 +227,12 @@ const Map = () => {
   if(modalShow){
     modal = <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
   }
+
+  let noticeModal
+  if(noticeShow){
+    noticeModal = <Notice show={noticeShow} onHide={()=> setNoticeShow(false)}></Notice>
+  }
+
   return (
     <div id="mapPage">
         <div id="searchDiv">
@@ -234,6 +242,7 @@ const Map = () => {
 
         <div className="App" id="map"></div>
         {modal}
+        {noticeModal}
     </div>
   );
 };
