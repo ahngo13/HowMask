@@ -8,7 +8,7 @@ const url = "localhost";
 function RouterStore1() {
   const confirm = window.confirm("이전 화면으로 이동하시겠습니까?");
   if (confirm) {
-    window.location.href = "/#/map";
+    window.location.href = "/";
   }
 }
 function RouterStore2() {
@@ -31,7 +31,7 @@ function Suggest() {
       Text: Text.current.value
     };
     const result = await axios.post(`http://${url}:8080/store/suggest`, sendParam);
-    if (result.data.message === "ok") {
+    if (result.data.message) {
       Text.current.value = "";
       RouterStore2();
     } else {

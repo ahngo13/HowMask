@@ -33,7 +33,6 @@ router.post("/update", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 // 판매처 정보수정 제안 응답
 router.post("/suggest", async (req, res) => {
   try {
@@ -43,20 +42,34 @@ router.post("/suggest", async (req, res) => {
       suggestType: req.body.suggestType,
       Text: req.body.Text
     };
-    if (req.session.email) {
-      const suggest = new Suggest(obj);
-      console.log("1 suggest inserted");
-      await suggest.save();
-      res.json({ message: "ok" });
-    } else {
-      res.json({ message: "login" });
-    }
+    const suggest = new Suggest(obj);
+    await suggest.save();
+    console.log("1 suggest inserted");
+    res.json({ message: true });
   } catch (err) {
     console.log(err);
     res.json({ message: false });
   }
 });
-
+// 판매처 계정 신청
+router.post("/join", async (req, res) => {
+  try {
+    let obj = {
+      bizCode: req.body.bizCode,
+      storeName: req.body.storeName,
+      address: req.body.address,
+      sellerName: req.body.sellerName,
+      phone: req.body.phone,
+      email: req.body.email
+    };
+    const store = new Store(obj);
+    await store.save();
+    res.json({ message: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+});
 router.post("/write", async (req, res) => {
   try {
     const file = req.file;

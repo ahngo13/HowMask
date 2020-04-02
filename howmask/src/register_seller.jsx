@@ -9,7 +9,7 @@ const url = "localhost";
 function RouterStore() {
   const confirm = window.confirm("이전 화면으로 이동하시겠습니까?");
   if (confirm) {
-    window.location.href = "/#/map";
+    window.location.href = "/";
   }
 }
 
@@ -57,37 +57,74 @@ function RegisterSeller(props) {
     }
   };
   async function Register(event) {
-    // event.preventDefault();
-    if (!emailvalid) {
-      alert("필수 항목을 입력하세요");
-      return;
-    }
-    const bizCode = inputStoreBizCode.current.value;
-    const name = inputStoreName.current.value;
+    const storeName = inputStoreName.current.value;
     const address = inputStoreAddress.current.value;
-    const nickname = inputSellerName.current.value;
+    const bizCode = inputStoreBizCode.current.value;
+    const sellerName = inputSellerName.current.value;
     const phone = inputPhoneNumber.current.value;
     const email = inputSellerEmail.current.value;
-    const type = param.type;
-    const code = param.code;
-
-    const sendParam = {
-      bizCode,
-      name,
-      address,
-      nickname,
-      phone,
-      email,
-      type,
-      code
-    };
-
-    console.log(sendParam);
-
-    const result = await axios.post(`http://${url}:8080/user/join`, sendParam);
-    if (result.data.message === "ok") {
+    // const type = param.type;
+    // const code = param.code;
+    if (!storeName) {
+      alert("판매처명을 입력하세요");
+      inputStoreName.current.focus();
+      return;
+    } else if (!address) {
+      alert("판매처 주소를 입력하세요");
+      inputStoreAddress.current.focus();
+      return;
+    } else if (!bizCode) {
+      alert("사업자등록번호를 입력하세요");
+      inputStoreBizCode.current.focus();
+      return;
+    } else if (!sellerName) {
+      alert("관리자 이름을 입력하세요");
+      inputSellerName.current.focus();
+      return;
+    } else if (!phone) {
+      alert("관리자 휴대전화번호를 입력하세요");
+      inputPhoneNumber.current.focus();
+      return;
+    } else if (!email) {
+      alert("관리자 이메일을 입력하세요");
+      inputSellerEmail.current.focus();
+      return;
     } else {
-      alert("오류");
+      if (!emailvalid) {
+        alert("이메일 형식이 맞지 않습니다. 다시 입력해주세요.");
+        inputSellerEmail.current.focus();
+        return;
+      } else {
+        const sendParamStore = {
+          bizCode,
+          storeName,
+          address,
+          sellerName,
+          phone,
+          email
+          // type,
+          // code
+        };
+        const sendParamUser = {
+          email,
+          phone,
+          user_type: 1
+        };
+
+        const resultStore = await axios.post(`http://${url}:8080/store/join`, sendParamStore);
+        const resultUser = await axios.post(`http://${url}:8080/user/join`, sendParamUser);
+        if (resultStore.data.message && resultUser.data.message) {
+          alert(
+            "판매처 계정이 신청되었습니다.\n관리자 승인 후 입력하신 메일로 안내문을 전달드립니다."
+          );
+        } else if (resultStore.data.message) {
+          alert("Store 테이블 오류");
+        } else if (resultUser.data.message) {
+          alert("User 테이블 오류");
+        } else {
+          alert("Store, User 테이블 오류");
+        }
+      }
     }
   }
   const registerTitle = {

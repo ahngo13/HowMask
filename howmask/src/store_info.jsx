@@ -3,20 +3,6 @@ import { Modal, Button, Badge, Table, Card, Container, Col, Row } from "react-bo
 import { NavLink } from "react-router-dom";
 import Comment from "./comment";
 
-// 판매처 정보 수정 제안 이동
-function suggestStoreInfo() {
-  if (!sessionStorage.getItem("login")) {
-    const confirm = window.confirm(
-      "로그인이 필요한 서비스입니다.\n로그인 화면으로 이동하겠습니까? "
-    );
-    if (confirm) {
-      window.location.href = "/#/login";
-    }
-  } else {
-    window.location.href = "/#/suggest";
-  }
-}
-
 //판매처 상세정보 Modal
 function StoreInfoModal(props) {
   const [stockColor, setStockColor] = useState();
@@ -165,9 +151,21 @@ function StoreInfoModal(props) {
         <Container>
           <Row>
             <Col>
-              <Button onClick={() => suggestStoreInfo(true)} variant="warning" size="lg" block>
-                판매처정보가 잘못되었어요!
-              </Button>
+              <NavLink
+                to={{
+                  pathname: `/suggest`,
+                  state: {
+                    code: props.info.code,
+                    name: props.info.name,
+                    addr: props.info.addr,
+                    type: props.info.type
+                  }
+                }}
+              >
+                <Button variant="warning" size="lg" block>
+                  판매처정보가 잘못되었어요!
+                </Button>
+              </NavLink>
             </Col>
             <Col>
               <NavLink

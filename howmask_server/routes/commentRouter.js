@@ -96,15 +96,20 @@ router.post("/write", upload.single("img"), async (req, res) => {
     res.json({ message: false });
   }
 });
-router.post("/getCommentList", async (req, res) => {
+router.post("/getImageList", (req, res) => {
   try {
     console.log(req.body);
+  } catch (err) {
+    console.log(err);
+  }
+});
+router.post("/getCommentList", async (req, res) => {
+  try {
     const comment = await Comment.find({ code: req.body.code }, null, {
       sort: { createdAt: -1 }
     });
     res.json({ list: comment });
   } catch (err) {
-    console.log(err);
     res.json({ message: false });
   }
 });
