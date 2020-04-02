@@ -8,6 +8,7 @@ const url = "localhost";
 const headers = { withCredentials: true };
 
 const Register = () => {
+  const [usertypestate, setUsertypestate] = useState({value:"0"});
   const [emailstate, setEmailstate] = useState({valid:false, invalid:false});
   const [pwstate, setPwstate] = useState({valid:false, invalid:false});
   const [namestate, setNamestate] = useState({valid:false, invalid:false});
@@ -19,9 +20,12 @@ const Register = () => {
   const inputEmail = useRef();
   const inputPwd = useRef();
   const inputYear = useRef();
-  const inputUsertype = useRef();
 
   let userRegisterform;
+
+  const changeUsertype = (e)=>{
+    setUsertypestate({value:e})
+  }
 
   const validateEmail = emailEntered => {
     const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
@@ -65,7 +69,7 @@ const Register = () => {
       return;
     }
 
-    const usertype = inputUsertype.current.value;
+    const usertype = usertypestate.value;
     const email = inputEmail.current.value;
     const password = inputPwd.current.value;
     const nick = inputNick.current.value;
@@ -134,12 +138,36 @@ const Register = () => {
     textAlign: "center"
   };
 
+  // const [optionstate, setOptionstate] = useState({value:"0"});
+  // const optionTest = (event) =>{
+  //   event.preventDefault();
+  //   alert(optionstate.value);
+  // }
+  // const changeTest = (event) =>{
+  //   setOptionstate({value: event});
+  // }
 
   if(!userformstate){
      userRegisterform = (
     <Container style={registerType}>      
       <Button onClick = {userForm} variant="info" block>개인회원 가입</Button>
       <Button onClick = {storeForm} variant="warning" block>판매처 가입</Button>
+      {/* <Form onSubmit={optionTest}>
+      <Form.Group  as={Row} controlId="formUsertype">
+        <Form.Label column sm={3}>
+          가입형식
+        </Form.Label>
+        <Col sm={9}>
+          <Form.Control as="select" value={optionstate.value} onChange={e => changeTest(e.target.value)}>
+            <option value="0">개인</option>
+            <option value="7791">관리자</option>
+          </Form.Control>
+        </Col>
+      </Form.Group>
+      <Button variant="info" type="submit">
+        테스트
+      </Button>
+      </Form> */}
     </Container>
   )
   }else{
@@ -151,10 +179,11 @@ const Register = () => {
           가입형식
         </Form.Label>
         <Col sm={9}>
-          <Form.Control as="select" ref={inputUsertype}>
-            <option>개인</option>
-          {/* 관리자옵션은 임시로 만듬 */}
-            <option>관리자</option>
+          <Form.Control as="select" value={usertypestate.value} onChange={e => changeUsertype(e.target.value)}>
+            <option value="0">개인</option>
+          {/* 관리자, 판매처 옵션은 임시로 만듬 */}
+            <option value="1">판매처</option>
+            <option value="7791">관리자</option>
           </Form.Control>
         </Col>
       </Form.Group>

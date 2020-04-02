@@ -14,7 +14,6 @@ const Admin = () => {
 
   const viewList = ()=>{
     if (!sessionStorage.getItem("login")) {
-      alert("다시 로그인해주세요");
       window.location.href = "/";
       return
     }
@@ -48,6 +47,7 @@ const Admin = () => {
         } else if(returnData.data.noSession){
           alert("다시 로그인해주세요");
           sessionStorage.removeItem("login");
+          sessionStorage.removeItem("login");
           window.location.href = "/";
 
         } else{
@@ -65,7 +65,7 @@ const Admin = () => {
     const listsEmail = lists.email;
     return(
     <tr key={listsEmail}>
-    <td>{lists.user_type}</td>
+    <td>{lists.user_type==="0"?"개인":"판매처"}</td>
     <td>{lists.email}</td>
     <td>{lists.nickname}</td>
     <td>{lists.lockYn}</td>

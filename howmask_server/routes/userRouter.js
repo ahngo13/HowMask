@@ -11,11 +11,11 @@ router.get("/adminViewList", async (req, res)=>{
     let user_type = req.session.user_type;
  
     console.log(user_type);
-    if(user_type !== "관리자"){
+    if(user_type !== "7791"){
       res.json({message: "관리자가 아닙니다."});
     } else{
       // const result = await User.find({ $or:[{user_type: "개인"},{user_type:"관리자"}] }, async (err, user) => {}
-        const result = await User.find().or([{user_type: "개인"},{user_type:"판매처"}]).select('-_id user_type email nickname lockYn');
+        const result = await User.find().or([{user_type: "0"},{user_type:"1"}]).select('-_id user_type email nickname lockYn');
     res.json({message: "관리자 확인", result});
     console.log(result);
   }
@@ -31,7 +31,7 @@ router.post("/admindelete", async (req, res) => {
     let user_type = req.session.user_type;
  
     console.log(user_type);
-    if(user_type !== "관리자" || !req.session.email){
+    if(user_type !== "7791" || !req.session.email){
       res.json({message: false,noSession:true});
     } else{
     await User.remove({
@@ -142,7 +142,7 @@ router.post("/login", async (req, res) => {
                   );
                   req.session.email = user.email;
                   req.session.user_type = user2.user_type;
-                  if(user2.user_type == "관리자"){
+                  if(user2.user_type == "7791"){
                     res.json({
                       message: "관리자님 로그인 되었습니다!",
                       _id: user2._id,
