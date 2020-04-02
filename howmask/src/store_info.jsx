@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Modal, Button, Badge, Table, Card, Container, Col, Row } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 import Comment from "./comment";
-
-const url = "localhost";
 
 // 판매처 정보 수정 제안 이동
 function suggestStoreInfo() {
@@ -17,16 +16,14 @@ function suggestStoreInfo() {
     window.location.href = "/#/suggest";
   }
 }
-// 판매처 계정 등록 이동
-function RegisterStoreAccount() {
-  window.location.href = "/#/register/seller";
-}
 
 //판매처 상세정보 Modal
 function StoreInfoModal(props) {
   const [stockColor, setStockColor] = useState();
   const [stockText, setStockText] = useState();
   const [stockType, setStockType] = useState();
+
+  const registerSeller = useRef();
 
   function howMany() {
     const stock = props.info.stock;
@@ -88,7 +85,6 @@ function StoreInfoModal(props) {
         <Modal.Title id="contained-modal-title-vcenter">
           {props.info.name}
           &nbsp;&nbsp;&nbsp;<Badge variant={stockColor}>{stockText}</Badge>
-          code : {props.info.code}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -174,9 +170,21 @@ function StoreInfoModal(props) {
               </Button>
             </Col>
             <Col>
-              <Button onClick={() => RegisterStoreAccount(true)} variant="info" size="lg" block>
-                무료 판매처계정 생성하기
-              </Button>
+              <NavLink
+                to={{
+                  pathname: `/register/seller`,
+                  state: {
+                    code: props.info.code,
+                    name: props.info.name,
+                    addr: props.info.addr,
+                    type: props.info.type
+                  }
+                }}
+              >
+                <Button className="register" ref={registerSeller} variant="info" size="lg" block>
+                  무료 판매처계정 생성하기
+                </Button>
+              </NavLink>
             </Col>
           </Row>
         </Container>
