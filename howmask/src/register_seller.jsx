@@ -30,17 +30,17 @@ function RegisterSeller(props) {
   // Modal로부터 값 받아오기
   function setStoreInfo() {
     const param = props.location.state;
-    
+
     //파라미터 저장(input 이외에 추가로 이전페이지에서 넘겨줘야 되는 값들을 사용하기 위해 세팅)
     setParam(param);
     //textfield 값 세팅
     inputStoreName.current.defaultValue = param.name;
-    inputStoreAddress.current.defaultValue = param.code;
+    inputStoreAddress.current.defaultValue = param.addr;
   }
 
   useEffect(() => {
     //locaiton state값이 비어있지 않을 경우
-    if(props.location.state != undefined){
+    if (props.location.state != undefined) {
       setStoreInfo();
     }
   });
@@ -80,13 +80,12 @@ function RegisterSeller(props) {
       email,
       type,
       code
-    }
+    };
 
     console.log(sendParam);
 
-   const result = await axios.post(`http://${url}:8080/user/join`, sendParam);
-   if (result.data.message === "ok") {
-
+    const result = await axios.post(`http://${url}:8080/user/join`, sendParam);
+    if (result.data.message === "ok") {
     } else {
       alert("오류");
     }
@@ -131,14 +130,14 @@ function RegisterSeller(props) {
             <Form.Control ref={inputStoreBizCode} placeholder="사업자등록번호*" />
           </Form.Group>
         </Form.Row>
-          <Button variant="info" size="lg" block>
-            사업자등록증 첨부
-          </Button>
-          <Form.Text className="text-muted">
-            사업자등록증은 판매처 관계자임을 증명하는 자료로만 사용됩니다. 신속한 계정 발급을 위해
-            꼭 첨부해주세요.
-          </Form.Text>
-          <br />
+        <Button variant="info" size="lg" block>
+          사업자등록증 첨부
+        </Button>
+        <Form.Text className="text-muted">
+          사업자등록증은 판매처 관계자임을 증명하는 자료로만 사용됩니다. 신속한 계정 발급을 위해 꼭
+          첨부해주세요.
+        </Form.Text>
+        <br />
         <Form.Label>관리자 정보</Form.Label>
         <Form.Text className="text-muted">
           입력하신 이메일로 계정정보 안내를 해드립니다. 정확하게 작성해주세요. (* 필수입력)

@@ -39,6 +39,8 @@ router.post("/delete", async (req, res) => {
 router.post("/update", async (req, res) => {
   try {
     if (req.body.flag) {
+      console.log("수정 완료 로직 진입");
+      // 수정 후 입력버튼 클릭 (DB에 수정된 값 저장)
       await Comment.update(
         { _id: req.body._id },
         {
@@ -47,9 +49,12 @@ router.post("/update", async (req, res) => {
           }
         }
       );
-      res.json({ message: "게시글이 수정 되었습니다." });
+      res.json({ message: "댓글 수정" });
     } else {
-      const comment = await Comment.find({ _id: req.body._id }, { _id: false });
+      console.log("수정 로직 진입");
+      // 수정버튼 클릭  (DB에서 수정할 값 조회)
+      const comment = await Comment.find({ _id: req.body._id });
+      console.log(comment);
       res.json({ comment: comment });
     }
   } catch (err) {

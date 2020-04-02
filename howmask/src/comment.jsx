@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { InputGroup, Form, Button, Badge, FormControl } from "react-bootstrap";
+import { InputGroup, Form, Button, Badge, FormControl, Table } from "react-bootstrap";
 import axios from "axios";
 import Moment from "react-moment";
 import "./css/grade.css";
@@ -12,12 +12,16 @@ const url = "localhost";
 function Comment(props) {
   const code = props.code; // 판매처코드
   // const [code, setCode] = useState(); // 판매처코드
-  const [comments, setComments] = useState(); // 댓글
+  const [comments, setComments] = useState(); // 댓글 리스트
+  const [commentId, setCommentId] = useState(); // 댓글 id
+  const [flag, setFlag] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null); // 파일
   const [imgBase64, setImgBase64] = useState(null); // 파일 base64
   const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 미리보기 파일 경로
   const [gradeValue, setGradeValue] = useState(5);
   const [commentCnt, setCommentCnt] = useState();
+  const [functionName, setFunctionName] = useState("insert");
+  const [btnName, setBtnName] = useState("댓글 등록");
 
   useEffect(() => {
     showComment();
@@ -57,16 +61,19 @@ function Comment(props) {
   }
   //댓글 수정
   async function updateComment(_id) {
-    const sendParam = { _id };
+    const sendParam = { _id, flag };
     const result = axios.post(`http://${url}:8080/comment/update`, sendParam);
-    if (result) {
+    if ((await result).data.comment) {
       console.log((await result).data.comment[0].text);
       commentTag.current.value = (await result).data.comment[0].text;
       commentTag.current.focus();
+      setCommentId(_id);
+      setFunctionName("update");
+      setBtnName("댓글 수정");
     }
   }
   //댓글 입력
-  async function insertComment(props) {
+  async function insertComment() {
     let formData = new FormData();
     if (!commentTag.current.value) {
       alert("댓글 내용을 입력하세요");
@@ -79,24 +86,42 @@ function Comment(props) {
       formData.append("code", code);
       formData.append("grade", gradeValue);
       formData.append("text", commentTag.current.value);
-    }
-    const result = await axios.post(`http://${url}:8080/comment/write`, formData);
-    if (result.data.message === "login") {
-      alert("로그인이 필요합니다.");
-      commentTag.current.focus();
-    } else if (result.data.message === "ok") {
-      commentTag.current.value = "";
-      fileTag.current.value = "";
-      setSelectedFile(null);
-      commentTag.current.focus();
-      setImagePreviewUrl("");
-      setGradeValue(5);
-      setCommentCnt(commentCnt + 1);
-      showComment();
-    } else {
-      alert("오류");
-      setSelectedFile(null);
-      setImagePreviewUrl("");
+
+      //새로운 댓글 등록
+      if (functionName === "insert") {
+        const resultWrite = await axios.post(`http://${url}:8080/comment/write`, formData);
+        if (resultWrite.data.message === "login") {
+          alert("로그인이 필요합니다.");
+          commentTag.current.focus();
+        } else if (resultWrite.data.message === "ok") {
+          commentTag.current.value = "";
+          fileTag.current.value = "";
+          setSelectedFile(null);
+          commentTag.current.focus();
+          setImagePreviewUrl("");
+          setGradeValue(5);
+          setCommentCnt(commentCnt + 1);
+          showComment();
+        } else {
+          alert("오류");
+          setSelectedFile(null);
+          setImagePreviewUrl("");
+        }
+      } // 수정한 댓글 등록
+      else if (functionName === "update") {
+        formData.append("_id", commentId);
+        formData.append("flag", flag);
+        setFlag(true);
+        console.log("수정할 댓글 id: " + commentId);
+        console.log("플래그 : " + flag);
+        const resultUpdate = await axios.post(`http://${url}:8080/comment/update`, formData);
+        if (resultUpdate) {
+          alert(resultUpdate.data.message);
+        } else {
+          alert("오류");
+        }
+      }
+      setBtnName("댓글 등록");
     }
   }
 
@@ -115,37 +140,56 @@ function Comment(props) {
 
           return (
             <div key={comment._id}>
-              <Badge pill variant="dark">
-                {comment.email}
-              </Badge>
-              &nbsp;&nbsp;
-              <span>{comment.text}</span>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Moment format="YYYY-MM-DD HH:mm">{comment.createdAt}</Moment>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <img src={comment.image} />
-              <Button
-                size="sm"
-                variant="warning"
-                onClick={() => {
-                  updateComment(commentId);
-                }}
-              >
-                수정
-              </Button>
-              <span>&nbsp;</span>
-              <Button
-                size="sm"
-                variant="danger"
-                onClick={() => {
-                  deleteComment(commentId, image);
-                }}
-              >
-                삭제
-              </Button>
-              <br />
-              <Button variant="light">답글</Button>
-              <hr />
+              <Table responsive borderless>
+                <tbody>
+                  <tr>
+                    <td>
+                      <span>{comment.grade}</span>
+                    </td>
+                    <td>
+                      <span>{comment.text}</span>
+                    </td>
+                    <td>
+                      <Button
+                        size="sm"
+                        variant="warning"
+                        onClick={() => {
+                          updateComment(commentId);
+                        }}
+                      >
+                        수정
+                      </Button>
+                      <span>&nbsp;</span>
+                      <Button
+                        size="sm"
+                        variant="danger"
+                        onClick={() => {
+                          deleteComment(commentId, image);
+                        }}
+                      >
+                        삭제
+                      </Button>
+                      <Button size="sm" variant="light">
+                        답글
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <Badge pill variant="dark">
+                        {comment.email}
+                      </Badge>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <Moment format="YYYY-MM-DD HH:mm">{comment.createdAt}</Moment>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                    <td>
+                      <img src={comment.image} />
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
             </div>
           );
         });
@@ -204,7 +248,7 @@ function Comment(props) {
               }}
               variant="outline-dark"
             >
-              댓글 등록
+              {btnName}
             </Button>
           </InputGroup.Append>
         </InputGroup>
