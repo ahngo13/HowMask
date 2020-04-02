@@ -6,7 +6,7 @@ const url = "localhost";
 
 // 판매처 조회화면 돌아가기 (confirm)
 function RouterStore1() {
-  const confirm = window.confirm("판매처 조회화면으로 이동하시겠습니까?");
+  const confirm = window.confirm("이전 화면으로 이동하시겠습니까?");
   if (confirm) {
     window.location.href = "/#/map";
   }

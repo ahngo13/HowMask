@@ -91,7 +91,7 @@ function Comment(props) {
       commentTag.current.focus();
       setImagePreviewUrl("");
       setGradeValue(5);
-      setCommentCnt(commentCnt+1);
+      setCommentCnt(commentCnt + 1);
       showComment();
     } else {
       alert("오류");
@@ -107,12 +107,12 @@ function Comment(props) {
       const result = await axios.post(`http://${url}:8080/comment/getCommentList`, sendParam);
 
       setCommentCnt(result.data.list.length);
-      
+
       if (result.data.list) {
         const allComments = result.data.list.map(comment => {
           const commentId = comment._id;
           const image = comment.image;
-          
+
           return (
             <div key={comment._id}>
               <Badge pill variant="dark">
@@ -143,7 +143,6 @@ function Comment(props) {
               >
                 삭제
               </Button>
-              {comment.code}
               <br />
               <Button variant="light">답글</Button>
               <hr />
@@ -196,16 +195,6 @@ function Comment(props) {
             5
           </span>
         </div>
-        {/*         평점 :
-        <input
-          style={{ width: "100px" }}
-          type="number"
-          name="name"
-          min={1}
-          max={5}
-          ref={grade}
-          onChange={e => handleGradeInput(e)}
-        /> */}
         <InputGroup>
           <FormControl placeholder="댓글을 입력하세요" ref={commentTag}></FormControl>
           <InputGroup.Append>

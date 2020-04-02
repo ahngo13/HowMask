@@ -1,20 +1,21 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import Register from "./register";
 
 // 판매처 조회화면 돌아가기
 function RouterStore() {
-  const confirm = window.confirm("판매처 조회화면으로 이동하시겠습니까?");
+  const confirm = window.confirm("이전 화면으로 이동하시겠습니까?");
   if (confirm) {
     window.location.href = "/#/map";
   }
 }
 
 // 판매처 계정 등록 Form
-function RegisterSeller() {
+function RegisterSeller(props) {
   // 판매처 계정 등록 Event
   const [emailinvalid, setEmailinvalid] = useState(false);
   const [emailvalid, setEmailvalid] = useState(false);
+  const [sendParam, setSendParam] = useState();
 
   const inputStoreName = useRef();
   const inputStoreAddress = useRef();
@@ -22,6 +23,18 @@ function RegisterSeller() {
   const inputSellerName = useRef();
   const inputPhoneNumber = useRef();
   const inputSellerEmail = useRef();
+
+  // Modal로부터 값 받아오기
+  function getDetail() {
+    const param = props.location.state;
+    console.log("param :" + param);
+    console.log("props: " + props);
+    setSendParam(props.location);
+  }
+
+  useEffect(() => {
+    getDetail();
+  });
 
   // 이메일 형식 체크
   const validateEmail = emailEntered => {
@@ -34,7 +47,7 @@ function RegisterSeller() {
       setEmailvalid(false);
     }
   };
-  function RegisterSellerBtn(event) {
+  async function Register(event) {
     event.preventDefault();
     if (!emailvalid) {
       alert("필수 항목을 입력하세요");
@@ -68,6 +81,7 @@ function RegisterSeller() {
     left: 0,
     margin: "auto"
   };
+  console.log(sendParam);
   return (
     <>
       <h2 style={registerTitle}>판매처 계정 신청</h2>
@@ -76,11 +90,11 @@ function RegisterSeller() {
         <Form.Text className="text-muted">(* 필수입력)</Form.Text>
         <Form.Row>
           <Form.Group as={Col}>
-            <Form.Control ref={inputStoreName} defaultValue="한서약국*" />
+            <Form.Control ref={inputStoreName} defaultValue="판매처명" />
           </Form.Group>
 
           <Form.Group as={Col} controlId="storeLocation">
-            <Form.Control ref={inputStoreAddress} defaultValue="서울특별시 강남구*" />
+            <Form.Control ref={inputStoreAddress} defaultValue="판매처 주소" />
           </Form.Group>
 
           <Form.Group as={Col} controlId="storeCode">
@@ -133,7 +147,13 @@ function RegisterSeller() {
             </Button>
           </Col>
           <Col>
-            <Button variant="info" as={Col} onClick={RegisterSellerBtn}>
+            <Button
+              variant="info"
+              as={Col}
+              onClick={() => {
+                Register(true);
+              }}
+            >
               신청하기
             </Button>
           </Col>
