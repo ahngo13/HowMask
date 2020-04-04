@@ -68,7 +68,6 @@ router.post("/write", upload.single("img"), async (req, res) => {
     let obj;
     if (req.session.email) {
       if (req.file) {
-        console.log(req.file);
         const test = req.file.path.split("public");
 
         obj = {
@@ -78,7 +77,6 @@ router.post("/write", upload.single("img"), async (req, res) => {
           text: req.body.text,
           image: test[1]
         };
-        console.log(obj);
       } else {
         obj = {
           email: req.session.email,
@@ -99,16 +97,9 @@ router.post("/write", upload.single("img"), async (req, res) => {
     res.json({ message: false });
   }
 });
-router.post("/getImageList", (req, res) => {
-  try {
-    console.log(req.body);
-  } catch (err) {
-    console.log(err);
-  }
-});
+
 router.post("/getCommentList", async (req, res) => {
   try {
-    // res.setHeader("Content-Type", mimeType[ext]);
     const comment = await Comment.find({ code: req.body.code }, null, {
       sort: { createdAt: -1 }
     });

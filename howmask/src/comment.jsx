@@ -31,15 +31,7 @@ function Comment(props) {
   function handleGradeInput(e) {
     setGradeValue(e.target.textContent);
   }
-  // 모든 이미지 파일 조회
-  async function showImages(props) {
-    try {
-      const sendParam = { code };
-      const result = await axios.post(`http://${url}:8080/comment/getCommentList`, sendParam);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+
   // 이미지 파일 업로드
   function handleFileInput(e) {
     e.preventDefault();
@@ -139,6 +131,10 @@ function Comment(props) {
     try {
       const sendParam = { code };
       const result = await axios.post(`http://${url}:8080/comment/getCommentList`, sendParam);
+      const imageStyle = {
+        width: "250px",
+        height: "auto"
+      };
 
       setCommentCnt(result.data.list.length);
 
@@ -146,7 +142,6 @@ function Comment(props) {
         const allComments = result.data.list.map(comment => {
           const commentId = comment._id;
           const imageUrl = `http://${url}:8080/` + comment.image;
-          console.log(imageUrl);
 
           return (
             <div key={comment._id}>
@@ -195,7 +190,7 @@ function Comment(props) {
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </td>
                     <td>
-                      <img src={imageUrl} />
+                      <img src={imageUrl} style={imageStyle} />
                     </td>
                   </tr>
                 </tbody>
