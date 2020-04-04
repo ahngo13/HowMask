@@ -59,8 +59,8 @@ function Comment(props) {
     }
   }
   //댓글 삭제
-  async function deleteComment(_id, image) {
-    const sendParam = { _id, image };
+  async function deleteComment(_id, imageUrl) {
+    const sendParam = { _id, imageUrl };
     const result = axios.post(`http://${url}:8080/comment/delete`, sendParam);
     if ((await result).data.message) {
       showComment();
@@ -145,8 +145,8 @@ function Comment(props) {
       if (result.data.list) {
         const allComments = result.data.list.map(comment => {
           const commentId = comment._id;
-          const image = comment.image;
-          const imageUrl = "http://localhost:8080/upload/";
+          const imageUrl = `http://${url}:8080/` + comment.image;
+          console.log(imageUrl);
 
           return (
             <div key={comment._id}>
@@ -174,7 +174,7 @@ function Comment(props) {
                         size="sm"
                         variant="danger"
                         onClick={() => {
-                          deleteComment(commentId, image);
+                          deleteComment(commentId, comment.image);
                         }}
                       >
                         삭제
@@ -195,7 +195,7 @@ function Comment(props) {
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </td>
                     <td>
-                      {/* <img src={require(`http://localhost:8080/upload/${comment.image}`)} /> */}
+                      <img src={imageUrl} />
                     </td>
                   </tr>
                 </tbody>

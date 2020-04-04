@@ -7,7 +7,7 @@ const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, "./upload/"); // 파일이 저장되는 경로입니다.
+    cb(null, "./public/upload/"); // 파일이 저장되는 경로입니다.
   },
   filename: function(req, file, cb) {
     cb(null, new Date().valueOf() + moment().format("YYYYMMDDHHmmss") + "_" + file.originalname); // 저장되는 파일명
@@ -18,7 +18,7 @@ const upload = multer({ storage: storage });
 
 router.post("/delete", async (req, res) => {
   try {
-    fs.unlink(`./upload/${req.body.image}`, err => {
+    fs.unlink(`./public${req.body.imageUrl}`, err => {
       if (err) {
         console.log(err);
       } else {
@@ -68,14 +68,17 @@ router.post("/write", upload.single("img"), async (req, res) => {
     let obj;
     if (req.session.email) {
       if (req.file) {
-        console.log(req.file.filename);
+        console.log(req.file);
+        const test = req.file.path.split("public");
+
         obj = {
           email: req.session.email,
           code: req.body.code,
           grade: req.body.grade,
           text: req.body.text,
-          image: req.file.filename
+          image: test[1]
         };
+        console.log(obj);
       } else {
         obj = {
           email: req.session.email,
@@ -105,6 +108,7 @@ router.post("/getImageList", (req, res) => {
 });
 router.post("/getCommentList", async (req, res) => {
   try {
+    // res.setHeader("Content-Type", mimeType[ext]);
     const comment = await Comment.find({ code: req.body.code }, null, {
       sort: { createdAt: -1 }
     });

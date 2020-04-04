@@ -153,18 +153,26 @@ function RegisterSeller(props) {
       <h2 style={registerTitle}>판매처 계정 신청</h2>
       <Form style={registerForm}>
         <Form.Label>판매처 정보</Form.Label>
-        <Form.Text className="text-muted">(* 필수입력)</Form.Text>
         <Form.Row>
           <Form.Group as={Col}>
+            <Form.Label>
+              <font color="#246dbf">판매처명</font>
+            </Form.Label>
             <Form.Control ref={inputStoreName} placeholder="판매처명" />
           </Form.Group>
-
-          <Form.Group as={Col} controlId="storeLocation">
-            <Form.Control ref={inputStoreAddress} placeholder="판매처 주소" />
-          </Form.Group>
-
           <Form.Group as={Col} controlId="storeCode">
+            <Form.Label>
+              <font color="#246dbf">사업자등록번호</font>
+            </Form.Label>
             <Form.Control ref={inputStoreBizCode} placeholder="사업자등록번호*" />
+          </Form.Group>
+        </Form.Row>
+        <Form.Row>
+          <Form.Group as={Col} controlId="storeLocation">
+            <Form.Label>
+              <font color="#246dbf">주소</font>
+            </Form.Label>
+            <Form.Control ref={inputStoreAddress} placeholder="판매처 주소" />
           </Form.Group>
         </Form.Row>
         <Button variant="info" size="lg" block>
@@ -176,19 +184,27 @@ function RegisterSeller(props) {
         </Form.Text>
         <br />
         <Form.Label>관리자 정보</Form.Label>
-        <Form.Text className="text-muted">
-          입력하신 이메일로 계정정보 안내를 해드립니다. 정확하게 작성해주세요. (* 필수입력)
-        </Form.Text>
+
         <Form.Row>
           <Form.Group as={Col} controlId="formGridCity">
+            <Form.Label>
+              <font color="#246dbf">이름</font>
+            </Form.Label>
             <Form.Control ref={inputSellerName} placeholder="이름*" />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridState">
+            <Form.Label>
+              <font color="#246dbf">휴대전화번호</font>
+            </Form.Label>
             <Form.Control ref={inputPhoneNumber} placeholder="휴대전화번호*" />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridZip">
+            <Form.Label>
+              <font color="#246dbf">이메일</font>
+            </Form.Label>
+
             <Form.Control
               ref={inputSellerEmail}
               isInvalid={emailinvalid}
@@ -196,6 +212,9 @@ function RegisterSeller(props) {
               onChange={e => validateEmail(e.target.value)}
               placeholder="이메일*"
             />
+            <Form.Text className="text-muted">
+              입력하신 이메일로 계정정보 안내를 해드립니다.
+            </Form.Text>
           </Form.Group>
         </Form.Row>
         <Row>

@@ -4,6 +4,7 @@ const cors = require("cors");
 const session = require("express-session");
 const connect = require("./schemas");
 const fs = require("fs");
+const path = require("path");
 
 connect();
 
@@ -12,10 +13,10 @@ const corsOptions = {
   credentials: true
 };
 
-fs.readdir("upload", error => {
+fs.readdir("public/upload", error => {
   // uploads 폴더 없으면 생성
   if (error) {
-    fs.mkdirSync("upload");
+    fs.mkdirSync("public/upload");
     console.log("upload 폴더 생성됨");
   }
 });
@@ -31,6 +32,7 @@ app.use(
     }
   })
 );
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(cors(corsOptions));
 
