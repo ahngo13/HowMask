@@ -28,7 +28,7 @@ function Suggest() {
     }
     const sendParam = {
       suggestType: suggestType.current.value,
-      Text: Text.current.value
+      Text: Text.current.value,
     };
     const result = await axios.post(`http://${url}:8080/store/suggest`, sendParam);
     if (result.data.message) {
@@ -48,7 +48,7 @@ function Suggest() {
     bottom: 0,
     left: 0,
     margin: "auto",
-    textAlign: "center"
+    textAlign: "center",
   };
   const suggestForm = {
     display: "inline-block",
@@ -58,7 +58,7 @@ function Suggest() {
     right: 0,
     bottom: 0,
     left: 100,
-    margin: "auto"
+    margin: "auto",
   };
   return (
     <>
@@ -82,7 +82,7 @@ function Suggest() {
             as="textarea"
             rows="3"
             ref={Text}
-            placeholder="진료시간이 오후 5시까지인데 6시까지로 되어 있습니다."
+            placeholder="(예시) 진료시간이 오후 5시까지인데 6시까지로 되어 있습니다."
           />
           <br />
           <Row>

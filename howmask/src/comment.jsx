@@ -32,12 +32,20 @@ function Comment(props) {
     setGradeValue(e.target.textContent);
   }
 
+  // 이미지 파일 Component
+  function imageFile(comment, imageUrl, imageStyle) {
+    if (comment.image) {
+      return <img src={imageUrl} style={imageStyle} />;
+    } else {
+      return null;
+    }
+  }
   // 이미지 파일 업로드
   function handleFileInput(e) {
     e.preventDefault();
     let reader = new FileReader(); // 파일 읽기
     let file = e.target.files[0];
-    reader.onloadend = function(e) {
+    reader.onloadend = function (e) {
       // 파일 load가 성공인 경우
       const base64 = e.target.result;
       if (base64) {
@@ -133,13 +141,13 @@ function Comment(props) {
       const result = await axios.post(`http://${url}:8080/comment/getCommentList`, sendParam);
       const imageStyle = {
         width: "250px",
-        height: "auto"
+        height: "auto",
       };
 
       setCommentCnt(result.data.list.length);
 
       if (result.data.list) {
-        const allComments = result.data.list.map(comment => {
+        const allComments = result.data.list.map((comment) => {
           const commentId = comment._id;
           const imageUrl = `http://${url}:8080/` + comment.image;
 
@@ -189,12 +197,11 @@ function Comment(props) {
                       <Moment format="YYYY-MM-DD HH:mm">{comment.createdAt}</Moment>
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </td>
-                    <td>
-                      <img src={imageUrl} style={imageStyle} />
-                    </td>
+                    <td>{imageFile(comment, imageUrl, imageStyle)}</td>
                   </tr>
                 </tbody>
               </Table>
+              <hr />
             </div>
           );
         });
@@ -213,34 +220,34 @@ function Comment(props) {
     <div>
       <Form>
         <div className="starRev">
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
             0.5
           </span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
             1
           </span>
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
             1.5
           </span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
             2
           </span>
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
             2.5
           </span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
             3
           </span>
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
             3.5
           </span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
             4
           </span>
-          <span className="starR1 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
             4.5
           </span>
-          <span className="starR2 on" onClick={e => handleGradeInput(e)}>
+          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
             5
           </span>
         </div>
@@ -261,14 +268,14 @@ function Comment(props) {
           style={{
             backgroundColor: "#efefef",
             width: "150px",
-            height: "150px"
+            height: "150px",
           }}
           src={imagePreviewUrl}
         />
         <br />
         <InputGroup>
           <Form.File>
-            <Form.File.Input accept="image/" ref={fileTag} onChange={e => handleFileInput(e)} />
+            <Form.File.Input accept="image/" ref={fileTag} onChange={(e) => handleFileInput(e)} />
           </Form.File>
         </InputGroup>
       </Form>
