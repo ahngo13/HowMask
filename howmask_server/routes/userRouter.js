@@ -75,6 +75,8 @@ router.post("/join", async (req, res) => {
               } else {
                 console.log(key.toString("base64"));
                 buf.toString("base64");
+                let code=0;
+                code = req.body.code;
                 obj = {
                   email: req.body.email,
                   nickname: req.body.nick,
@@ -82,6 +84,7 @@ router.post("/join", async (req, res) => {
                   year: req.body.year,
                   password: key.toString("base64"),
                   salt: buf.toString("base64"),
+                  code
                 };
                 user = new User(obj);
                 await user.save();

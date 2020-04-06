@@ -24,6 +24,7 @@ const Map = () => {
   const [noticeShow, setNoticeShow] = useState(true);
   const [storeInfo, setStoreInfo] = useState();
   const [word, setWord] = useState(null);
+  const [searched, setSearched] = useState(false);
 
  
   async function getInfoByGeo(lat, lng) {
@@ -89,6 +90,7 @@ const Map = () => {
 
   function current () {
       setWord(null);
+      setSearched(false);
       setCoords({ lat: coords.lat, lng:coords.lng });
   }
 
@@ -113,7 +115,6 @@ const Map = () => {
   }, [coords, word, coords.lat, coords.lng]);
 
   useEffect(() => {
-    console.log(coords);
     if (latitude && longitude) {
 
       // 지도의 중심 위치 지정
@@ -216,12 +217,15 @@ const Map = () => {
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
             
             setCoords({ lat: latlng.getLat(), lng: latlng.getLng() });
-            map.setCenter(latlng);
+            if(!searched){
+              map.setCenter(latlng);
+              setSearched(true);
+            }
           }
         });
       }
     }
-  }, [positions, latitude, longitude, word]);
+  }, [positions, latitude, longitude, word, level, coords, searched]);
   
 
   let modal
