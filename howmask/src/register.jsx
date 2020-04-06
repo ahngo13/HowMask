@@ -156,15 +156,6 @@ const Register = () => {
     textAlign: "center",
   };
 
-  // const [optionstate, setOptionstate] = useState({value:"0"});
-  // const optionTest = (event) =>{
-  //   event.preventDefault();
-  //   alert(optionstate.value);
-  // }
-  // const changeTest = (event) =>{
-  //   setOptionstate({value: event});
-  // }
-
   if (!userformstate) {
     userRegisterform = (
       <Container style={registerType}>
@@ -172,24 +163,8 @@ const Register = () => {
           개인회원 가입
         </Button>
         <Button onClick={storeForm} variant="warning" block>
-          판매처 가입
+          판매처는 판매점을 통해 진행해주세요
         </Button>
-        {/* <Form onSubmit={optionTest}>
-      <Form.Group  as={Row} controlId="formUsertype">
-        <Form.Label column sm={3}>
-          가입형식
-        </Form.Label>
-        <Col sm={9}>
-          <Form.Control as="select" value={optionstate.value} onChange={e => changeTest(e.target.value)}>
-            <option value="0">개인</option>
-            <option value="7791">관리자</option>
-          </Form.Control>
-        </Col>
-      </Form.Group>
-      <Button variant="info" type="submit">
-        테스트
-      </Button>
-      </Form> */}
       </Container>
     );
   } else {
