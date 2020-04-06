@@ -23,6 +23,41 @@ function Comment(props) {
   const [functionName, setFunctionName] = useState("insert");
   const [btnName, setBtnName] = useState("댓글 등록");
 
+  const gradeForm = (
+    <div className="starRev">
+      <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
+        0.5
+      </span>
+      <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
+        1
+      </span>
+      <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
+        1.5
+      </span>
+      <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
+        2
+      </span>
+      <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
+        2.5
+      </span>
+      <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
+        3
+      </span>
+      <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
+        3.5
+      </span>
+      <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
+        4
+      </span>
+      <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
+        4.5
+      </span>
+      <span className="starR2 on 5" onClick={(e) => handleGradeInput(e)}>
+        5
+      </span>
+    </div>
+  );
+
   useEffect(() => {
     showComment();
   }, []);
@@ -31,6 +66,7 @@ function Comment(props) {
   function handleGradeInput(e) {
     setGradeValue(e.target.textContent);
   }
+  // 평점 Component
 
   // 이미지 파일 Component
   function imageFile(comment, imageUrl, imageStyle) {
@@ -62,23 +98,28 @@ function Comment(props) {
   async function deleteComment(_id, imageUrl) {
     const sendParam = { _id, imageUrl };
     const result = axios.post(`http://${url}:8080/comment/delete`, sendParam);
-    if ((await result).data.message) {
+    console.log(result);
+    if ((await result).data.session == true) {
       showComment();
-    } else {
-      alert("오류");
+    } else if ((await result).data.session == false) {
+      alert("로그인이 필요합니다.");
+      window.location.href = "/#/login";
+    } else if ((await result).data.message == false) {
+      alert("에러");
     }
   }
   //댓글 수정
   async function updateComment(_id) {
     const sendParam = { _id, flag };
     const result = axios.post(`http://${url}:8080/comment/update`, sendParam);
-    if ((await result).data.comment) {
+    if ((await result).data.message) {
       console.log((await result).data.comment[0].text);
       commentTag.current.value = (await result).data.comment[0].text;
       commentTag.current.focus();
       setCommentId(_id);
       setFunctionName("update");
       setBtnName("댓글 수정");
+    } else {
     }
   }
   //댓글 입력
@@ -99,10 +140,12 @@ function Comment(props) {
       //새로운 댓글 등록
       if (functionName === "insert") {
         const resultWrite = await axios.post(`http://${url}:8080/comment/write`, formData);
-        if (resultWrite.data.message === "login") {
+
+        if ((await resultWrite).data.resultCode === 0) {
+          sessionStorage.clear(); // 세션스토리지 삭제
           alert("로그인이 필요합니다.");
-          commentTag.current.focus();
-        } else if (resultWrite.data.message === "ok") {
+          window.location.href = "/#/login";
+        } else if ((await resultWrite).data.resultCode === 1) {
           commentTag.current.value = "";
           fileTag.current.value = "";
           setSelectedFile(null);
@@ -111,8 +154,8 @@ function Comment(props) {
           setGradeValue(5);
           setCommentCnt(commentCnt + 1);
           showComment();
-        } else {
-          alert("오류");
+        } else if ((await resultWrite).data.resultCode === 2) {
+          alert("에러");
           setSelectedFile(null);
           setImagePreviewUrl("");
         }
@@ -219,38 +262,7 @@ function Comment(props) {
   return (
     <div>
       <Form>
-        <div className="starRev">
-          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
-            0.5
-          </span>
-          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
-            1
-          </span>
-          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
-            1.5
-          </span>
-          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
-            2
-          </span>
-          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
-            2.5
-          </span>
-          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
-            3
-          </span>
-          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
-            3.5
-          </span>
-          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
-            4
-          </span>
-          <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
-            4.5
-          </span>
-          <span className="starR2 on" onClick={(e) => handleGradeInput(e)}>
-            5
-          </span>
-        </div>
+        {gradeForm}
         <InputGroup>
           <FormControl placeholder="댓글을 입력하세요" ref={commentTag}></FormControl>
           <InputGroup.Append>
@@ -264,18 +276,15 @@ function Comment(props) {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        <img
-          style={{
-            backgroundColor: "#efefef",
-            width: "150px",
-            height: "150px",
-          }}
-          src={imagePreviewUrl}
-        />
+        <img src={imagePreviewUrl} />
         <br />
         <InputGroup>
           <Form.File>
-            <Form.File.Input accept="image/" ref={fileTag} onChange={(e) => handleFileInput(e)} />
+            <Form.File.Input
+              accept=".gif, .jpg, .png"
+              ref={fileTag}
+              onChange={(e) => handleFileInput(e)}
+            />
           </Form.File>
         </InputGroup>
       </Form>
