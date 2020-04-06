@@ -2,39 +2,42 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 const {
-  Types: { ObjectId }
+  Types: { ObjectId },
 } = Schema;
 const commentSchema = new Schema({
   email: {
     type: String,
     required: true,
-    ref: "User"
+    ref: "User",
   },
   code: {
     type: String,
     required: true,
-    ref: "Store"
+    ref: "Store",
   },
   grade: {
     type: String,
-    required: true
+    required: true,
   },
   // 컬럼 추가 : text
   text: {
     type: String,
-    required: true
+    required: true,
   },
   image: {
-    type: String
+    type: String,
+  },
+  mine: {
+    type: Boolean,
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("Comment", commentSchema);

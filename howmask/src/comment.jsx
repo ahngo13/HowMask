@@ -23,7 +23,6 @@ function Comment(props) {
   const [functionName, setFunctionName] = useState("insert");
   const [insertBtn, setInsertBtn] = useState("댓글 등록");
   const [cancelStyle, setCancelStyle] = useState("none");
-  const [showBtn, setShowBtn] = useState(null);
 
   const gradeForm = (
     <div className="starRev">
@@ -202,7 +201,7 @@ function Comment(props) {
         width: "250px",
         height: "auto",
       };
-
+      let showBtn;
       setCommentCnt(result.data.list.length);
 
       if (result.data.list) {
@@ -210,6 +209,11 @@ function Comment(props) {
           const commentId = comment._id;
           const imageUrl = `http://${url}:8080/` + comment.image;
 
+          if (comment.mine) {
+            showBtn = "inline-block";
+          } else {
+            showBtn = "none";
+          }
           return (
             <div key={comment._id}>
               <Table responsive borderless>
@@ -221,7 +225,6 @@ function Comment(props) {
                           평점 : {comment.grade}
                         </Badge>
                       </h5>
-                      {/*  <span>{comment.grade}</span> */}
                     </td>
                     <td colSpan="2">
                       <span>{comment.text}</span>
@@ -233,7 +236,7 @@ function Comment(props) {
                         onClick={() => {
                           updateComment(commentId, flag);
                         }}
-                        style={showBtn}
+                        style={{ display: showBtn }}
                       >
                         수정
                       </Button>
@@ -244,14 +247,13 @@ function Comment(props) {
                         onClick={() => {
                           deleteComment(commentId, comment.image);
                         }}
-                        style={showBtn}
+                        style={{ display: showBtn }}
                       >
                         삭제
                       </Button>
                     </td>
                   </tr>
                   <tr>
-                    {/*    <td></td> */}
                     <td colSpan="2">
                       <Badge pill variant="dark">
                         {comment.email}
