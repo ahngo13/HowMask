@@ -5,14 +5,11 @@ import axios from "axios";
 const url = "localhost";
 
 // 판매처 조회화면 돌아가기 (confirm)
-function RouterStore1() {
+function RouterStore() {
   const confirm = window.confirm("이전 화면으로 이동하시겠습니까?");
   if (confirm) {
     window.location.href = "/";
   }
-}
-function RouterStore2() {
-  window.location.href = "/#/storeInfo";
 }
 
 // 판매처 정보수정 제안 Form
@@ -32,9 +29,6 @@ function Suggest(props) {
       Text.current.focus();
       return;
     }
-    // alert(param.code + ":" + suggesttypestate.value + Text.current.value);
-    // alert(param.code);
-    // alert(Text.current.value + ":" + suggesttypestate.value);
     let sendParam;
     if (props.location.state === undefined) {
       alert("다시 들어와주세요");
@@ -46,14 +40,11 @@ function Suggest(props) {
         Text: Text.current.value,
       };
     }
-    const result = await axios.post(
-      `http://${url}:8080/store/suggest`,
-      sendParam
-    );
+    const result = await axios.post(`http://${url}:8080/store/suggest`, sendParam);
     if (result.data.message) {
       alert("입력 완료");
+      window.location.href = "/";
       Text.current.value = "";
-      RouterStore2();
     } else {
       alert("오류");
     }
@@ -97,9 +88,7 @@ function Suggest(props) {
             <option value="전화번호">전화번호</option>
             <option value="진료 및 영업시간">진료 및 영업시간</option>
             <option value="마스크 종류 및 재고">마스크 종류 및 재고</option>
-            <option value="기타">
-              기타(약국 등 판매처 정보에 대한 제보만 가능)
-            </option>
+            <option value="기타">기타(약국 등 판매처 정보에 대한 제보만 가능)</option>
           </Form.Control>
           <br />
           <Form.Label>제안 상세 내용</Form.Label>
@@ -115,7 +104,7 @@ function Suggest(props) {
             <Col>
               <Button
                 onClick={() => {
-                  RouterStore1(true);
+                  RouterStore(true);
                 }}
                 variant="warning"
                 size="lg"
@@ -125,12 +114,7 @@ function Suggest(props) {
               </Button>
             </Col>
             <Col>
-              <Button
-                variant="info"
-                size="lg"
-                block
-                onClick={registerSuggestion}
-              >
+              <Button variant="info" size="lg" block onClick={registerSuggestion}>
                 등록하기
               </Button>
             </Col>
