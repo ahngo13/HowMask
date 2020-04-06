@@ -88,13 +88,13 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">판매처명</font>
             </Form.Label>
-            <Form.Control ref={storeName} disabled={textFlag} defaultValue="한서약국" />
+            <Form.Control ref={storeName} readOnly="false" defaultValue="한서약국" />
           </Form.Group>
           <Form.Group as={Col} controlId="storeLocation">
             <Form.Label>
               <font color="#246dbf">사업자등록번호</font>
             </Form.Label>
-            <Form.Control ref={bizCode} disabled={textFlag} defaultValue="123-456789" />
+            <Form.Control ref={bizCode} readOnly={textFlag} defaultValue="123-456789" />
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -102,7 +102,7 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">주소</font>
             </Form.Label>
-            <Form.Control ref={addr} disabled={textFlag} defaultValue="서울특별시 강남구" />
+            <Form.Control ref={addr} readOnly={textFlag} defaultValue="서울특별시 강남구" />
           </Form.Group>
         </Form.Row>
         <br />
@@ -112,21 +112,21 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">이름</font>
             </Form.Label>
-            <Form.Control ref={sellerName} disabled={textFlag} defaultValue="홍길동" />
+            <Form.Control ref={sellerName} readOnly={textFlag} defaultValue="홍길동" />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridState">
             <Form.Label>
               <font color="#246dbf">휴대전화번호</font>
             </Form.Label>
-            <Form.Control ref={phone} disabled={textFlag} defaultValue="010-1234-1234" />
+            <Form.Control ref={phone} readOnly={textFlag} defaultValue="010-1234-1234" />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridZip">
             <Form.Label>
               <font color="#246dbf">이메일</font>
             </Form.Label>
-            <Form.Control ref={email} disabled={textFlag} defaultValue="seller@gmail.com" />
+            <Form.Control ref={email} readOnly={textFlag} defaultValue="seller@gmail.com" />
           </Form.Group>
         </Form.Row>
         <br />
@@ -136,20 +136,20 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">판매 예정시간</font>
             </Form.Label>
-            <Form.Control disabled={textFlag} defaultValue="(1차) 10시~12시 (2차) 16시~18시" />
+            <Form.Control readOnly={textFlag} defaultValue="(1차) 10시~12시 (2차) 16시~18시" />
           </Form.Group>
-          <Form.Group as={Col} disabled={textFlag} controlId="formGridState">
+          <Form.Group as={Col} readOnly={textFlag} controlId="formGridState">
             <Form.Label>
               <font color="#246dbf">평균 재고수량</font>
             </Form.Label>
-            <Form.Control disabled={textFlag} defaultValue="300개" />
+            <Form.Control readOnly={textFlag} defaultValue="300개" />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridZip">
             <Form.Label>
               <font color="#246dbf">유아용마스크 판매여부</font>
             </Form.Label>
-            <Form.Control disabled={textFlag} defaultValue="판매중" />
+            <Form.Control readOnly={textFlag} defaultValue="판매중" />
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -157,7 +157,7 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">공지사항</font>
             </Form.Label>
-            <Form.Control as="textarea" disabled={textFlag} defaultValue="재고 많습니다." />
+            <Form.Control as="textarea" readOnly={textFlag} defaultValue="재고 많습니다." />
           </Form.Group>
         </Form.Row>
       </Form>

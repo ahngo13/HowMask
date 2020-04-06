@@ -12,9 +12,10 @@ const storeSchema = new Schema({
   },
   //사업자 등록번호
   bizCode: {
-    type: String
+    type: String,
+    required: true
   },
-  store_type: {
+  storeType: {
     type: String,
     required: true
   },

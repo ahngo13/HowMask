@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import axios from "axios";
-import Register from "./register";
 
 const url = "localhost";
 
@@ -40,7 +39,7 @@ function RegisterSeller(props) {
 
   useEffect(() => {
     //locaiton state값이 비어있지 않을 경우
-    if (props.location.state != undefined) {
+    if (props.location.state !== undefined) {
       setStoreInfo();
     }
   });
@@ -96,29 +95,35 @@ function RegisterSeller(props) {
         return;
       } else {
         const sendParamStore = {
+          code:param.code,
           bizCode,
+          storeType:param.type,
           storeName,
           address,
           sellerName,
           phone,
-          email
           // type,
           // code
         };
         const sendParamUser = {
           email,
-          phone,
-          user_type: 1
+          nick:"seller",
+          usertype: 1,
+          password:"123",
+          year:0,
         };
-
+        
         const resultStore = await axios.post(`http://${url}:8080/store/join`, sendParamStore);
         const resultUser = await axios.post(`http://${url}:8080/user/join`, sendParamUser);
-        if (resultStore.data.message && resultUser.data.message) {
+        if (resultStore.data.message && resultUser.data.dupYn === "0") {
           alert(
             "판매처 계정이 신청되었습니다.\n관리자 승인 후 입력하신 메일로 안내문을 전달드립니다."
           );
-        } else if (resultStore.data.message) {
+        } else if (!resultStore.data.message) {
           alert("Store 테이블 오류");
+        } else if (resultUser.data.dupYn==="1") {
+          await axios.post(`http://${url}:8080/store/joinfail`, sendParamStore);
+          alert("중복된 이메일입니다.");
         } else if (resultUser.data.message) {
           alert("User 테이블 오류");
         } else {

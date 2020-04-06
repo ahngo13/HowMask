@@ -52,7 +52,7 @@ router.post("/join", async (req, res) => {
     let obj = { email: req.body.email };
 
     let user = await User.findOne(obj);
-    console.log(user);
+    // console.log(user);
 
     if (user) {
       res.json({
@@ -76,13 +76,18 @@ router.post("/join", async (req, res) => {
               } else {
                 console.log(key.toString("base64"));
                 buf.toString("base64");
+                let code=0;
+                if(req.body.code){
+                  code=req.body.code;
+                }
                 obj = {
                   email: req.body.email,
                   nickname: req.body.nick,
                   user_type: req.body.usertype,
                   year: req.body.year,
                   password: key.toString("base64"),
-                  salt: buf.toString("base64")
+                  salt: buf.toString("base64"),
+                  code,
                 };
                 user = new User(obj);
                 await user.save();
@@ -203,6 +208,7 @@ router.post("/login", async (req, res) => {
     res.json({ message: "로그인 실패" });
   }
 });
+
 
 router.get("/logout", (req, res) => {
   console.log("/logout" + req.sessionID);
