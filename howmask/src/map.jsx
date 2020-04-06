@@ -103,18 +103,17 @@ const Map = () => {
         getInfoByGeo(latitude, longitude);
       }
     }
-  }, [latitude, longitude]);
+  }, [latitude, longitude, word, coords.lat, coords.lng]);
   useEffect(() => {
     if (!word) {
       if (coords.lat && coords.lng) {
         getInfoByGeo(coords.lat, coords.lng);
       }
     }
-  }, [coords]);
+  }, [coords, word, coords.lat, coords.lng]);
 
   useEffect(() => {
     if (latitude && longitude) {
-      // getStoreInfo();
 
       // 지도의 중심 위치 지정
       let lat, lng;
@@ -221,7 +220,8 @@ const Map = () => {
         });
       }
     }
-  }, [positions]);
+  }, [positions, latitude, longitude, coords.lat, coords.lng, level, word]);
+  
 
   let modal
   if(modalShow){
