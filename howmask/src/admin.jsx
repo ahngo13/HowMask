@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Table, Container } from "react-bootstrap";
 
@@ -8,6 +8,10 @@ const headers = { withCredentials: true };
 
 const Admin = () => {
   const [list, setList] = useState([]);
+
+  useEffect(() => {
+    viewList();
+  }, []);
 
   const viewList = () => {
     if (!sessionStorage.getItem("login")) {
@@ -38,7 +42,7 @@ const Admin = () => {
           alert("삭제 되었습니다.");
           viewList();
         } else if (returnData.data.resultCode === "0") {
-          alert("다시 로그인해주세요");
+          alert("다시 로그인 해주세요");
           sessionStorage.clear();
           window.location.href = "/login";
         } else {
@@ -57,7 +61,7 @@ const Admin = () => {
         <td>{lists.user_type === "0" ? "개인" : "판매처"}</td>
         <td>{lists.email}</td>
         <td>{lists.nickname}</td>
-        <td>{lists.lockYn}</td>
+        <td>{lists.lockYn === false ? "No" : "Yes"}</td>
         <td>
           <Button>승인</Button>
         </td>
@@ -79,7 +83,7 @@ const Admin = () => {
 
   return (
     <Container>
-      <Button onClick={viewList}>회원조회</Button>
+      <Button onClick={viewList}>새로고침</Button>
       <Table>
         <thead>
           <tr>
