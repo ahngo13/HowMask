@@ -24,8 +24,6 @@ const Map = () => {
   const [noticeShow, setNoticeShow] = useState(true);
   const [storeInfo, setStoreInfo] = useState();
   const [word, setWord] = useState(null);
-  const [searched, setSearched] = useState(false);
-
  
   async function getInfoByGeo(lat, lng) {
     const info = [];
@@ -90,7 +88,6 @@ const Map = () => {
 
   function current () {
       setWord(null);
-      setSearched(false);
       setCoords({ lat: coords.lat, lng:coords.lng });
   }
 
@@ -217,15 +214,14 @@ const Map = () => {
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
             
             setCoords({ lat: latlng.getLat(), lng: latlng.getLng() });
-            if(!searched){
-              map.setCenter(latlng);
-              setSearched(true);
-            }
+            
+            map.setCenter(latlng);
+            
           }
         });
       }
     }
-  }, [positions, latitude, longitude, word, level, coords, searched]);
+  }, [positions, latitude, longitude, word]);
   
 
   let modal
