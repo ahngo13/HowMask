@@ -2,30 +2,33 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 const {
-  Types: { ObjectId }
+  Types: { ObjectId },
 } = Schema;
 const suggestSchema = new Schema({
   suggestType: {
     type: String,
-    required: true
+    required: true,
   },
   Text: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     ref: "User",
-    required: true
+  },
+  code: {
+    type: String,
+    ref: "Store",
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("Suggest", suggestSchema);

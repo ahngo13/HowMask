@@ -9,9 +9,10 @@ router.post("/suggest", async (req, res) => {
   try {
     let obj;
     obj = {
+      code: req.body.code,
       email: req.session.email,
       suggestType: req.body.suggestType,
-      Text: req.body.Text
+      Text: req.body.Text,
     };
     const suggest = new Suggest(obj);
     await suggest.save();
@@ -68,15 +69,15 @@ router.post('/getInfo', async (req, res) => {
 router.post("/join", async (req, res) => {
   try {
     let obj = {
-      code:req.body.code,
+      code: req.body.code,
       bizCode: req.body.bizCode,
-      storeType:req.body.storeType,
+      storeType: req.body.storeType,
       storeName: req.body.storeName,
       sellerName: req.body.sellerName,
       address: req.body.address,
       phone: req.body.phone,
     };
-    const store = new Store(obj); 
+    const store = new Store(obj);
     await store.save();
     res.json({ message: true });
   } catch (err) {
@@ -85,14 +86,13 @@ router.post("/join", async (req, res) => {
   }
 });
 
-router.post("/joinfail", async(req, res) =>{
-
-  try{
-    await Store.remove({code:req.body.code});
-    res.json({message:true});
-  }catch(err){
+router.post("/joinfail", async (req, res) => {
+  try {
+    await Store.remove({ code: req.body.code });
+    res.json({ message: true });
+  } catch (err) {
     console.log(err);
-    res.json({message:false});
+    res.json({ message: false });
   }
 });
 

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Form, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
@@ -16,9 +16,15 @@ function RouterStore2() {
 }
 
 // 판매처 정보수정 제안 Form
-function Suggest() {
-  const suggestType = useRef();
+function Suggest(props) {
+  const [suggesttypestate, setSuggesttypestate] = useState({ value: "폐업" });
   const Text = useRef();
+
+  const param = props.location.state;
+
+  const changeSuggesttype = (e) => {
+    setSuggesttypestate({ value: e });
+  };
 
   async function registerSuggestion() {
     if (!Text.current.value) {
@@ -26,12 +32,26 @@ function Suggest() {
       Text.current.focus();
       return;
     }
-    const sendParam = {
-      suggestType: suggestType.current.value,
-      Text: Text.current.value,
-    };
-    const result = await axios.post(`http://${url}:8080/store/suggest`, sendParam);
+    // alert(param.code + ":" + suggesttypestate.value + Text.current.value);
+    // alert(param.code);
+    // alert(Text.current.value + ":" + suggesttypestate.value);
+    let sendParam;
+    if (props.location.state === undefined) {
+      alert("다시 들어와주세요");
+      window.location.href = "/";
+    } else {
+      sendParam = {
+        code: param.code,
+        suggestType: suggesttypestate.value,
+        Text: Text.current.value,
+      };
+    }
+    const result = await axios.post(
+      `http://${url}:8080/store/suggest`,
+      sendParam
+    );
     if (result.data.message) {
+      alert("입력 완료");
       Text.current.value = "";
       RouterStore2();
     } else {
@@ -66,14 +86,20 @@ function Suggest() {
       <Form style={suggestForm}>
         <Col sm={10}>
           <Form.Label>수정 제안할 항목을 선택하세요.</Form.Label>
-          <Form.Control as="select" ref={suggestType}>
-            <option>폐업</option>
-            <option>판매처명</option>
-            <option>주소 및 위치</option>
-            <option>전화번호</option>
-            <option>진료 및 영업시간</option>
-            <option>마스크 종류 및 재고</option>
-            <option>기타(약국 등 판매처 정보에 대한 제보만 가능)</option>
+          <Form.Control
+            as="select"
+            value={suggesttypestate.value}
+            onChange={(e) => changeSuggesttype(e.target.value)}
+          >
+            <option value="폐업">폐업</option>
+            <option value="판매처명">판매처명</option>
+            <option value="주소 및 위치">주소 및 위치</option>
+            <option value="전화번호">전화번호</option>
+            <option value="진료 및 영업시간">진료 및 영업시간</option>
+            <option value="마스크 종류 및 재고">마스크 종류 및 재고</option>
+            <option value="기타">
+              기타(약국 등 판매처 정보에 대한 제보만 가능)
+            </option>
           </Form.Control>
           <br />
           <Form.Label>제안 상세 내용</Form.Label>
@@ -99,7 +125,12 @@ function Suggest() {
               </Button>
             </Col>
             <Col>
-              <Button variant="info" size="lg" block onClick={registerSuggestion}>
+              <Button
+                variant="info"
+                size="lg"
+                block
+                onClick={registerSuggestion}
+              >
                 등록하기
               </Button>
             </Col>

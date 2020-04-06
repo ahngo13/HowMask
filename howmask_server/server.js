@@ -10,11 +10,11 @@ connect();
 
 const corsOptions = {
   origin: true,
-  credentials: true
+  credentials: true,
 };
 
-fs.readdir("public/upload", error => {
-  // uploads 폴더 없으면 생성
+fs.readdir("public/upload", (error) => {
+  // upl5oads 폴더 없으면 생성
   if (error) {
     fs.mkdirSync("public/upload");
     console.log("upload 폴더 생성됨");
@@ -28,8 +28,8 @@ app.use(
     secret: "hamletshu",
     cookie: {
       httpOnly: true,
-      secure: false
-    }
+      secure: false,
+    },
   })
 );
 app.use(express.static(path.join(__dirname, "public")));

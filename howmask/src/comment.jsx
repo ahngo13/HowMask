@@ -10,18 +10,20 @@ import { useState } from "react";
 const url = "localhost";
 
 function Comment(props) {
+  let flag = false;
   const code = props.code; // 판매처코드
   // const [code, setCode] = useState(); // 판매처코드
   const [comments, setComments] = useState(); // 댓글 리스트
   const [commentId, setCommentId] = useState(); // 댓글 id
-  const [flag, setFlag] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null); // 파일
   const [imgBase64, setImgBase64] = useState(null); // 파일 base64
   const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 미리보기 파일 경로
   const [gradeValue, setGradeValue] = useState(5);
   const [commentCnt, setCommentCnt] = useState();
   const [functionName, setFunctionName] = useState("insert");
-  const [btnName, setBtnName] = useState("댓글 등록");
+  const [insertBtn, setInsertBtn] = useState("댓글 등록");
+  const [cancelStyle, setCancelStyle] = useState("none");
+  const [showBtn, setShowBtn] = useState(null);
 
   const gradeForm = (
     <div className="starRev">
@@ -66,7 +68,6 @@ function Comment(props) {
   function handleGradeInput(e) {
     setGradeValue(e.target.textContent);
   }
-  // 평점 Component
 
   // 이미지 파일 Component
   function imageFile(comment, imageUrl, imageStyle) {
@@ -98,28 +99,39 @@ function Comment(props) {
   async function deleteComment(_id, imageUrl) {
     const sendParam = { _id, imageUrl };
     const result = axios.post(`http://${url}:8080/comment/delete`, sendParam);
-    console.log(result);
-    if ((await result).data.session == true) {
+    if ((await result).data.session === true) {
       showComment();
-    } else if ((await result).data.session == false) {
+    } else if ((await result).data.session === false) {
       alert("로그인이 필요합니다.");
       window.location.href = "/#/login";
-    } else if ((await result).data.message == false) {
+    } else if ((await result).data.message === false) {
       alert("에러");
     }
   }
+  // 댓글 수정집입 취소
+  async function cancelUpdate() {
+    setFunctionName("insert");
+    setInsertBtn("댓글 등록");
+    setCancelStyle("none");
+    setSelectedFile(null);
+    setImagePreviewUrl("");
+    commentTag.current.focus();
+    commentTag.current.value = "";
+    fileTag.current.value = "";
+  }
   //댓글 수정
-  async function updateComment(_id) {
+  async function updateComment(_id, flag) {
+    console.log(_id, flag);
     const sendParam = { _id, flag };
     const result = axios.post(`http://${url}:8080/comment/update`, sendParam);
-    if ((await result).data.message) {
+    if ((await result).data.comment) {
       console.log((await result).data.comment[0].text);
       commentTag.current.value = (await result).data.comment[0].text;
       commentTag.current.focus();
       setCommentId(_id);
       setFunctionName("update");
-      setBtnName("댓글 수정");
-    } else {
+      setInsertBtn("댓글 수정");
+      setCancelStyle("inline-block");
     }
   }
   //댓글 입력
@@ -151,7 +163,6 @@ function Comment(props) {
           setSelectedFile(null);
           commentTag.current.focus();
           setImagePreviewUrl("");
-          setGradeValue(5);
           setCommentCnt(commentCnt + 1);
           showComment();
         } else if ((await resultWrite).data.resultCode === 2) {
@@ -161,19 +172,24 @@ function Comment(props) {
         }
       } // 수정한 댓글 등록
       else if (functionName === "update") {
+        flag = false;
         formData.append("_id", commentId);
         formData.append("flag", flag);
-        setFlag(true);
-        console.log("수정할 댓글 id: " + commentId);
-        console.log("플래그 : " + flag);
+
         const resultUpdate = await axios.post(`http://${url}:8080/comment/update`, formData);
-        if (resultUpdate) {
-          alert(resultUpdate.data.message);
+        if (resultUpdate.data.message) {
+          alert("댓글 수정 성공");
+          setCancelStyle("none");
+          setSelectedFile(null);
+          showComment();
+          commentTag.current.value = "";
+          fileTag.current.value = "";
+          commentTag.current.focus();
         } else {
-          alert("오류");
+          alert("에러");
         }
       }
-      setBtnName("댓글 등록");
+      setInsertBtn("댓글 등록");
     }
   }
 
@@ -199,10 +215,15 @@ function Comment(props) {
               <Table responsive borderless>
                 <tbody>
                   <tr>
-                    <td>
-                      <span>{comment.grade}</span>
+                    <td rowSpan="2">
+                      <h5>
+                        <Badge variant="info" style={{ textAlign: "center" }}>
+                          평점 : {comment.grade}
+                        </Badge>
+                      </h5>
+                      {/*  <span>{comment.grade}</span> */}
                     </td>
-                    <td>
+                    <td colSpan="2">
                       <span>{comment.text}</span>
                     </td>
                     <td>
@@ -210,8 +231,9 @@ function Comment(props) {
                         size="sm"
                         variant="warning"
                         onClick={() => {
-                          updateComment(commentId);
+                          updateComment(commentId, flag);
                         }}
+                        style={showBtn}
                       >
                         수정
                       </Button>
@@ -222,22 +244,20 @@ function Comment(props) {
                         onClick={() => {
                           deleteComment(commentId, comment.image);
                         }}
+                        style={showBtn}
                       >
                         삭제
-                      </Button>
-                      <Button size="sm" variant="light">
-                        답글
                       </Button>
                     </td>
                   </tr>
                   <tr>
-                    <td></td>
-                    <td>
+                    {/*    <td></td> */}
+                    <td colSpan="2">
                       <Badge pill variant="dark">
                         {comment.email}
                       </Badge>
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <Moment format="YYYY-MM-DD HH:mm">{comment.createdAt}</Moment>
+                      <Moment format="YYYY-MM-DD HH:mm">{comment.updatedAt}</Moment>
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </td>
                     <td>{imageFile(comment, imageUrl, imageStyle)}</td>
@@ -257,7 +277,6 @@ function Comment(props) {
 
   const commentTag = useRef();
   const fileTag = useRef();
-  const grade = useRef();
 
   return (
     <div>
@@ -267,12 +286,20 @@ function Comment(props) {
           <FormControl placeholder="댓글을 입력하세요" ref={commentTag}></FormControl>
           <InputGroup.Append>
             <Button
+              style={{ display: cancelStyle }}
+              onClick={() => {
+                cancelUpdate(true);
+              }}
+            >
+              수정취소
+            </Button>
+            <Button
               onClick={() => {
                 insertComment(true);
               }}
               variant="outline-dark"
             >
-              {btnName}
+              {insertBtn}
             </Button>
           </InputGroup.Append>
         </InputGroup>

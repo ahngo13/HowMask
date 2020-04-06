@@ -43,29 +43,26 @@ router.post("/delete", async (req, res) => {
   }
 });
 
-router.post("/update", async (req, res) => {
+router.post("/update", upload.single("img"), async (req, res) => {
   try {
     if (req.body.flag) {
-      console.log("수정 완료 로직 진입");
       // 수정 후 입력버튼 클릭 (DB에 수정된 값 저장)
       await Comment.update(
         { _id: req.body._id },
         {
           $set: {
             text: req.body.text,
+            updatedAt: Date.now(),
           },
         }
       );
-      res.json({ message: "댓글 수정" });
+      res.json({ message: true });
     } else {
-      console.log("수정 로직 진입");
       // 수정버튼 클릭  (DB에서 수정할 값 조회)
       const comment = await Comment.find({ _id: req.body._id });
-      console.log(comment);
       res.json({ comment: comment });
     }
   } catch (err) {
-    console.log(err);
     res.json({ message: false });
   }
 });
@@ -110,6 +107,16 @@ router.post("/getCommentList", async (req, res) => {
     const comment = await Comment.find({ code: req.body.code }, null, {
       sort: { createdAt: -1 },
     });
+
+    for (i = 0; i < comment.length; i++) {
+      if (req.session.email === comment.email) {
+        comment[i].push({ mine: true });
+      } else {
+        comment[i].push({ mine: false });
+      }
+      console.log(comment[i]);
+    }
+
     res.json({ list: comment });
   } catch (err) {
     res.json({ message: false });
