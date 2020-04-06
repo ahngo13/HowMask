@@ -8,7 +8,8 @@ const storeSchema = new Schema({
   //마스크 api에서 가져오는 값
   code: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
   //사업자 등록번호
   bizCode: {
@@ -36,7 +37,7 @@ const storeSchema = new Schema({
   phone: {
     type: Number
   },
-  stock_average: {
+  stockAverage: {
     type: String
   },
   operating_time: {
@@ -45,13 +46,13 @@ const storeSchema = new Schema({
   notice: {
     type: String
   },
-  sold_expected_time: {
+  soldTime: {
     type: String
   },
-  sold_state: {
+  soldState: {
     type: String
   },
-  kids_mask_yn: {
+  kidsMask: {
     type: String
   },
   createdAt: {

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { Form, Row, Col, Button } from "react-bootstrap";
+import React, { useState, useEffect, useRef } from "react";
+import { Form, Col, Button } from "react-bootstrap";
 import axios from "axios";
 
 const url = "localhost";
@@ -9,7 +9,19 @@ const Store = () => {
   const [btnDefaultFlag, setBtnDefaultFlag] = useState("inline-block"); //수정하기 버튼
   const [btnSuccessFlag, setBtnSuccessFlag] = useState("none"); //수정완료 버튼
   const [title, setTitle] = useState(" 판매처 정보 조회");
-  const [textFlag, setTextFlag] = useState("true");
+  const [textFlag, setTextFlag] = useState(true);
+
+  const [code, setCode] = useState();
+  const [storeNameState, setStoreNameState] = useState();
+  const [addrState, setAddrState] = useState();
+  const [bizCodeState, setBizCodeState] = useState();
+  const [sellerNameState, setSellerNameState] = useState();
+  const [phoneState, setPhoneState] = useState();
+  const [emailState, setEmailState] = useState();
+  const [soldTimeState, setSoldTimeState] = useState();
+  const [stockAverageState, setStockAverageState] = useState();
+  const [kidMaskState, setKidMaskState] = useState();
+  const [noticeState, setNoticeState] = useState();
 
   const storeName = useRef(); //판매처명 (store)
   const addr = useRef(); //주소 (store)
@@ -17,6 +29,10 @@ const Store = () => {
   const sellerName = useRef(); //관리자 이름 (store)
   const phone = useRef(); // 관리자 휴대전화번호 (store)
   const email = useRef(); // 관리자 이메일 (user)
+  const soldTime = useRef(); //판매 예정시간
+  const stockAverage = useRef();  //재고 수량
+  const kidMask =useRef(); // 유야용 마스크
+  const notice = useRef(); // 공지사항
 
   const registerTitle = {
     display: "inline-block",
@@ -46,22 +62,66 @@ const Store = () => {
     display: btnSuccessFlag
   };
   function goToUpdateForm() {
+    console.log("수정하기");
     setBtnSuccessFlag("inline-block");
     setBtnDefaultFlag("none");
     setTitle("판매처 정보 수정");
-    setTextFlag("");
+    setTextFlag(false);
   }
-  function updateInfo() {
+  async function updateInfo() {
     const sendParam = {
-      name: storeName.current.vlaue,
-      address: addr.current.vlaue,
-      bizCode: bizCode.current.vlaue,
-      sellerName: sellerName.current.vlaue,
-      phone: phone.current.vlaue,
-      email: email.current.vlaue
+      code,
+      name: storeName.current.value,
+      address: addr.current.value,
+      bizCode: bizCode.current.value,
+      sellerName: sellerName.current.value,
+      phone: phone.current.value,
+      email: email.current.value,
+      soldTime: soldTime.current.value,
+      stockAverage: stockAverage.current.value,
+      kidMask: kidMask.current.value,
+      notice: notice.current.value,
     };
-    const result = axios.post(`http://${url}:8080/store/update`);
+    const result = await axios.post(`http://${url}:8080/store/update`, sendParam);
+    if(result.data.message){
+      alert(result.data.message);
+      setBtnSuccessFlag("none");
+      setBtnDefaultFlag("inline-block");
+      setTitle("판매처 정보 조회");
+      setTextFlag(true);
+    }else{
+      alert("수정실패");
+    }
   }
+
+  async function getInfo(){
+    console.log("getInfo");
+    const result = await axios.post(`http://${url}:8080/store/getInfo`);
+    if(result.data.info){
+      const info = result.data.info;
+      setCode(info.code);
+      setStoreNameState(info.storeName);
+      setBizCodeState(info.bizCode);
+      setAddrState(info.address);
+      setSellerNameState(info.sellerName);
+      setPhoneState(info.phone);
+      setEmailState(result.data.email);
+      setSoldTimeState(info.soldTime);
+      setStockAverageState(info.stockAverage);
+      setKidMaskState(info.kidsMask);
+      setNoticeState(info.notice);
+    }else{
+      console.log("setting fail");
+    }
+  }
+  
+
+
+  useEffect(()=>{
+    console.log("useEffect");
+    getInfo()
+  },[])
+
   return (
     <>
       <h2 style={registerTitle}>{title}</h2>
@@ -88,13 +148,13 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">판매처명</font>
             </Form.Label>
-            <Form.Control ref={storeName} readOnly="false" defaultValue="한서약국" />
+            <Form.Control ref={storeName} readOnly={textFlag} defaultValue={storeNameState} />
           </Form.Group>
           <Form.Group as={Col} controlId="storeLocation">
             <Form.Label>
               <font color="#246dbf">사업자등록번호</font>
             </Form.Label>
-            <Form.Control ref={bizCode} readOnly={textFlag} defaultValue="123-456789" />
+            <Form.Control ref={bizCode} readOnly={textFlag} defaultValue={bizCodeState} />
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -102,7 +162,7 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">주소</font>
             </Form.Label>
-            <Form.Control ref={addr} readOnly={textFlag} defaultValue="서울특별시 강남구" />
+            <Form.Control ref={addr} readOnly={textFlag} defaultValue={addrState} />
           </Form.Group>
         </Form.Row>
         <br />
@@ -112,21 +172,21 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">이름</font>
             </Form.Label>
-            <Form.Control ref={sellerName} readOnly={textFlag} defaultValue="홍길동" />
+            <Form.Control ref={sellerName} readOnly={textFlag} defaultValue={sellerNameState} />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridState">
             <Form.Label>
               <font color="#246dbf">휴대전화번호</font>
             </Form.Label>
-            <Form.Control ref={phone} readOnly={textFlag} defaultValue="010-1234-1234" />
+            <Form.Control ref={phone} readOnly={textFlag} defaultValue={phoneState} />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridZip">
             <Form.Label>
               <font color="#246dbf">이메일</font>
             </Form.Label>
-            <Form.Control ref={email} readOnly={textFlag} defaultValue="seller@gmail.com" />
+            <Form.Control ref={email} readOnly={textFlag} defaultValue={emailState} />
           </Form.Group>
         </Form.Row>
         <br />
@@ -136,20 +196,20 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">판매 예정시간</font>
             </Form.Label>
-            <Form.Control readOnly={textFlag} defaultValue="(1차) 10시~12시 (2차) 16시~18시" />
+            <Form.Control ref={soldTime} readOnly={textFlag} defaultValue={soldTimeState} />
           </Form.Group>
-          <Form.Group as={Col} readOnly={textFlag} controlId="formGridState">
+          <Form.Group as={Col} controlId="formGridState">
             <Form.Label>
               <font color="#246dbf">평균 재고수량</font>
             </Form.Label>
-            <Form.Control readOnly={textFlag} defaultValue="300개" />
+            <Form.Control ref={stockAverage} readOnly={textFlag} defaultValue={stockAverageState} />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridZip">
             <Form.Label>
               <font color="#246dbf">유아용마스크 판매여부</font>
             </Form.Label>
-            <Form.Control readOnly={textFlag} defaultValue="판매중" />
+            <Form.Control ref={kidMask} readOnly={textFlag} defaultValue={kidMaskState} />
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -157,7 +217,7 @@ const Store = () => {
             <Form.Label>
               <font color="#246dbf">공지사항</font>
             </Form.Label>
-            <Form.Control as="textarea" readOnly={textFlag} defaultValue="재고 많습니다." />
+            <Form.Control ref={notice} as="textarea" readOnly={textFlag} defaultValue={noticeState} />
           </Form.Group>
         </Form.Row>
       </Form>

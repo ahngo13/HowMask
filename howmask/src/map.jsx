@@ -113,6 +113,7 @@ const Map = () => {
   }, [coords, word, coords.lat, coords.lng]);
 
   useEffect(() => {
+    console.log(coords);
     if (latitude && longitude) {
 
       // 지도의 중심 위치 지정
@@ -220,7 +221,7 @@ const Map = () => {
         });
       }
     }
-  }, [positions, latitude, longitude, coords.lat, coords.lng, level, word]);
+  }, [positions, latitude, longitude, word]);
   
 
   let modal

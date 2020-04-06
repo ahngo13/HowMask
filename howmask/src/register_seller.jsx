@@ -106,6 +106,7 @@ function RegisterSeller(props) {
           // code
         };
         const sendParamUser = {
+          code:param.code,
           email,
           nick:"seller",
           usertype: 1,
