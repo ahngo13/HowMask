@@ -15,15 +15,17 @@ const Admin = () => {
       return;
     }
 
-    axios.get(`http://${url}:8080/user/adminViewList`, { headers }).then((returnData) => {
-      // alert(returnData.data.message);
-      // console.log(returnData.data.result);
-      if (returnData.data.result) {
-        setList(returnData.data.result);
-      } else {
-        window.location.href = "/";
-      }
-    });
+    axios
+      .get(`http://${url}:8080/user/adminViewList`, { headers })
+      .then((returnData) => {
+        // alert(returnData.data.message);
+        // console.log(returnData.data.result);
+        if (returnData.data.result) {
+          setList(returnData.data.result);
+        } else {
+          window.location.href = "/login";
+        }
+      });
   };
 
   const deleteList = (email) => {
@@ -32,16 +34,15 @@ const Admin = () => {
     axios
       .post(`http://${url}:8080/user/admindelete`, sendParam)
       .then((returnData) => {
-        if (returnData.data.message) {
-          alert("삭제완료");
+        if (returnData.data.resultCode === "1") {
+          alert("삭제 되었습니다.");
           viewList();
-        } else if (returnData.data.noSession) {
+        } else if (returnData.data.resultCode === "0") {
           alert("다시 로그인해주세요");
-          sessionStorage.removeItem("login");
-          sessionStorage.removeItem("login");
-          window.location.href = "/";
+          sessionStorage.clear();
+          window.location.href = "/login";
         } else {
-          alert("삭제실패");
+          alert("삭제 실패");
         }
       })
       .catch((err) => {
