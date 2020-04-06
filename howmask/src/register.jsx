@@ -70,7 +70,7 @@ const Register = () => {
   const joinInsert = (event) => {
     event.preventDefault();
     const recaptchaValue = recaptchaRef.current.getValue();
-    alert(recaptchaValue);
+    // alert(recaptchaValue);
 
     if (
       !emailstate.valid ||
