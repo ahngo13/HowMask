@@ -104,10 +104,19 @@ router.post("/write", upload.single("img"), async (req, res) => {
 
 router.post("/getCommentList", async (req, res) => {
   try {
+    let gradeAvg = 0;
+    let gradeSum = 0;
     const comment = await Comment.find({ code: req.body.code }, null, {
       sort: { createdAt: -1 },
     });
-    console.log(comment.length);
+    if (comment.length > 0) {
+      for (i = 0; i < comment.length; i++) {
+        gradeSum += comment[i].grade;
+      }
+      gradeAvg = (gradeSum / comment.length).toFixed(1);
+    } else {
+      gradeAvg = "평점 없음";
+    }
     if (req.session.email) {
       for (i = 0; i < comment.length; i++) {
         if (req.session.email === comment[i].email) {
@@ -119,7 +128,7 @@ router.post("/getCommentList", async (req, res) => {
     } else {
     }
 
-    res.json({ list: comment });
+    res.json({ list: comment, avg: { gradeAvg } });
   } catch (err) {
     res.json({ message: false });
   }

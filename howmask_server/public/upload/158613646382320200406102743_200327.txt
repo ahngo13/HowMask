@@ -1,5 +1,0 @@
-
-remote development 설치
-ssh로 옮기면 검색창 나옴
-ssh root@210.107.78.151
-pw0rd--== 들어가면댐

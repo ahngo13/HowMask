@@ -16,7 +16,7 @@ const commentSchema = new Schema({
     ref: "Store",
   },
   grade: {
-    type: String,
+    type: Number,
     required: true,
   },
   // 컬럼 추가 : text

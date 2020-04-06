@@ -24,6 +24,8 @@ function Comment(props) {
   const [insertBtn, setInsertBtn] = useState("댓글 등록");
   const [cancelStyle, setCancelStyle] = useState("none");
 
+  const [avgGrade, setAvgGrade] = useState("평점 없음");
+
   const gradeForm = (
     <div className="starRev">
       <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
@@ -204,6 +206,8 @@ function Comment(props) {
       let showBtn;
       setCommentCnt(result.data.list.length);
 
+      setAvgGrade(result.data.avg.gradeAvg);
+
       if (result.data.list) {
         const allComments = result.data.list.map((comment) => {
           const commentId = comment._id;
@@ -318,7 +322,13 @@ function Comment(props) {
         </InputGroup>
       </Form>
       <br />
-      <div>총 댓글 갯수 : {commentCnt}</div>
+      <span>
+        총 댓글 갯수 : {commentCnt} &nbsp;&nbsp;&nbsp;
+        <h1 style={{ float: "right" }}>
+          ★<Badge variant="secondary">{avgGrade}</Badge>
+        </h1>
+      </span>
+
       {comments}
     </div>
   );
