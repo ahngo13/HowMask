@@ -107,6 +107,16 @@ router.post("/getCommentList", async (req, res) => {
     const comment = await Comment.find({ code: req.body.code }, null, {
       sort: { createdAt: -1 },
     });
+
+    for (i = 0; i < comment.length; i++) {
+      if (req.session.email === comment.email) {
+        comment[i].push({ mine: true });
+      } else {
+        comment[i].push({ mine: false });
+      }
+      console.log(comment[i]);
+    }
+
     res.json({ list: comment });
   } catch (err) {
     res.json({ message: false });

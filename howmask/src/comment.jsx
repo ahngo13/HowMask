@@ -23,6 +23,7 @@ function Comment(props) {
   const [functionName, setFunctionName] = useState("insert");
   const [insertBtn, setInsertBtn] = useState("댓글 등록");
   const [cancelStyle, setCancelStyle] = useState("none");
+  const [showBtn, setShowBtn] = useState(null);
 
   const gradeForm = (
     <div className="starRev">
@@ -162,7 +163,6 @@ function Comment(props) {
           setSelectedFile(null);
           commentTag.current.focus();
           setImagePreviewUrl("");
-          setGradeValue(5);
           setCommentCnt(commentCnt + 1);
           showComment();
         } else if ((await resultWrite).data.resultCode === 2) {
@@ -180,11 +180,11 @@ function Comment(props) {
         if (resultUpdate.data.message) {
           alert("댓글 수정 성공");
           setCancelStyle("none");
+          setSelectedFile(null);
+          showComment();
           commentTag.current.value = "";
           fileTag.current.value = "";
-          setSelectedFile(null);
           commentTag.current.focus();
-          showComment();
         } else {
           alert("에러");
         }
@@ -233,6 +233,7 @@ function Comment(props) {
                         onClick={() => {
                           updateComment(commentId, flag);
                         }}
+                        style={showBtn}
                       >
                         수정
                       </Button>
@@ -243,11 +244,9 @@ function Comment(props) {
                         onClick={() => {
                           deleteComment(commentId, comment.image);
                         }}
+                        style={showBtn}
                       >
                         삭제
-                      </Button>
-                      <Button size="sm" variant="light">
-                        답글
                       </Button>
                     </td>
                   </tr>
