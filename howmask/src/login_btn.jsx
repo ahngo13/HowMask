@@ -18,7 +18,7 @@ const LoginBtn = () => {
       .then(returnData => {
         if (returnData.data.message) {
           alert(returnData.data.message);
-          sessionStorage.removeItem("login");
+          sessionStorage.clear();
           window.location.href = "/";
         }
       });
@@ -55,7 +55,7 @@ const LoginBtn = () => {
     }
   
 
-  return <div>{btn}</div>;
+  return <span>{btn}</span>;
 };
 
 export default LoginBtn;

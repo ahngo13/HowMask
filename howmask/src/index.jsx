@@ -9,7 +9,6 @@ import LoginBtn from "./login_btn";
 
 
 import "./css/main.css";
-import "./css/map.css";
 
 const navbarStyle = {
   margin: "0 auto"
@@ -31,8 +30,13 @@ ReactDOM.render(
           />
           <span>마스크 어때?</span>
         </Navbar.Brand>
-        <LoginBtn />
-        
+        <div id="memberMenu">
+          {(sessionStorage.getItem("type") === "1")? 
+          <NavLink style={navLinkStyle} to="/store">
+            store
+          </NavLink> : <></>}
+          <LoginBtn />
+        </div>
       </Navbar>
       <Router />
     </HashRouter>,

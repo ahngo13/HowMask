@@ -62,6 +62,7 @@ const Login = () => {
         alert(returnData.data.message);
         if (returnData.data.dupYn === "0") {
           sessionStorage.setItem("login", true);
+          sessionStorage.setItem("type", returnData.data.type);
           window.location.href = "/";
         } else if (returnData.data.dupYn === "2") {
           sessionStorage.setItem("login", "hamletshu");
