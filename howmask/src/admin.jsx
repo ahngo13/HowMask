@@ -65,7 +65,7 @@ const Admin = () => {
           alert("삭제 되었습니다.");
           viewList();
         } else if (returnData.data.resultCode === "0") {
-          alert("다시 로그인해주세요");
+          alert("다시 로그인 해주세요");
           sessionStorage.clear();
           window.location.href = "/login";
         } else {
@@ -106,7 +106,7 @@ const Admin = () => {
 
   return (
     <Container>
-      <Button onClick={viewList}>회원조회</Button>
+      <Button onClick={viewList}>새로고침</Button>
       <Table>
         <thead>
           <tr>
