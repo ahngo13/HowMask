@@ -182,7 +182,7 @@ const Store = () => {
             required
           />
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button variant="info" type="submit" block>
           확인
         </Button>
       </Form>
