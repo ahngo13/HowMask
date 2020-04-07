@@ -144,17 +144,17 @@ const Register = () => {
     left: 0,
     margin: "auto",
   };
-  const registerType = {
-    display: "inline-block",
-    width: "50%",
-    position: "fixed",
-    top: 90,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    margin: "auto",
-    textAlign: "center",
-  };
+  // const registerType = {
+  //   display: "inline-block",
+  //   width: "50%",
+  //   position: "fixed",
+  //   top: 90,
+  //   right: 0,
+  //   bottom: 0,
+  //   left: 0,
+  //   margin: "auto",
+  //   textAlign: "center",
+  // };
   const initialType = {
     display: "inline-block",
     width: "50%",

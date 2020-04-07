@@ -14,7 +14,7 @@ const LoginBtn = () => {
     paddingRight: 10,
     paddingTop: 3,
     paddingBottom: 3,
-    color:"#007bff",
+    color: "#007bff",
   };
 
   const loginout = {
@@ -24,7 +24,7 @@ const LoginBtn = () => {
   const memberLogout = () => {
     axios
       .get(`http://${url}:8080/user/logout`, { headers })
-      .then(returnData => {
+      .then((returnData) => {
         if (returnData.data.message) {
           alert(returnData.data.message);
           sessionStorage.clear();
@@ -39,30 +39,31 @@ const LoginBtn = () => {
     btn = (
       <NavLink style={navLinkStyle} to="/login">
         <Button variant="light">
-          <span style={loginout}>login</span> <i className='fas fa-sign-in-alt' id="iconStyle"></i>
+          <span style={loginout}>login</span>{" "}
+          <i className="fas fa-sign-in-alt" id="iconStyle"></i>
         </Button>
       </NavLink>
     );
-  } else if(sessionStorage.getItem("login")==="hamletshu") {
+  } else if (sessionStorage.getItem("login") === "hamletshu") {
     btn = (
       <>
-      <Button style={navLinkStyle} onClick={memberLogout} variant="light">
-        <span style={loginout}>log out</span><i className='fas fa-sign-out-alt' id="iconStyle"></i>
-      </Button>
-      <NavLink style={navLinkStyle} to="/admin">
-      가입된 회원정보 보기
-    </NavLink>
+        <Button style={navLinkStyle} onClick={memberLogout} variant="light">
+          <span style={loginout}>log out</span>
+          <i className="fas fa-sign-out-alt" id="iconStyle"></i>
+        </Button>
+        <NavLink style={navLinkStyle} to="/admin">
+          가입된 회원정보 보기
+        </NavLink>
       </>
     );
-
-   }else{
+  } else {
     btn = (
       <Button style={navLinkStyle} onClick={memberLogout} variant="light">
-        <span style={loginout}>log out</span><i className='fas fa-sign-out-alt' id="iconStyle" ></i>
+        <span style={loginout}>log out</span>
+        <i className="fas fa-sign-out-alt" id="iconStyle"></i>
       </Button>
     );
-    }
-  
+  }
 
   return <span>{btn}</span>;
 };
