@@ -59,7 +59,7 @@ router.post("/grantAuth", async (req, res) => {
         { email: req.body.email },
         {
           $set: {
-            auth: true,
+            auth: true
           },
         }
       );
@@ -85,6 +85,32 @@ router.post("/revokeAuth", async (req, res) => {
         {
           $set: {
             auth: false
+          },
+        }
+      );
+      res.json({ resultCode: "1" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ resultCode: "2" });
+  }
+});
+
+//관리자 판매처 계정 승인
+router.post("/unlockLogin", async (req, res) => {
+  try {
+    let user_type = req.session.user_type;
+
+    console.log(user_type);
+    if (user_type !== "7791" || !req.session.email) {
+      res.json({ resultCode: "0" });
+    } else {
+      await User.update(
+        { email: req.body.email },
+        {
+          $set: {
+            lockYn : false,
+            loginCnt : 0
           },
         }
       );
@@ -126,7 +152,7 @@ router.post("/join", async (req, res) => {
               } else {
                 console.log(key.toString("base64"));
                 buf.toString("base64");
-                let code = 0;
+                let code=0;
                 code = req.body.code;
                 obj = {
                   email: req.body.email,
@@ -135,7 +161,7 @@ router.post("/join", async (req, res) => {
                   year: req.body.year,
                   password: key.toString("base64"),
                   salt: buf.toString("base64"),
-                  code,
+                  code
                 };
                 user = new User(obj);
                 await user.save();
@@ -213,12 +239,6 @@ router.post("/login", async (req, res) => {
                 } else {
                   //없으면 로그인 실패횟수 추가
                   if (user.loginCnt > 4) {
-                    await User.updateOne(
-                      {
-                        email: req.body.email,
-                      },
-                      { $set: { lockYn: true } }
-                    );
                     res.json({
                       message:
                         "아이디나 패스워드가 5회 이상 일치하지 않아 잠겼습니다.\n고객센터에 문의 바랍니다.",
@@ -230,9 +250,22 @@ router.post("/login", async (req, res) => {
                       },
                       { $set: { loginCnt: user.loginCnt + 1 } }
                     );
-                    res.json({
-                      message: "아이디나 패스워드가 일치하지 않습니다.",
-                    });
+                    if (user.loginCnt >= 5) {
+                      await User.updateOne(
+                        {
+                          email: req.body.email,
+                        },
+                        { $set: { lockYn: true } }
+                      );
+                      res.json({
+                        message:
+                          "아이디나 패스워드가 5회 이상 일치하지 않아 잠겼습니다.\n고객센터에 문의 바랍니다.",
+                      });
+                    } else {
+                      res.json({
+                        message: "아이디나 패스워드가 일치하지 않습니다.",
+                      });
+                    }
                   }
                 }
               }
