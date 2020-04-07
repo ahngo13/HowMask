@@ -107,8 +107,13 @@ const Login = () => {
     margin: "auto",
   };
   const registerBtn = {
-    margin:5,
-  }
+    margin: 5,
+  };
+
+  const removeSession = () => {
+    sessionStorage.clear();
+  };
+  removeSession();
 
   return (
     <div>
@@ -142,12 +147,11 @@ const Login = () => {
           <Button variant="info" type="submit" size="lg" block>
             로그인
           </Button>
-          <NavLink to='/register' style={registerBtn}>
-            <Button variant="warning" size='lg' block >
+          <NavLink to="/register" style={registerBtn}>
+            <Button variant="warning" size="lg" block>
               회원가입
             </Button>
           </NavLink>
-          
         </Form>
       </Container>
     </div>
