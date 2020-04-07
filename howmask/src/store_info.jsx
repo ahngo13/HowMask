@@ -234,7 +234,7 @@ function StoreInfoModal(props) {
             <Col>
               <NavLink
                 to={{
-                  pathname: `/register/seller`,
+                  pathname: `/registerSeller`,
                   state: {
                     code: props.info.code,
                     name: props.info.name,
@@ -255,8 +255,8 @@ function StoreInfoModal(props) {
               </NavLink>
             </Col>
           </Row>
+          <br />
         </Container>
-        <br />
         <Comment code={props.info.code} />
       </Modal.Body>
     </Modal>

@@ -7,18 +7,17 @@ import { Navbar } from "react-bootstrap";
 import Router from "./router";
 import LoginBtn from "./login_btn";
 
-
 import "./css/main.css";
-import "./css/map.css";
 
 const navbarStyle = {
-  margin: "0 auto"
+  margin: "0 auto",
 };
 const navLinkStyle = {
-  margin: 5
+  margin: 5,
 };
 
 ReactDOM.render(
+  <React.StrictMode>
     <HashRouter>
       <Navbar bg="light" variant="light">
         <Navbar.Brand href="/" style={navbarStyle}>
@@ -31,10 +30,16 @@ ReactDOM.render(
           />
           <span>마스크 어때?</span>
         </Navbar.Brand>
-        <LoginBtn />
-        
+        <div id="memberMenu">
+          {(sessionStorage.getItem("type") === "1")? 
+          <NavLink style={navLinkStyle} to="/store">
+            store
+          </NavLink> : <></>}
+          <LoginBtn />
+        </div>
       </Navbar>
       <Router />
-    </HashRouter>,
+    </HashRouter>{" "}
+  </React.StrictMode>,
   document.getElementById("container")
 );

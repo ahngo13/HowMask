@@ -233,6 +233,7 @@ router.post("/login", async (req, res) => {
                       message: "로그인 되었습니다!",
                       _id: user2._id,
                       email: user2.email,
+                      type:user2.user_type,
                       dupYn: "0",
                     });
                   }

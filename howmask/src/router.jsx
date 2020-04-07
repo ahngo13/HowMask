@@ -21,7 +21,7 @@ const Router = () => {
       <Route exact path="/" component={Map}></Route>
       <Route path="/store" component={Store}></Route>
       <Route path="/login" component={Login}></Route>
-      <Route exact path="/register" component={Register}></Route>
+      <Route path="/register" component={Register}></Route>
       <Route path="/modify" component={Modify}></Route>
       <Route path="/checkPw" component={CheckPw}></Route>
       <Route path="/birth" component={Birth}></Route>
@@ -29,7 +29,7 @@ const Router = () => {
       <Route path="/marker" component={Marker}></Route>
       <Route path="/storeInfoUpdate" component={StoreInfoUpdate}></Route>
       <Route path="/storeInfo" component={StoreInfo}></Route>
-      <Route path="/register/seller" component={RegisterSeller}></Route>
+      <Route path="/registerSeller" component={RegisterSeller}></Route>
       <Route path="/suggest" component={Suggest}></Route>
       <Route path="/admin" component={Admin}></Route>
     </>

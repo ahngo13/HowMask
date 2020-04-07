@@ -9,7 +9,16 @@ const headers = { withCredentials: true };
 
 const LoginBtn = () => {
   const navLinkStyle = {
-    margin: 5
+    margin: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 3,
+    paddingBottom: 3,
+    color:"#007bff",
+  };
+
+  const loginout = {
+    borderBottom: 10,
   };
 
   const memberLogout = () => {
@@ -18,7 +27,7 @@ const LoginBtn = () => {
       .then(returnData => {
         if (returnData.data.message) {
           alert(returnData.data.message);
-          sessionStorage.removeItem("login");
+          sessionStorage.clear();
           window.location.href = "/";
         }
       });
@@ -29,16 +38,16 @@ const LoginBtn = () => {
   if (!sessionStorage.getItem("login")) {
     btn = (
       <NavLink style={navLinkStyle} to="/login">
-        <Button>
-        login
+        <Button variant="light">
+          <span style={loginout}>login</span> <i className='fas fa-sign-in-alt' id="iconStyle"></i>
         </Button>
       </NavLink>
     );
   } else if(sessionStorage.getItem("login")==="hamletshu") {
     btn = (
       <>
-      <Button style={navLinkStyle} onClick={memberLogout}>
-        logout
+      <Button style={navLinkStyle} onClick={memberLogout} variant="light">
+        <span style={loginout}>log out</span><i className='fas fa-sign-out-alt' id="iconStyle"></i>
       </Button>
       <NavLink style={navLinkStyle} to="/admin">
       가입된 회원정보 보기
@@ -48,14 +57,14 @@ const LoginBtn = () => {
 
    }else{
     btn = (
-      <Button style={navLinkStyle} onClick={memberLogout}>
-        logout
+      <Button style={navLinkStyle} onClick={memberLogout} variant="light">
+        <span style={loginout}>log out</span><i className='fas fa-sign-out-alt' id="iconStyle" ></i>
       </Button>
     );
     }
   
 
-  return <div>{btn}</div>;
+  return <span>{btn}</span>;
 };
 
 export default LoginBtn;
