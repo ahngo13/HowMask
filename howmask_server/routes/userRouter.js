@@ -25,7 +25,6 @@ router.get("/adminViewList", async (req, res) => {
     res.json({ message: "로그인 실패" });
   }
 });
-
 //관리자 회원 삭제
 router.post("/admindelete", async (req, res) => {
   try {
@@ -60,57 +59,6 @@ router.post("/grantAuth", async (req, res) => {
         {
           $set: {
             auth: true
-          },
-        }
-      );
-      res.json({ resultCode: "1" });
-    }
-  } catch (err) {
-    console.log(err);
-    res.json({ resultCode: "2" });
-  }
-});
-
-//관리자 판매처 계정 반려
-router.post("/revokeAuth", async (req, res) => {
-  try {
-    let user_type = req.session.user_type;
-
-    console.log(user_type);
-    if (user_type !== "7791" || !req.session.email) {
-      res.json({ resultCode: "0" });
-    } else {
-      await User.update(
-        { email: req.body.email },
-        {
-          $set: {
-            auth: false
-          },
-        }
-      );
-      res.json({ resultCode: "1" });
-    }
-  } catch (err) {
-    console.log(err);
-    res.json({ resultCode: "2" });
-  }
-});
-
-//관리자 판매처 계정 승인
-router.post("/unlockLogin", async (req, res) => {
-  try {
-    let user_type = req.session.user_type;
-
-    console.log(user_type);
-    if (user_type !== "7791" || !req.session.email) {
-      res.json({ resultCode: "0" });
-    } else {
-      await User.update(
-        { email: req.body.email },
-        {
-          $set: {
-            lockYn : false,
-            loginCnt : 0
           },
         }
       );
