@@ -255,9 +255,7 @@ const Register = () => {
                 maxLength="24"
                 required
               />
-              <Form.Control.Feedback type="invalid">
-                닉네임을 입력해주세요
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">닉네임을 입력해주세요</Form.Control.Feedback>
             </Col>
           </Form.Group>
 
@@ -274,9 +272,7 @@ const Register = () => {
                 maxLength="1"
                 required
               />
-              <Form.Control.Feedback type="invalid">
-                숫자만 입력해주세요
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">숫자만 입력해주세요</Form.Control.Feedback>
             </Col>
           </Form.Group>
 

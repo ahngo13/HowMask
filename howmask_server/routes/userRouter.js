@@ -2,6 +2,16 @@ const express = require("express");
 const router = express.Router();
 const User = require("../schemas/user");
 const crypto = require("crypto");
+const rateLimit = require("express-rate-limit");
+
+const createAccountLimiter = rateLimit({
+  windowMs: 30 * 30 * 1000, // 15 min window
+  max: 5, // start blocking after 5 requests
+  message: {
+    status: 429,
+    error: "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
+  },
+});
 
 //관리자 회원 리스트 보기
 router.get("/adminViewList", async (req, res) => {
@@ -96,7 +106,7 @@ router.post("/revokeAuth", async (req, res) => {
 });
 
 //회원가입
-router.post("/join", async (req, res) => {
+router.post("/join", createAccountLimiter, async (req, res) => {
   try {
     let obj = { email: req.body.email };
 
