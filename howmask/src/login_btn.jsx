@@ -29,7 +29,9 @@ const LoginBtn = () => {
   if (!sessionStorage.getItem("login")) {
     btn = (
       <NavLink style={navLinkStyle} to="/login">
+        <Button>
         login
+        </Button>
       </NavLink>
     );
   } else if(sessionStorage.getItem("login")==="hamletshu") {

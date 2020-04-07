@@ -32,39 +32,7 @@ ReactDOM.render(
           <span>마스크 어때?</span>
         </Navbar.Brand>
         <LoginBtn />
-        <NavLink style={navLinkStyle} to="/store">
-          store
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/register">
-          register
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/register/seller">
-          register_seller
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/modify">
-          modify
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/checkPw">
-          checkPw
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/birth">
-          birth
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/location">
-          location
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/map">
-          map
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/marker">
-          marker
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/storeInfoUpdate">
-          storeInfoUpdate
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/storeInfo">
-          storeInfo
-        </NavLink>
+        
       </Navbar>
       <Router />
     </HashRouter>,
