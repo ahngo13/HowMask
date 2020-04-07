@@ -158,8 +158,8 @@ function StoreInfoModal(props) {
                     code: props.info.code,
                     name: props.info.name,
                     addr: props.info.addr,
-                    type: props.info.type
-                  }
+                    type: props.info.type,
+                  },
                 }}
               >
                 <Button variant="warning" size="lg" block>
@@ -175,8 +175,8 @@ function StoreInfoModal(props) {
                     code: props.info.code,
                     name: props.info.name,
                     addr: props.info.addr,
-                    type: props.info.type
-                  }
+                    type: props.info.type,
+                  },
                 }}
               >
                 <Button className="register" ref={registerSeller} variant="info" size="lg" block>
@@ -185,8 +185,8 @@ function StoreInfoModal(props) {
               </NavLink>
             </Col>
           </Row>
+          <br />
         </Container>
-        <br />
         <Comment code={props.info.code} />
       </Modal.Body>
     </Modal>
