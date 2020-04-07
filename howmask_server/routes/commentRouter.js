@@ -52,6 +52,7 @@ router.post("/update", upload.single("img"), async (req, res) => {
         {
           $set: {
             text: req.body.text,
+            grade: req.body.grade,
             updatedAt: Date.now(),
           },
         }
