@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Table, Container } from "react-bootstrap";
 
@@ -8,6 +8,10 @@ const headers = { withCredentials: true };
 
 const Admin = () => {
   const [list, setList] = useState([]);
+
+  useEffect(() => {
+    viewList();
+  }, []);
 
   const viewList = () => {
     if (!sessionStorage.getItem("login")) {
@@ -28,7 +32,30 @@ const Admin = () => {
       });
   };
 
+  const grantAuth = (email) => {
+    const sendParam = {email, headers};
+    axios
+      .post(`http://${url}:8080/user/grantAuth`, sendParam)
+      .then((returnData) => {
+        if (returnData.data.resultCode === "1") {
+          alert("판매처가 승인 되었습니다.");
+          viewList();
+        } else if (returnData.data.resultCode === "0") {
+          alert("다시 로그인해주세요");
+          sessionStorage.clear();
+          window.location.href = "/login";
+        } else {
+          alert("판매처 승인 실패");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   const deleteList = (email) => {
+
+    if(window.confirm("정말 삭제하시겠습니까?")){
     const sendParam = { email, headers };
 
     axios
@@ -48,21 +75,21 @@ const Admin = () => {
       .catch((err) => {
         console.log(err);
       });
+    }
   };
 
   let listForm = list.map((lists) => {
     const listsEmail = lists.email;
+    const authBtn = <Button onClick={()=>{grantAuth(listsEmail)}}>승인</Button>
     return (
       <tr key={listsEmail}>
         <td>{lists.user_type === "0" ? "개인" : "판매처"}</td>
         <td>{lists.email}</td>
         <td>{lists.nickname}</td>
-        <td>{lists.lockYn}</td>
+        <td>{lists.lockYn ? "Yes" : "No" } </td>
         <td>
-          <Button>승인</Button>
-        </td>
-        <td>
-          <Button>승인취소</Button>
+          {lists.auth} {list.user_type}
+          {lists.auth === false && lists.user_type === "1" ? authBtn : ""}
         </td>
         <td>
           <Button
@@ -87,8 +114,7 @@ const Admin = () => {
             <th>이메일</th>
             <th>닉네임</th>
             <th>잠금여부</th>
-            <th>승인</th>
-            <th>승인취소</th>
+            <th>계정승인</th>
             <th></th>
           </tr>
         </thead>
@@ -99,3 +125,4 @@ const Admin = () => {
 };
 
 export default Admin;
+
