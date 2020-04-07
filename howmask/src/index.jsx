@@ -7,17 +7,17 @@ import { Navbar } from "react-bootstrap";
 import Router from "./router";
 import LoginBtn from "./login_btn";
 
-
 import "./css/main.css";
 
 const navbarStyle = {
-  margin: "0 auto"
+  margin: "0 auto",
 };
 const navLinkStyle = {
-  margin: 5
+  margin: 5,
 };
 
 ReactDOM.render(
+  <React.StrictMode>
     <HashRouter>
       <Navbar bg="light" variant="light">
         <Navbar.Brand href="/" style={navbarStyle}>
@@ -39,6 +39,7 @@ ReactDOM.render(
         </div>
       </Navbar>
       <Router />
-    </HashRouter>,
+    </HashRouter>{" "}
+  </React.StrictMode>,
   document.getElementById("container")
 );
