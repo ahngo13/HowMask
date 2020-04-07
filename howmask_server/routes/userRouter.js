@@ -220,7 +220,7 @@ router.post("/login", async (req, res) => {
               }
             }
           );
-        } else {
+         } else {
           res.json({ message: "아이디나 패스워드가 일치하지 않습니다." });
         }
       }
