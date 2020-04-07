@@ -8,7 +8,6 @@ import Router from "./router";
 import LoginBtn from "./login_btn";
 
 import "./css/main.css";
-import "./css/map.css";
 
 const navbarStyle = {
   margin: "0 auto",
@@ -31,40 +30,13 @@ ReactDOM.render(
           />
           <span>마스크 어때?</span>
         </Navbar.Brand>
-        <LoginBtn />
-        <NavLink style={navLinkStyle} to="/store">
-          store
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/register">
-          register
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/register/seller">
-          register_seller
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/modify">
-          modify
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/checkPw">
-          checkPw
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/birth">
-          birth
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/location">
-          location
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/map">
-          map
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/marker">
-          marker
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/storeInfoUpdate">
-          storeInfoUpdate
-        </NavLink>
-        <NavLink style={navLinkStyle} to="/storeInfo">
-          storeInfo
-        </NavLink>
+        <div id="memberMenu">
+          {(sessionStorage.getItem("type") === "1")? 
+          <NavLink style={navLinkStyle} to="/store">
+            store
+          </NavLink> : <></>}
+          <LoginBtn />
+        </div>
       </Navbar>
       <Router />
     </HashRouter>{" "}

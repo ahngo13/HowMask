@@ -1,18 +1,41 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Modal, Button, Badge, Table, Card, Container, Col, Row } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Badge,
+  Table,
+  Card,
+  Container,
+  Col,
+  Row,
+} from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import Comment from "./comment";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+const url = "localhost";
+const headers = { withCredentials: true };
+
+let kidsMaskColor = "";
 
 //판매처 상세정보 Modal
 function StoreInfoModal(props) {
   const [stockColor, setStockColor] = useState();
   const [stockText, setStockText] = useState();
   const [stockType, setStockType] = useState();
+  const [sellerstate, setSellerstate] = useState({
+    soldTime: "",
+    stockAverage: "",
+    kidsMask: "",
+    notice: "",
+  });
 
   const registerSeller = useRef();
 
   function howMany() {
     const stock = props.info.stock;
+    console.log(props.info);
     return (
       <div>
         {(() => {
@@ -60,13 +83,53 @@ function StoreInfoModal(props) {
       </div>
     );
   }
+
+  const loadSellerdata = () => {
+    // console.log(props.info.code);
+    const code = props.info.code;
+    const sendParam = { headers, code };
+    axios
+      .post(`http://${url}:8080/store/loadsellerdata`, sendParam)
+      .then((returnData) => {
+        // console.log(returnData.data.soldTime);
+        // console.log(returnData.data.stockAverage);
+        // console.log(returnData.data.kidsMask);
+        // console.log(returnData.data.notice);
+        switch (returnData.data.kidsMask) {
+          case "무":
+            kidsMaskColor = "danger";
+            break;
+          case "유":
+            kidsMaskColor = "primary";
+            break;
+          default:
+            break;
+        }
+        setSellerstate({
+          soldTime: returnData.data.soldTime,
+          stockAverage: returnData.data.stockAverage,
+          kidsMask: returnData.data.kidsMask,
+          notice: returnData.data.notice,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     howMany();
     storeType();
-  });
+    loadSellerdata();
+  }, []);
 
   return (
-    <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.info.name}
@@ -109,13 +172,13 @@ function StoreInfoModal(props) {
                 <strong>
                   <font color="#1a0066">판매예정시간</font>
                 </strong>
-                &nbsp;&nbsp;&nbsp; 실제 마스크 판매시간
+                &nbsp;&nbsp;&nbsp; {sellerstate.soldTime}
               </td>
               <td>
                 <strong>
                   <font color="#1a0066">평균 재고수량</font>
                 </strong>
-                &nbsp;&nbsp;&nbsp; 000개
+                &nbsp;&nbsp;&nbsp; {sellerstate.stockAverage}
               </td>
             </tr>
           </tbody>
@@ -127,7 +190,8 @@ function StoreInfoModal(props) {
                 <font color="#1a0066">
                   <strong>유아용 마스크 판매여부</strong>
                 </font>
-                &nbsp;&nbsp;&nbsp; <Badge variant="primary">유(무)</Badge>
+                &nbsp;&nbsp;&nbsp;{" "}
+                <Badge variant={kidsMaskColor}>{sellerstate.kidsMask}</Badge>
               </td>
             </tr>
           </tbody>
@@ -141,7 +205,7 @@ function StoreInfoModal(props) {
                 </font>
                 <Card>
                   <Card.Body>
-                    <p>공지사항 내용</p>
+                    <p>{sellerstate.notice}</p>
                   </Card.Body>
                 </Card>
               </td>
@@ -170,7 +234,7 @@ function StoreInfoModal(props) {
             <Col>
               <NavLink
                 to={{
-                  pathname: `/register/seller`,
+                  pathname: `/registerSeller`,
                   state: {
                     code: props.info.code,
                     name: props.info.name,
@@ -179,7 +243,13 @@ function StoreInfoModal(props) {
                   },
                 }}
               >
-                <Button className="register" ref={registerSeller} variant="info" size="lg" block>
+                <Button
+                  className="register"
+                  ref={registerSeller}
+                  variant="info"
+                  size="lg"
+                  block
+                >
                   무료 판매처계정 생성하기
                 </Button>
               </NavLink>
@@ -196,7 +266,13 @@ function StoreInfoModal(props) {
 function StoreInfo(props) {
   let modal;
   if (props.storeInfo) {
-    modal = <StoreInfoModal show={props.show} info={props.storeInfo} onHide={props.onHide} />;
+    modal = (
+      <StoreInfoModal
+        show={props.show}
+        info={props.storeInfo}
+        onHide={props.onHide}
+      />
+    );
   }
 
   return <>{modal}</>;

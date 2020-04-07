@@ -5,6 +5,27 @@ const User = require("../schemas/user");
 const Suggest = require("../schemas/suggest");
 const crypto = require("crypto");
 
+//store_info seller data 출력
+router.post("/loadsellerdata", async (req, res) => {
+  try {
+    //이메일 값으로 코드가 존재하는지 확인
+    await Store.findOne({ code: req.body.code }, async (err, code) => {
+      if (err) {
+        console.log(err);
+      } else if (code) {
+        res.json({
+          soldTime: code.soldTime,
+          stockAverage: code.stockAverage,
+          kidsMask: code.kidsMask,
+          notice: code.notice,
+        });
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // 판매처 정보수정 제안 응답
 router.post("/checkpw", async (req, res) => {
   try {

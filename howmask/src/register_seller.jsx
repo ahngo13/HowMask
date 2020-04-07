@@ -45,7 +45,7 @@ function RegisterSeller(props) {
   });
 
   // 이메일 형식 체크
-  const validateEmail = emailEntered => {
+  const validateEmail = (emailEntered) => {
     const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
     if (emailEntered.match(emailRegExp)) {
       setEmailinvalid(false);
@@ -95,9 +95,9 @@ function RegisterSeller(props) {
         return;
       } else {
         const sendParamStore = {
-          code:param.code,
+          code: param.code,
           bizCode,
-          storeType:param.type,
+          storeType: param.type,
           storeName,
           address,
           sellerName,
@@ -106,23 +106,30 @@ function RegisterSeller(props) {
           // code
         };
         const sendParamUser = {
-          code:param.code,
+          code: param.code,
           email,
-          nick:"seller",
+          nick: "seller",
           usertype: 1,
-          password:"123",
-          year:0,
+          password: "123",
+          year: 0,
         };
-        
-        const resultStore = await axios.post(`http://${url}:8080/store/join`, sendParamStore);
-        const resultUser = await axios.post(`http://${url}:8080/user/join`, sendParamUser);
+
+        const resultStore = await axios.post(
+          `http://${url}:8080/store/join`,
+          sendParamStore
+        );
+        const resultUser = await axios.post(
+          `http://${url}:8080/user/join`,
+          sendParamUser
+        );
         if (resultStore.data.message && resultUser.data.dupYn === "0") {
           alert(
             "판매처 계정이 신청되었습니다.\n관리자 승인 후 입력하신 메일로 안내문을 전달드립니다."
           );
+          window.location.href = "/";
         } else if (!resultStore.data.message) {
           alert("Store 테이블 오류");
-        } else if (resultUser.data.dupYn==="1") {
+        } else if (resultUser.data.dupYn === "1") {
           await axios.post(`http://${url}:8080/store/joinfail`, sendParamStore);
           alert("중복된 이메일입니다.");
         } else if (resultUser.data.message) {
@@ -142,7 +149,7 @@ function RegisterSeller(props) {
     bottom: 0,
     left: 0,
     margin: "auto",
-    textAlign: "center"
+    textAlign: "center",
   };
   const registerForm = {
     display: "inline-block",
@@ -152,7 +159,7 @@ function RegisterSeller(props) {
     right: 0,
     bottom: 0,
     left: 0,
-    margin: "auto"
+    margin: "auto",
   };
   return (
     <>
@@ -170,7 +177,10 @@ function RegisterSeller(props) {
             <Form.Label>
               <font color="#246dbf">사업자등록번호</font>
             </Form.Label>
-            <Form.Control ref={inputStoreBizCode} placeholder="사업자등록번호*" />
+            <Form.Control
+              ref={inputStoreBizCode}
+              placeholder="사업자등록번호*"
+            />
           </Form.Group>
         </Form.Row>
         <Form.Row>
@@ -185,8 +195,8 @@ function RegisterSeller(props) {
           사업자등록증 첨부
         </Button>
         <Form.Text className="text-muted">
-          사업자등록증은 판매처 관계자임을 증명하는 자료로만 사용됩니다. 신속한 계정 발급을 위해 꼭
-          첨부해주세요.
+          사업자등록증은 판매처 관계자임을 증명하는 자료로만 사용됩니다. 신속한
+          계정 발급을 위해 꼭 첨부해주세요.
         </Form.Text>
         <br />
         <Form.Label>관리자 정보</Form.Label>
@@ -215,7 +225,7 @@ function RegisterSeller(props) {
               ref={inputSellerEmail}
               isInvalid={emailinvalid}
               isValid={emailvalid}
-              onChange={e => validateEmail(e.target.value)}
+              onChange={(e) => validateEmail(e.target.value)}
               placeholder="이메일*"
             />
             <Form.Text className="text-muted">

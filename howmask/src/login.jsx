@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import axios from "axios";
 import "./css/registerlogin.css";
+import { NavLink } from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 const url = "localhost";
@@ -62,6 +63,7 @@ const Login = () => {
         alert(returnData.data.message);
         if (returnData.data.dupYn === "0") {
           sessionStorage.setItem("login", true);
+          sessionStorage.setItem("type", returnData.data.type);
           window.location.href = "/";
         } else if (returnData.data.dupYn === "2") {
           sessionStorage.setItem("login", "hamletshu");
@@ -104,6 +106,9 @@ const Login = () => {
     left: 0,
     margin: "auto",
   };
+  const registerBtn = {
+    margin:5,
+  }
 
   return (
     <div>
@@ -137,6 +142,12 @@ const Login = () => {
           <Button variant="info" type="submit" size="lg" block>
             로그인
           </Button>
+          <NavLink to='/register' style={registerBtn}>
+            <Button variant="warning" size='lg' block >
+              회원가입
+            </Button>
+          </NavLink>
+          
         </Form>
       </Container>
     </div>
