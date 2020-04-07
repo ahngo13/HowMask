@@ -29,6 +29,8 @@ function StoreInfoModal(props) {
     stockAverage: "",
     kidsMask: "",
     notice: "",
+    startTime: "",
+    endTime: "",
   });
 
   const registerSeller = useRef();
@@ -105,12 +107,16 @@ function StoreInfoModal(props) {
           default:
             break;
         }
-        setSellerstate({
-          soldTime: returnData.data.soldTime,
-          stockAverage: returnData.data.stockAverage,
-          kidsMask: returnData.data.kidsMask,
-          notice: returnData.data.notice,
-        });
+        if (returnData.data.startTime) {
+          setSellerstate({
+            soldTime: returnData.data.soldTime,
+            stockAverage: returnData.data.stockAverage,
+            kidsMask: returnData.data.kidsMask,
+            notice: returnData.data.notice,
+            startTime: returnData.data.startTime + "~",
+            endTime: returnData.data.endTime,
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -162,7 +168,8 @@ function StoreInfoModal(props) {
                 <strong>
                   <font color="#1a0066">영업시간</font>
                 </strong>
-                &nbsp;&nbsp;&nbsp; (요일) 시작시간~종료시간
+                &nbsp;&nbsp;&nbsp; {sellerstate.startTime}
+                {sellerstate.endTime}
               </td>
               <td>
                 <strong>

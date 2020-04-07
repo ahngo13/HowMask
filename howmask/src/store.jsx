@@ -27,6 +27,7 @@ const Store = () => {
   const [stockAverageState, setStockAverageState] = useState();
   const [kidMaskState, setKidMaskState] = useState();
   const [noticeState, setNoticeState] = useState();
+  const [timestate, setTimestate] = useState({ start: null, end: null });
 
   const storeName = useRef(); //판매처명 (store)
   const addr = useRef(); //주소 (store)
@@ -38,6 +39,8 @@ const Store = () => {
   const stockAverage = useRef(); //재고 수량
   const kidMask = useRef(); // 유야용 마스크
   const notice = useRef(); // 공지사항
+  const startTime = useRef(); // 시작시간
+  const endTime = useRef(); // 종료시간
 
   const inputCheckPw = useRef();
   let storeForm;
@@ -89,6 +92,8 @@ const Store = () => {
       stockAverage: stockAverage.current.value,
       kidMask: kidMask.current.value,
       notice: notice.current.value,
+      startTime: startTime.current.value,
+      endTime: endTime.current.value,
     };
     const result = await axios.post(
       `http://${url}:8080/store/update`,
@@ -121,6 +126,7 @@ const Store = () => {
       setStockAverageState(info.stockAverage);
       setKidMaskState(info.kidsMask);
       setNoticeState(info.notice);
+      setTimestate({ start: info.startTime, end: info.endTime });
     } else {
       console.log("setting fail");
     }
@@ -226,6 +232,7 @@ const Store = () => {
                 ref={storeName}
                 readOnly={textFlag}
                 defaultValue={storeNameState}
+                disabled
               />
             </Form.Group>
             <Form.Group as={Col} controlId="storeLocation">
@@ -248,6 +255,30 @@ const Store = () => {
                 ref={addr}
                 readOnly={textFlag}
                 defaultValue={addrState}
+                disabled
+              />
+            </Form.Group>
+          </Form.Row>
+          <Form.Label>영업시간</Form.Label>
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Label>
+                <font color="#246dbf">시작시간</font>
+              </Form.Label>
+              <Form.Control
+                ref={startTime}
+                readOnly={textFlag}
+                defaultValue={timestate.start}
+              />
+            </Form.Group>
+            <Form.Group as={Col} controlId="storeLocation">
+              <Form.Label>
+                <font color="#246dbf">종료시간</font>
+              </Form.Label>
+              <Form.Control
+                ref={endTime}
+                readOnly={textFlag}
+                defaultValue={timestate.end}
               />
             </Form.Group>
           </Form.Row>
