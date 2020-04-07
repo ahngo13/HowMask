@@ -115,11 +115,15 @@ function StoreInfoModal(props) {
       .catch((err) => {
         console.log(err);
       });
+    return;
   };
 
   useEffect(() => {
     howMany();
     storeType();
+  });
+
+  useEffect(() => {
     loadSellerdata();
   }, []);
 
