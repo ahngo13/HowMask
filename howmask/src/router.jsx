@@ -29,7 +29,7 @@ const Router = () => {
       <Route path="/marker" component={Marker}></Route>
       <Route path="/storeInfoUpdate" component={StoreInfoUpdate}></Route>
       <Route path="/storeInfo" component={StoreInfo}></Route>
-      <Route path="/register/seller" component={RegisterSeller}></Route>
+      <Route path="/registerSeller" component={RegisterSeller}></Route>
       <Route path="/suggest" component={Suggest}></Route>
       <Route path="/admin" component={Admin}></Route>
     </>
