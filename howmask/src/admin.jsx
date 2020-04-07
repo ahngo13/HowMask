@@ -99,16 +99,42 @@ const Admin = () => {
     }
   };
 
+  const unlockLogin = (email) => {
+
+    if(window.confirm(email + " 계정을 잠금해제 하시겠습니까?")){
+    const sendParam = { email, headers };
+
+    axios
+      .post(`http://${url}:8080/user/unlockLogin`, sendParam)
+      .then((returnData) => {
+        if (returnData.data.resultCode === "1") {
+          alert("잠금해제 되었습니다.");
+          viewList();
+        } else if (returnData.data.resultCode === "0") {
+          alert("다시 로그인 해주세요");
+          sessionStorage.clear();
+          window.location.href = "/login";
+        } else {
+          alert("삭제 실패");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+  };
+
   let listForm = list.map((lists) => {
     const listsEmail = lists.email;
     const grantBtn = <Button onClick={()=>{grantAuth(listsEmail)}}>승인</Button>
     const revokeBtn = <Button onClick={()=>{revokeAuth(listsEmail)}}>반려</Button>
+    const unlockBtn = <Button onClick={()=>{unlockLogin(listsEmail)}}>잠금해제</Button>
     return (
       <tr key={listsEmail}>
         <td>{lists.user_type === "0" ? "개인" : "판매처"}</td>
         <td>{lists.email}</td>
         <td>{lists.nickname}</td>
-        <td>{lists.lockYn === true ? "Yes" : "No" } </td>
+        <td>{lists.lockYn === true ? unlockBtn : "No" }</td>
         <td>
           {lists.auth === false && lists.user_type === "1" ? grantBtn : ""}
           {lists.auth === true && lists.user_type === "1" ? revokeBtn : ""}
