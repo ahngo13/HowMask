@@ -6,6 +6,7 @@ const connect = require("./schemas");
 const fs = require("fs");
 const path = require("path");
 const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 connect();
 
@@ -13,6 +14,11 @@ const corsOptions = {
   origin: true,
   credentials: true,
 };
+
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 min
+  max: 100, // IP 당 허용하는 요청 횟수
+});
 
 fs.readdir("public/upload", (error) => {
   // upl5oads 폴더 없으면 생성
@@ -53,7 +59,7 @@ app.use(function (req, res, next) {
 app.use("/user", require("./routes/userRouter"));
 app.use("/comment", require("./routes/commentRouter"));
 app.use("/store", require("./routes/storeRouter"));
-app.use("/mask", require("./routes/maskRouter"));
+app.use("/mask", require("./routes/maskRouter"), apiLimiter);
 
 // 500 Error 처리
 app.use(function (err, req, res, next) {
