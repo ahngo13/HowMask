@@ -83,3 +83,8 @@
     position: absolute;
     right:10px;
 }
+
+#iconStyle{
+    font-size: 20px;
+    transform:translate(20%, 20%);
+}

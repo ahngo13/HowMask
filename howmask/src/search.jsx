@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef} from "react";
-import { NavLink } from "react-router-dom";
 import { Button, Form, FormControl, Col } from "react-bootstrap";
 
 const Search = (props) => {
