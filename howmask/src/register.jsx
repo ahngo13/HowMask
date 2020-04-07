@@ -116,7 +116,7 @@ const Register = () => {
     setUserformstate(true);
   };
   const storeForm = () => {
-    window.location.href = "/#/register/seller";
+    window.location.href = "/";
   };
 
   function onChange(value) {
@@ -155,10 +155,21 @@ const Register = () => {
     margin: "auto",
     textAlign: "center",
   };
+  const initialType = {
+    display: "inline-block",
+    width: "50%",
+    position: "fixed",
+    top: 200,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    margin: "auto",
+    textAlign: "center",
+  };
 
   if (!userformstate) {
     userRegisterform = (
-      <Container style={registerType}>
+      <Container style={initialType}>
         <Button onClick={userForm} variant="info" block>
           개인회원 가입
         </Button>
