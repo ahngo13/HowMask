@@ -26,6 +26,8 @@ function Comment(props) {
 
   const [avgGrade, setAvgGrade] = useState("평점 없음");
 
+  const imgExp = /([^\s]+(?=\.(jpg|gif|png|jpeg))\.\2)/;
+
   const gradeForm = (
     <div className="starRev">
       <span className="starR1 on" onClick={(e) => handleGradeInput(e)}>
@@ -83,17 +85,26 @@ function Comment(props) {
     e.preventDefault();
     let reader = new FileReader(); // 파일 읽기
     let file = e.target.files[0];
-    reader.onloadend = function (e) {
-      // 파일 load가 성공인 경우
-      const base64 = e.target.result;
-      if (base64) {
-        setImgBase64(base64.toString()); // 파일 base64 상태 업데이트
+    let fileName = e.target.files[0].name;
+
+    if (fileName.match(imgExp) == null) {
+      alert("jpg, gif, png 형식의 이미지 파일만 첨부 가능합니다.");
+      fileTag.current.value = "";
+      commentTag.current.focus();
+      return;
+    } else {
+      reader.onloadend = function (e) {
+        // 파일 load가 성공인 경우
+        const base64 = e.target.result;
+        if (base64) {
+          setImgBase64(base64.toString()); // 파일 base64 상태 업데이트
+        }
+        setImagePreviewUrl(base64);
+      };
+      if (file) {
+        reader.readAsDataURL(file); // 1. 파일을 읽어 버퍼에 저장합니다.
+        setSelectedFile(file); // 파일 상태 업데이트
       }
-      setImagePreviewUrl(e.target.result);
-    };
-    if (file) {
-      reader.readAsDataURL(file); // 1. 파일을 읽어 버퍼에 저장합니다.
-      setSelectedFile(e.target.files[0]); // 파일 상태 업데이트
     }
   }
   //댓글 삭제
@@ -126,7 +137,6 @@ function Comment(props) {
     const sendParam = { _id, flag };
     const result = axios.post(`http://${url}:8080/comment/update`, sendParam);
     if ((await result).data.comment) {
-      console.log((await result).data.comment[0].text);
       commentTag.current.value = (await result).data.comment[0].text;
       commentTag.current.focus();
       setCommentId(_id);
@@ -173,7 +183,7 @@ function Comment(props) {
         }
       } // 수정한 댓글 등록
       else if (functionName === "update") {
-        flag = false;
+        flag = true;
         formData.append("_id", commentId);
         formData.append("flag", flag);
 
@@ -186,8 +196,10 @@ function Comment(props) {
           commentTag.current.value = "";
           fileTag.current.value = "";
           commentTag.current.focus();
+          flag = false;
         } else {
           alert("에러");
+          flag = false;
         }
       }
       setInsertBtn("댓글 등록");
@@ -325,7 +337,10 @@ function Comment(props) {
       <span>
         총 댓글 갯수 : {commentCnt} &nbsp;&nbsp;&nbsp;
         <h1 style={{ float: "right" }}>
-          ★<Badge variant="secondary">{avgGrade}</Badge>
+          <font color="yellow">★</font>
+          <Badge pill variant="success">
+            {avgGrade}
+          </Badge>
         </h1>
       </span>
 

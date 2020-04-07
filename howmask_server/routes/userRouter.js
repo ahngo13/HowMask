@@ -16,7 +16,7 @@ router.get("/adminViewList", async (req, res) => {
       // const result = await User.find({ $or:[{user_type: "개인"},{user_type:"관리자"}] }, async (err, user) => {}
       const result = await User.find()
         .or([{ user_type: "0" }, { user_type: "1" }])
-        .select("-_id user_type email nickname lockYn");
+        .select("-_id user_type email nickname lockYn auth");
       res.json({ message: "관리자 확인", result });
       console.log(result);
     }
@@ -37,6 +37,31 @@ router.post("/admindelete", async (req, res) => {
       await User.remove({
         email: req.body.email,
       });
+      res.json({ resultCode: "1" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ resultCode: "2" });
+  }
+});
+
+//관리자 판매처 계정 승인
+router.post("/grantAuth", async (req, res) => {
+  try {
+    let user_type = req.session.user_type;
+
+    console.log(user_type);
+    if (user_type !== "7791" || !req.session.email) {
+      res.json({ resultCode: "0" });
+    } else {
+      await User.update(
+        { email: req.body.email },
+        {
+          $set: {
+            auth: true
+          },
+        }
+      );
       res.json({ resultCode: "1" });
     }
   } catch (err) {
