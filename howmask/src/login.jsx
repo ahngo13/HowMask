@@ -67,7 +67,7 @@ const Login = () => {
           window.location.href = "/";
         } else if (returnData.data.dupYn === "2") {
           sessionStorage.setItem("login", "hamletshu");
-          window.location.href = "/#/admin";
+          window.location.href = "/";
         }
       })
       .catch((err) => {
