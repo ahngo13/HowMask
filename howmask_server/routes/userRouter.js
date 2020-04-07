@@ -5,12 +5,10 @@ const crypto = require("crypto");
 const rateLimit = require("express-rate-limit");
 
 const createAccountLimiter = rateLimit({
+  status: 429,
   windowMs: 30 * 30 * 1000, // 15 min window
   max: 5, // start blocking after 5 requests
-  message: {
-    status: 429,
-    error: "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
-  },
+  message: "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
 });
 
 //관리자 회원 리스트 보기
@@ -68,7 +66,7 @@ router.post("/grantAuth", async (req, res) => {
         { email: req.body.email },
         {
           $set: {
-            auth: true
+            auth: true,
           },
         }
       );
@@ -110,7 +108,7 @@ router.post("/join", createAccountLimiter, async (req, res) => {
               } else {
                 console.log(key.toString("base64"));
                 buf.toString("base64");
-                let code=0;
+                let code = 0;
                 code = req.body.code;
                 obj = {
                   email: req.body.email,
@@ -119,7 +117,7 @@ router.post("/join", createAccountLimiter, async (req, res) => {
                   year: req.body.year,
                   password: key.toString("base64"),
                   salt: buf.toString("base64"),
-                  code
+                  code,
                 };
                 user = new User(obj);
                 await user.save();
@@ -131,7 +129,6 @@ router.post("/join", createAccountLimiter, async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
     res.json({ message: false });
   }
 });
@@ -149,88 +146,81 @@ router.post("/login", async (req, res) => {
           //아이디가 존재할 경우 이메일과 패스워드가 일치하는 회원이 있는지 확인
           console.log(req.body.password);
           console.log(user.salt);
-          crypto.pbkdf2(
-            req.body.password,
-            user.salt,
-            100000,
-            64,
-            "sha512",
-            async (err, key) => {
-              if (err) {
-                console.log(err);
+          crypto.pbkdf2(req.body.password, user.salt, 100000, 64, "sha512", async (err, key) => {
+            if (err) {
+              console.log(err);
+            } else {
+              // console.log(key.toString('base64')); // 'dWhPkH6c4X1Y71A/DrAHhML3DyKQdEkUOIaSmYCI7xZkD5bLZhPF0dOSs2YZA/Y4B8XNfWd3DHIqR5234RtHzw=='
+
+              const obj = {
+                email: req.body.email,
+                password: key.toString("base64"),
+              };
+
+              const user2 = await User.findOne(obj);
+              console.log(user2);
+              if (user2) {
+                // 있으면 로그인 처리
+                // console.log(req.body._id);
+                await User.updateOne(
+                  {
+                    email: req.body.email,
+                  },
+                  { $set: { loginCnt: 0 } }
+                );
+                req.session.email = user.email;
+                req.session.user_type = user2.user_type;
+                if (user2.user_type == "7791") {
+                  res.json({
+                    message: "관리자님 로그인 되었습니다!",
+                    _id: user2._id,
+                    email: user2.email,
+                    dupYn: "2",
+                  });
+                } else {
+                  res.json({
+                    message: "로그인 되었습니다!",
+                    _id: user2._id,
+                    email: user2.email,
+                    type: user2.user_type,
+                    dupYn: "0",
+                  });
+                }
               } else {
-                // console.log(key.toString('base64')); // 'dWhPkH6c4X1Y71A/DrAHhML3DyKQdEkUOIaSmYCI7xZkD5bLZhPF0dOSs2YZA/Y4B8XNfWd3DHIqR5234RtHzw=='
-
-                const obj = {
-                  email: req.body.email,
-                  password: key.toString("base64"),
-                };
-
-                const user2 = await User.findOne(obj);
-                console.log(user2);
-                if (user2) {
-                  // 있으면 로그인 처리
-                  // console.log(req.body._id);
+                //없으면 로그인 실패횟수 추가
+                if (user.loginCnt > 4) {
+                  res.json({
+                    message:
+                      "아이디나 패스워드가 5회 이상 일치하지 않아 잠겼습니다.\n고객센터에 문의 바랍니다.",
+                  });
+                } else {
                   await User.updateOne(
                     {
                       email: req.body.email,
                     },
-                    { $set: { loginCnt: 0 } }
+                    { $set: { loginCnt: user.loginCnt + 1 } }
                   );
-                  req.session.email = user.email;
-                  req.session.user_type = user2.user_type;
-                  if (user2.user_type == "7791") {
-                    res.json({
-                      message: "관리자님 로그인 되었습니다!",
-                      _id: user2._id,
-                      email: user2.email,
-                      dupYn: "2",
-                    });
-                  } else {
-                    res.json({
-                      message: "로그인 되었습니다!",
-                      _id: user2._id,
-                      email: user2.email,
-                      type:user2.user_type,
-                      dupYn: "0",
-                    });
-                  }
-                } else {
-                  //없으면 로그인 실패횟수 추가
-                  if (user.loginCnt > 4) {
+                  if (user.loginCnt >= 5) {
+                    await User.updateOne(
+                      {
+                        email: req.body.email,
+                      },
+                      { $set: { lockYn: true } }
+                    );
                     res.json({
                       message:
                         "아이디나 패스워드가 5회 이상 일치하지 않아 잠겼습니다.\n고객센터에 문의 바랍니다.",
                     });
                   } else {
-                    await User.updateOne(
-                      {
-                        email: req.body.email,
-                      },
-                      { $set: { loginCnt: user.loginCnt + 1 } }
-                    );
-                    if (user.loginCnt >= 5) {
-                      await User.updateOne(
-                        {
-                          email: req.body.email,
-                        },
-                        { $set: { lockYn: true } }
-                      );
-                      res.json({
-                        message:
-                          "아이디나 패스워드가 5회 이상 일치하지 않아 잠겼습니다.\n고객센터에 문의 바랍니다.",
-                      });
-                    } else {
-                      res.json({
-                        message: "아이디나 패스워드가 일치하지 않습니다.",
-                      });
-                    }
+                    res.json({
+                      message: "아이디나 패스워드가 일치하지 않습니다.",
+                    });
                   }
                 }
               }
             }
-          );
-         } else {
+          });
+        } else {
           res.json({ message: "아이디나 패스워드가 일치하지 않습니다." });
         }
       }

@@ -108,7 +108,13 @@ const Register = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        const status = err.response.status;
+        // 다수 request 응답 거부
+        if (status === 429) {
+          alert(err.response.data);
+          window.location.href = "/";
+        }
+        console.log(err.response);
       });
   };
 
