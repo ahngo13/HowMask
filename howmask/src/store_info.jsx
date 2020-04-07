@@ -131,7 +131,7 @@ function StoreInfoModal(props) {
 
   useEffect(() => {
     loadSellerdata();
-  }, []);
+  }, [props]);
 
   return (
     <Modal
