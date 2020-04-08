@@ -110,6 +110,11 @@ const Login = () => {
     margin: 5,
   };
 
+  const removeSession = () => {
+    sessionStorage.clear();
+  };
+  removeSession();
+
   return (
     <div>
       <Container style={loginType}>

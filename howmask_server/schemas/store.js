@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 const {
-  Types: { ObjectId }
+  Types: { ObjectId },
 } = Schema;
 const storeSchema = new Schema({
   //마스크 api에서 가져오는 값
@@ -14,55 +14,61 @@ const storeSchema = new Schema({
   //사업자 등록번호
   bizCode: {
     type: String,
-    required: true
+    required: true,
   },
   storeType: {
     type: String,
-    required: true
+    required: true,
   },
   storeName: {
     type: String,
-    required: true
+    required: true,
   },
   //관리자 이름
   sellerName: {
     type: String,
-    required: true
+    required: true,
   },
   address: {
     type: String,
-    required: true
+    required: true,
   },
   // 관리자 휴대전화번호
   phone: {
-    type: Number
+    type: Number,
   },
   stockAverage: {
-    type: String
+    type: String,
   },
   operating_time: {
-    type: String
+    type: String,
   },
   notice: {
-    type: String
+    type: String,
   },
   soldTime: {
-    type: String
+    type: String,
   },
   soldState: {
-    type: String
+    type: String,
   },
   kidsMask: {
-    type: String
+    type: String,
+  },
+  startTime: {
+    type: String,
+  },
+  endTime: {
+    type: String,
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("Store", storeSchema);

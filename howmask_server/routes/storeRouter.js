@@ -18,6 +18,8 @@ router.post("/loadsellerdata", async (req, res) => {
           stockAverage: code.stockAverage,
           kidsMask: code.kidsMask,
           notice: code.notice,
+          startTime: code.startTime,
+          endTime: code.endTime,
         });
       }
     });
@@ -150,6 +152,8 @@ router.post("/update", async (req, res) => {
       stockAverage: req.body.stockAverage,
       kidsMask: req.body.kidMask,
       notice: req.body.notice,
+      startTime: req.body.startTime,
+      endTime: req.body.endTime,
     };
     console.log(obj);
     const result = await Store.update({ code: req.body.code }, obj);
@@ -174,6 +178,23 @@ router.post("/getInfo", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.json({ info: false });
+  }
+});
+
+//관리자 판매처 신청정보 조회
+router.post("/getStoreInfo", async (req, res) => {
+  const user_type = req.session.user_type;
+  try {
+    if (user_type !== "7791") {
+      res.json({ message: "관리자가 아닙니다." });
+    } else {
+      const info = await Store.findOne({ code: req.body.code });
+      res.json({ info });
+      console.log(info);
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ message: "로그인 실패" });
   }
 });
 
