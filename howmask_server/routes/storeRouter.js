@@ -18,6 +18,8 @@ router.post("/loadsellerdata", async (req, res) => {
           stockAverage: code.stockAverage,
           kidsMask: code.kidsMask,
           notice: code.notice,
+          startTime: code.startTime,
+          endTime: code.endTime,
         });
       }
     });
@@ -150,6 +152,8 @@ router.post("/update", async (req, res) => {
       stockAverage: req.body.stockAverage,
       kidsMask: req.body.kidMask,
       notice: req.body.notice,
+      startTime: req.body.startTime,
+      endTime: req.body.endTime,
     };
     console.log(obj);
     const result = await Store.update({ code: req.body.code }, obj);

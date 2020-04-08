@@ -108,16 +108,22 @@ const Register = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        const status = err.response.status;
+        // 다수 request 응답 거부
+        if (status === 429) {
+          alert(err.response.data);
+          window.location.href = "/";
+        }
+        console.log(err.response);
       });
   };
 
   const userForm = () => {
     setUserformstate(true);
   };
-  const storeForm = () => {
-    window.location.href = "/";
-  };
+  // const storeForm = () => {
+  //   window.location.href = "/";
+  // };
 
   function onChange(value) {
     console.log("Captcha value:", value);
@@ -167,137 +173,136 @@ const Register = () => {
     textAlign: "center",
   };
 
-  if (!userformstate) {
-    userRegisterform = (
-      <Container style={initialType}>
-        <Button onClick={userForm} variant="info" block>
-          개인회원 가입
+  // if (!userformstate) {
+  //   userRegisterform = (
+  //     <Container style={initialType}>
+  //       <Button onClick={userForm} variant="info" block>
+  //         개인회원 가입
+  //       </Button>
+  //       <Button onClick={storeForm} variant="warning" block>
+  //         판매처는 판매점을 통해 진행해주세요
+  //       </Button>
+  //     </Container>
+  //   );
+  // } else {
+  userRegisterform = (
+    <Container>
+      <h2 style={registerTitle}>회원가입</h2>
+      <Form noValidate style={registerForm} onSubmit={joinInsert}>
+        <Form.Group as={Row} controlId="formUsertype">
+          <Form.Label column sm={3}>
+            가입형식
+          </Form.Label>
+          <Col sm={9}>
+            <Form.Control
+              as="select"
+              value={usertypestate.value}
+              onChange={(e) => changeUsertype(e.target.value)}
+            >
+              <option value="0">개인</option>
+              {/* 관리자, 판매처 옵션은 임시로 만듬 */}
+              <option value="7791">관리자</option>
+            </Form.Control>
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} controlId="formEmail">
+          <Form.Label column sm={3}>
+            이메일
+          </Form.Label>
+          <Col sm={9}>
+            <Form.Control
+              type="email"
+              placeholder="이메일을 입력해주세요"
+              isInvalid={emailstate.invalid}
+              isValid={emailstate.valid}
+              ref={inputEmail}
+              onChange={(e) => validateEmail(e.target.value)}
+              maxLength="40"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              주소를 양식에 맞게 입력해주세요
+            </Form.Control.Feedback>
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} controlId="formPassword">
+          <Form.Label column sm={3}>
+            비밀번호
+          </Form.Label>
+          <Col sm={9}>
+            <Form.Control
+              type="password"
+              className="pwdfont"
+              isInvalid={pwstate.invalid}
+              isValid={pwstate.valid}
+              ref={inputPwd}
+              onChange={(e) => validatePwd(e.target.value)}
+              maxLength="16"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              비밀번호는 영문자 및 숫자, 특수문자 포함 8자 이상이어야합니다
+            </Form.Control.Feedback>
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} controlId="formNickname">
+          <Form.Label column sm={3}>
+            닉네임
+          </Form.Label>
+          <Col sm={9}>
+            <Form.Control
+              isInvalid={namestate.invalid}
+              isValid={namestate.valid}
+              ref={inputNick}
+              onChange={(e) => validateName(e.target.value)}
+              maxLength="24"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              닉네임을 입력해주세요
+            </Form.Control.Feedback>
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row} controlId="yearForm">
+          <Form.Label column sm={3}>
+            태어난 년도 끝자리
+          </Form.Label>
+          <Col sm={9}>
+            <Form.Control
+              ref={inputYear}
+              isInvalid={yearstate.invalid}
+              isValid={yearstate.valid}
+              onChange={(e) => validateYear(e.target.value)}
+              maxLength="1"
+              required
+            />
+            <Form.Control.Feedback type="invalid">
+              숫자만 입력해주세요
+            </Form.Control.Feedback>
+          </Col>
+        </Form.Group>
+
+        <Form.Group as={Row}>
+          <Form.Label column sm={3}></Form.Label>
+          <Col sm={9}>
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey="6Ld7CucUAAAAAIx2bAazLyMpGWYpusA7tStIGokY"
+              onChange={onChange}
+            />
+          </Col>
+        </Form.Group>
+
+        <Button variant="info" type="submit" size="lg" block>
+          회원가입
         </Button>
-        <Button onClick={storeForm} variant="warning" block>
-          판매처는 판매점을 통해 진행해주세요
-        </Button>
-      </Container>
-    );
-  } else {
-    userRegisterform = (
-      <Container>
-        <h2 style={registerTitle}>회원가입</h2>
-        <Form noValidate style={registerForm} onSubmit={joinInsert}>
-          <Form.Group as={Row} controlId="formUsertype">
-            <Form.Label column sm={3}>
-              가입형식
-            </Form.Label>
-            <Col sm={9}>
-              <Form.Control
-                as="select"
-                value={usertypestate.value}
-                onChange={(e) => changeUsertype(e.target.value)}
-              >
-                <option value="0">개인</option>
-                {/* 관리자, 판매처 옵션은 임시로 만듬 */}
-                <option value="1">판매처</option>
-                <option value="7791">관리자</option>
-              </Form.Control>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} controlId="formEmail">
-            <Form.Label column sm={3}>
-              이메일
-            </Form.Label>
-            <Col sm={9}>
-              <Form.Control
-                type="email"
-                placeholder="이메일을 입력해주세요"
-                isInvalid={emailstate.invalid}
-                isValid={emailstate.valid}
-                ref={inputEmail}
-                onChange={(e) => validateEmail(e.target.value)}
-                maxLength="40"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                주소를 양식에 맞게 입력해주세요
-              </Form.Control.Feedback>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId="formPassword">
-            <Form.Label column sm={3}>
-              비밀번호
-            </Form.Label>
-            <Col sm={9}>
-              <Form.Control
-                type="password"
-                className="pwdfont"
-                isInvalid={pwstate.invalid}
-                isValid={pwstate.valid}
-                ref={inputPwd}
-                onChange={(e) => validatePwd(e.target.value)}
-                maxLength="16"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                비밀번호는 영문자 및 숫자, 특수문자 포함 8자 이상이어야합니다
-              </Form.Control.Feedback>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId="formNickname">
-            <Form.Label column sm={3}>
-              닉네임
-            </Form.Label>
-            <Col sm={9}>
-              <Form.Control
-                isInvalid={namestate.invalid}
-                isValid={namestate.valid}
-                ref={inputNick}
-                onChange={(e) => validateName(e.target.value)}
-                maxLength="24"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                닉네임을 입력해주세요
-              </Form.Control.Feedback>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} controlId="yearForm">
-            <Form.Label column sm={3}>
-              태어난 년도 끝자리
-            </Form.Label>
-            <Col sm={9}>
-              <Form.Control
-                ref={inputYear}
-                isInvalid={yearstate.invalid}
-                isValid={yearstate.valid}
-                onChange={(e) => validateYear(e.target.value)}
-                maxLength="1"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                숫자만 입력해주세요
-              </Form.Control.Feedback>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row}>
-            <Form.Label column sm={3}></Form.Label>
-            <Col sm={9}>
-              <ReCAPTCHA
-                ref={recaptchaRef}
-                sitekey="6Ld7CucUAAAAAIx2bAazLyMpGWYpusA7tStIGokY"
-                onChange={onChange}
-              />
-            </Col>
-          </Form.Group>
-
-          <Button variant="info" type="submit" size="lg" block>
-            회원가입
-          </Button>
-        </Form>
-      </Container>
-    );
-  }
+      </Form>
+    </Container>
+  );
+  // }
 
   return <div>{userRegisterform}</div>;
 };

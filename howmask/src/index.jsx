@@ -31,10 +31,13 @@ ReactDOM.render(
           <span>마스크 어때?</span>
         </Navbar.Brand>
         <div id="memberMenu">
-          {(sessionStorage.getItem("type") === "1")? 
-          <NavLink style={navLinkStyle} to="/store">
-            store
-          </NavLink> : <></>}
+          {sessionStorage.getItem("type") === "1" ? (
+            <NavLink style={navLinkStyle} to="/store">
+              store
+            </NavLink>
+          ) : (
+            <></>
+          )}
           <LoginBtn />
         </div>
       </Navbar>
