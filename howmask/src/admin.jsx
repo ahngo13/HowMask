@@ -229,9 +229,6 @@ const Admin = () => {
         <tbody>{listForm}</tbody>
       </Table>
     </Container>
-      <Button variant="primary" onClick={() => setModalShow(true)}>
-          Launch vertically centered modal
-      </Button>
       <StoreInfoModal
         show={modalShow}
         code={code}
