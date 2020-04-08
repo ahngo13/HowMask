@@ -16,7 +16,7 @@ router.get("/adminViewList", async (req, res) => {
       // const result = await User.find({ $or:[{user_type: "개인"},{user_type:"관리자"}] }, async (err, user) => {}
       const result = await User.find()
         .or([{ user_type: "0" }, { user_type: "1" }])
-        .select("-_id user_type email nickname lockYn auth");
+        .select("-_id user_type email nickname lockYn auth code");
       res.json({ message: "관리자 확인", result });
       console.log(result);
     }
