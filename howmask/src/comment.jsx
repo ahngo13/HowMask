@@ -131,7 +131,7 @@ function Comment(props) {
     commentTag.current.value = "";
     fileTag.current.value = "";
   }
-  //댓글 수정
+  //댓글 수정진입
   async function updateComment(_id, flag) {
     console.log(_id, flag);
     const sendParam = { _id, flag };

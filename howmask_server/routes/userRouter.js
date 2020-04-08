@@ -7,7 +7,7 @@ const rateLimit = require("express-rate-limit");
 const createAccountLimiter = rateLimit({
   status: 429,
   windowMs: 30 * 30 * 1000, // 15 min window
-  max: 5, // start blocking after 5 requests
+  max: 1, // start blocking after 5 requests
   message: "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
 });
 
