@@ -7,7 +7,7 @@ const rateLimit = require("express-rate-limit");
 const createAccountLimiter = rateLimit({
   status: 429,
   windowMs: 30 * 30 * 1000, // 15 min window
-  max: 1, // start blocking after 5 requests
+  max: 5, // start blocking after 5 requests
   message: "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
 });
 
@@ -250,10 +250,9 @@ router.post("/delete", async (req, res) => {
   }
 });
 
-// 회원 현재 비밀번호 확인 
+// 회원 현재 비밀번호 확인
 router.post("/modify/Checkpw", async (req, res) => {
   try {
-    
     crypto.pbkdf2(
       req.body.password,
       buf.toString("base64"),
@@ -269,32 +268,30 @@ router.post("/modify/Checkpw", async (req, res) => {
           const obj = {
             email: req.session.email,
             password: key.toString("base64"),
-            salt: buf.toString("base64")
+            salt: buf.toString("base64"),
           };
         }
       }
     );
 
     let user = await User.findOne(obj);
-         
+
     if (user) {
       res.json({
         message: true,
-        dupYn: "0"
+        dupYn: "0",
       });
     } else {
       res.json({
         message: "비밀번호가 일치하지 않습니다. 다시 입력해 주세요",
-        dupYn: "1"
-    });
-   }
-  } catch(err) {
+        dupYn: "1",
+      });
+    }
+  } catch (err) {
     console.log(err);
-    res.json({message: false })
+    res.json({ message: false });
   }
 });
-
-
 
 // 회원정보 수정
 router.post("/update", async (req, res) => {
@@ -302,18 +299,17 @@ router.post("/update", async (req, res) => {
     let obj = {
       password: req.body.password,
       nick: req.body.nick,
-      year: req.body.year
+      year: req.body.year,
     };
     console.log(obj);
-    const returnData = await User.update({email: req.body.email}, obj);
-    console.log(returnData)
+    const returnData = await User.update({ email: req.body.email }, obj);
+    console.log(returnData);
     res.json({ message: "회원님의 정보가 수정이 완료되었습니다." });
   } catch (err) {
     console.log(err);
     res.json({ message: false });
   }
 });
-
 
 router.post("/getUserInfo", async (req, res) => {
   try {

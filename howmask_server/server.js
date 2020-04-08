@@ -47,30 +47,61 @@ app.disable("x-powered-by"); // 공격자에게 Express 사용된 것을 숨김
 app.use(helmet.xssFilter()); // XSS 보안 헤더 적용
 app.use(helmet.noCache()); // 클라이언트 측 캐싱 방지
 app.use(helmet.noSniff()); // X-Content-Type-Options 설정
+app.use(helmet.frameguard("deny")); //클릭재킹 보호 (클릭재킹 : 클릭을 유도한 후 내가 클릭하는 부분을 가로채서 다른 것을 누르게 해서 문제를 만드는 방식)
+// deny : 프레임 내에 우리 사이트를 넣지 못하게 함
 
+https: app.enable("trust proxy");
 app.use(morgan("combined", { stream })); // 로그 생성 및 파일 저장
-
-// next가 아닌 다른 값 할당시 오류 처리 코드를 실행
-//   next("err");
-// app.use(function (req, res, next) {
-// });
 
 app.use("/user", require("./routes/userRouter"));
 app.use("/comment", require("./routes/commentRouter"));
 app.use("/store", require("./routes/storeRouter"));
 app.use("/mask", require("./routes/maskRouter"));
 
-// 500 Error 처리
-// app.use(function (err, req, res, next) {
-//   console.error(err.stack);
-//   res.status(500).send("Something broke!");
-// });
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  next(createError(404));
+});
 
-// // 404 Error 처리
-// app.use(function (err, req, res, next) {
-//   console.error(err.stack);
-//   res.status(404).send("404 ERROR : No such page.");
-// });
+// error handler
+app.use((err, req, res, next) => {
+  let apiError = err;
+
+  if (!err.status) {
+    apiError = createError(err);
+  }
+
+  if (process.env.NODE_ENV === "start") {
+    const errObj = {
+      req: {
+        headers: req.headers,
+        query: req.query,
+        body: req.body,
+        route: req.route,
+      },
+      error: {
+        message: apiError.message,
+        stack: apiError.stack,
+        status: apiError.status,
+      },
+      user: req.user,
+    };
+
+    logger.error(`${moment().format("YYYY-MM-DD HH:mm:ss")}`, errObj);
+  } else {
+    res.locals.message = apiError.message;
+    res.locals.error = apiError;
+  }
+
+  // render the error page
+  /* return response(
+    res,
+    {
+      message: apiError.message
+    },
+    apiError.status
+  ) */
+});
 
 app.listen(8080, () => {
   console.log("listen umm..umm..um...");
