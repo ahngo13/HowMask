@@ -168,6 +168,7 @@ router.post("/login", async (req, res) => {
                   },
                   { $set: { loginCnt: 0 } }
                 );
+                req.session._id = user._id
                 req.session.email = user.email;
                 req.session.user_type = user2.user_type;
                 if (user2.user_type == "7791") {

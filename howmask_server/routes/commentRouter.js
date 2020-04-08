@@ -75,6 +75,7 @@ router.post("/write", upload.single("img"), async (req, res) => {
         const test = req.file.path.split("public");
 
         obj = {
+          commenter: req.session._id,
           email: req.session.email,
           code: req.body.code,
           grade: req.body.grade,
@@ -83,6 +84,7 @@ router.post("/write", upload.single("img"), async (req, res) => {
         };
       } else {
         obj = {
+          commenter: req.session._id,
           email: req.session.email,
           code: req.body.code,
           grade: req.body.grade,
@@ -108,7 +110,9 @@ router.post("/getCommentList", async (req, res) => {
     let gradeSum = 0;
     const comment = await Comment.find({ code: req.body.code }, null, {
       sort: { createdAt: -1 },
-    });
+    }).populate('commenter');
+
+    console.log("comment" + comment);
 
     if (comment.length > 0) {
       for (i = 0; i < comment.length; i++) {

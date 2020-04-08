@@ -5,6 +5,11 @@ const {
   Types: { ObjectId },
 } = Schema;
 const commentSchema = new Schema({
+  commenter: {
+    type: ObjectId,
+    required: true,
+    ref: "User"
+  },
   email: {
     type: String,
     required: true,

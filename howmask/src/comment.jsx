@@ -219,7 +219,6 @@ function Comment(props) {
       setCommentCnt(result.data.list.length);
 
       setAvgGrade(result.data.avg.gradeAvg);
-
       if (result.data.list) {
         const allComments = result.data.list.map((comment) => {
           const commentId = comment._id;
@@ -272,7 +271,7 @@ function Comment(props) {
                   <tr>
                     <td colSpan="2">
                       <Badge pill variant="dark">
-                        {comment.email}
+                        {comment.commenter.nickname}
                       </Badge>
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <Moment format="YYYY-MM-DD HH:mm">{comment.updatedAt}</Moment>
