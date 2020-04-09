@@ -11,8 +11,9 @@ function StoreInfoModal(props) {
   const [storeInfo, setStoreInfo] = useState();
 
   useEffect(() => {
-    console.log(props);
-    getStoreDetail(props.code);
+    if(props.code){
+      getStoreDetail(props.code);
+    }
   },[props.code]); 
 
   const getStoreDetail = async (code) => {

@@ -12,7 +12,6 @@ const createAccountLimiter = rateLimit({
 });
 
 //관리자 회원 리스트 보기
-
 router.get("/adminViewList", async (req, res) => {
   try {
     let user_type = req.session.user_type;
@@ -67,6 +66,57 @@ router.post("/grantAuth", async (req, res) => {
         {
           $set: {
             auth: true,
+          },
+        }
+      );
+      res.json({ resultCode: "1" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ resultCode: "2" });
+  }
+});
+
+//관리자 판매처 계정 반려
+router.post("/revokeAuth", async (req, res) => {
+  try {
+    let user_type = req.session.user_type;
+
+    console.log(user_type);
+    if (user_type !== "7791" || !req.session.email) {
+      res.json({ resultCode: "0" });
+    } else {
+      await User.update(
+        { email: req.body.email },
+        {
+          $set: {
+            auth: false
+          },
+        }
+      );
+      res.json({ resultCode: "1" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ resultCode: "2" });
+  }
+});
+
+//관리자 로그인 잠금 해제
+router.post("/unlockLogin", async (req, res) => {
+  try {
+    let user_type = req.session.user_type;
+
+    console.log(user_type);
+    if (user_type !== "7791" || !req.session.email) {
+      res.json({ resultCode: "0" });
+    } else {
+      await User.update(
+        { email: req.body.email },
+        {
+          $set: {
+            lockYn : false,
+            loginCnt : 0
           },
         }
       );
