@@ -7,7 +7,7 @@ const rateLimit = require("express-rate-limit");
 const createAccountLimiter = rateLimit({
   status: 429,
   windowMs: 30 * 30 * 1000, // 15 min window
-  max: 5, // start blocking after 5 requests
+  max: 15, // start blocking after 5 requests
   message:
     "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
 });
@@ -24,7 +24,8 @@ router.get("/adminViewList", async (req, res) => {
       // const result = await User.find({ $or:[{user_type: "개인"},{user_type:"관리자"}] }, async (err, user) => {}
       const result = await User.find()
         .or([{ user_type: "0" }, { user_type: "1" }])
-        .select("-_id user_type email nickname lockYn auth code");
+        .select("-_id user_type email nickname lockYn auth code createdAt")
+        .sort({ createdAt: -1 });
       res.json({ message: "관리자 확인", result });
       console.log(result);
     }
@@ -318,45 +319,65 @@ router.post("/delete", async (req, res) => {
 });
 
 // 회원 현재 비밀번호 확인
-router.post("/modify/Checkpw", async (req, res) => {
+router.post("/checkpw", async (req, res) => {
   try {
-    crypto.pbkdf2(
-      req.body.password,
-      buf.toString("base64"),
-      100000,
-      64,
-      "sha512",
-      async (err, key) => {
-        if (err) {
-          console.log(err);
+    let sEmail = req.session.email;
+    // 아래의 find는 salt 값 찾기 위해 돌리는 걸로 보고 유지한 쿼리임
+    await User.findOne({ email: sEmail }, async (err, user) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(user);
+        if (user) {
+          //아이디가 존재할 경우 이메일과 패스워드가 일치하는 회원이 있는지 확인
+          console.log(req.body.password);
+          console.log(user.salt);
+          crypto.pbkdf2(
+            req.body.password,
+            user.salt,
+            100000,
+            64,
+            "sha512",
+            async (err, key) => {
+              if (err) {
+                console.log(err);
+              } else {
+                // console.log(key.toString('base64')); // 'dWhPkH6c4X1Y71A/DrAHhML3DyKQdEkUOIaSmYCI7xZkD5bLZhPF0dOSs2YZA/Y4B8XNfWd3DHIqR5234RtHzw=='
+
+                const obj = {
+                  email: sEmail,
+                  password: key.toString("base64"),
+                };
+
+                const user2 = await User.findOne(obj);
+                console.log(user2);
+                if (user2) {
+                  // 있으면 로그인 처리
+                  // console.log(req.body._id);
+                  res.json({
+                    message: "확인 되었습니다!",
+                    user_type: user2.user_type,
+                    email: user2.email,
+                    nickname: user2.nickname,
+                    year: user2.year,
+                    dupYn: "0",
+                  });
+                } else {
+                  res.json({
+                    message: "패스워드가 일치하지 않습니다.",
+                  });
+                }
+              }
+            }
+          );
         } else {
-          console.log(key.toString("base64"));
-          buf.toString("base64");
-          const obj = {
-            email: req.session.email,
-            password: key.toString("base64"),
-            salt: buf.toString("base64"),
-          };
+          res.json({ message: "패스워드가 일치하지 않습니다." });
         }
       }
-    );
-
-    let user = await User.findOne(obj);
-
-    if (user) {
-      res.json({
-        message: true,
-        dupYn: "0",
-      });
-    } else {
-      res.json({
-        message: "비밀번호가 일치하지 않습니다. 다시 입력해 주세요",
-        dupYn: "1",
-      });
-    }
+    });
   } catch (err) {
     console.log(err);
-    res.json({ message: false });
+    res.json({ message: "로그인 오류" });
   }
 });
 
@@ -364,7 +385,6 @@ router.post("/modify/Checkpw", async (req, res) => {
 router.post("/update", async (req, res) => {
   try {
     let obj = {
-      password: req.body.password,
       nick: req.body.nick,
       year: req.body.year,
     };
@@ -375,6 +395,79 @@ router.post("/update", async (req, res) => {
   } catch (err) {
     console.log(err);
     res.json({ message: false });
+  }
+});
+//비밀번호 수정
+router.post("/updatepw", async (req, res) => {
+  try {
+    let sEmail = req.session.email;
+    await User.findOne({ email: sEmail }, async (err, user) => {
+      if (err) {
+        // console.log(err);
+      } else {
+        console.log(user);
+        if (user) {
+          //아이디가 존재할 경우 이메일과 패스워드가 일치하는 회원이 있는지 확인
+          console.log(req.body.passwordOrigin);
+          // console.log(user.salt);
+          crypto.pbkdf2(
+            req.body.passwordOrigin,
+            user.salt,
+            100000,
+            64,
+            "sha512",
+            async (err, key) => {
+              if (err) {
+                console.log(err);
+              } else {
+                // console.log(key.toString('base64')); // 'dWhPkH6c4X1Y71A/DrAHhML3DyKQdEkUOIaSmYCI7xZkD5bLZhPF0dOSs2YZA/Y4B8XNfWd3DHIqR5234RtHzw=='
+
+                const obj = {
+                  email: sEmail,
+                  password: key.toString("base64"),
+                };
+
+                const user2 = await User.findOne(obj);
+                console.log(user2);
+                if (user2) {
+                  crypto.pbkdf2(
+                    req.body.password,
+                    user2.salt,
+                    100000,
+                    64,
+                    "sha512",
+                    async (err, key) => {
+                      if (err) {
+                        console.log(err);
+                      } else {
+                        console.log(key.toString("base64"));
+                        await User.updateOne(
+                          {
+                            email: req.session.email,
+                          },
+                          { $set: { password: key.toString("base64") } }
+                        );
+                        res.json({
+                          message: "패스워드가 수정되었습니다!",
+                          dupYn: "0",
+                        });
+                      }
+                    }
+                  );
+                } else {
+                  res.json({ message: "다시 시도해주세요." });
+                }
+              }
+            }
+          );
+        } else {
+          res.json({ message: "다시 시도해주세요." });
+        }
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: "변경 실패" });
   }
 });
 
