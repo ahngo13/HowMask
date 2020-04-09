@@ -38,6 +38,14 @@ ReactDOM.render(
           ) : (
             <></>
           )}
+          {sessionStorage.getItem("login") ? (
+            <NavLink style={navLinkStyle} to="/modify">
+              회원정보 수정
+            </NavLink>
+          ) : (
+            <></>
+          )}
+          
           <LoginBtn />
         </div>
       </Navbar>
