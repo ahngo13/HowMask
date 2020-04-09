@@ -231,10 +231,16 @@ const Modify = () => {
     margin: "auto",
   };
 
+  const titleStyle = {
+    textAlign:"center"
+  };
+
   if (!check) {
     userForm = (
       <Form style={modifyForm} onSubmit={checkPwInsert}>
         <Form.Group controlId="checkPassword">
+          <h2 style={titleStyle}>회원정보수정</h2>
+          <br></br>
           <Form.Label>비밀번호 입력</Form.Label>
           <p>
             개인정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 입력해

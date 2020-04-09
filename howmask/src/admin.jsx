@@ -326,6 +326,8 @@ const Admin = () => {
   if (!check) {
     adminForm = 
       <Form style={pwCheckForm} onSubmit={checkPwInsert}>
+        <h2 style={titleStyle}>회원관리</h2>
+        <br></br>
         <Form.Group controlId="checkPassword">
           <Form.Label>비밀번호 입력</Form.Label>
           <p>

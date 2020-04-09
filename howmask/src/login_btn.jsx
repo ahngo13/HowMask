@@ -50,13 +50,13 @@ const LoginBtn = () => {
   } else if (sessionStorage.getItem("login") === "hamletshu") {
     btn = (
       <>
+        <NavLink style={navLinkStyle} to="/admin">
+        회원관리
+        </NavLink>
         <Button style={navLinkStyle} onClick={memberLogout} variant="light">
-          <span style={loginout}>log out</span>
+          <span style={loginout}>logout</span>
           <i className="fas fa-sign-out-alt" id="iconStyle"></i>
         </Button>
-        <NavLink style={navLinkStyle} to="/admin">
-          가입된 회원정보 보기
-        </NavLink>
       </>
     );
   } else {
