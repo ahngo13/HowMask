@@ -17,7 +17,6 @@ const Register = () => {
   const [pwstate, setPwstate] = useState({ valid: false, invalid: false });
   const [namestate, setNamestate] = useState({ valid: false, invalid: false });
   const [yearstate, setYearstate] = useState({ valid: false, invalid: false });
-  const [userformstate, setUserformstate] = useState(false);
 
   const inputNick = useRef();
   const inputEmail = useRef();
@@ -91,7 +90,7 @@ const Register = () => {
 
     // alert(usertype + ":" + email + ":" + pwd + ":" + nick + ":" + year);
     let auth;
-    if (usertype == "1") {
+    if (usertype === "1") {
       auth = false;
     } else {
       auth = true;
@@ -125,13 +124,6 @@ const Register = () => {
       });
   };
 
-  const userForm = () => {
-    setUserformstate(true);
-  };
-  // const storeForm = () => {
-  //   window.location.href = "/";
-  // };
-
   function onChange(value) {
     console.log("Captcha value:", value);
   }
@@ -157,41 +149,7 @@ const Register = () => {
     left: 0,
     margin: "auto",
   };
-  // const registerType = {
-  //   display: "inline-block",
-  //   width: "50%",
-  //   position: "fixed",
-  //   top: 90,
-  //   right: 0,
-  //   bottom: 0,
-  //   left: 0,
-  //   margin: "auto",
-  //   textAlign: "center",
-  // };
-  const initialType = {
-    display: "inline-block",
-    width: "50%",
-    position: "fixed",
-    top: 200,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    margin: "auto",
-    textAlign: "center",
-  };
 
-  // if (!userformstate) {
-  //   userRegisterform = (
-  //     <Container style={initialType}>
-  //       <Button onClick={userForm} variant="info" block>
-  //         개인회원 가입
-  //       </Button>
-  //       <Button onClick={storeForm} variant="warning" block>
-  //         판매처는 판매점을 통해 진행해주세요
-  //       </Button>
-  //     </Container>
-  //   );
-  // } else {
   userRegisterform = (
     <Container>
       <h2 style={registerTitle}>회원가입</h2>
