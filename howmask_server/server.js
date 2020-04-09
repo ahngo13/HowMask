@@ -57,63 +57,6 @@ app.use("/comment", require("./routes/commentRouter"));
 app.use("/store", require("./routes/storeRouter"));
 app.use("/mask", require("./routes/maskRouter"));
 
-// catch 404 and forward to error handler
-// app.use((req, res, next) => {
-//   next(createError(404));
-// });
-
-// error handler
-// app.use((err, req, res, next) => {
-//   let apiError = err;
-
-//   if (!err.status) {
-//     apiError = createError(err);
-//   }
-
-//   if (process.env.NODE_ENV === "start") {
-//     const errObj = {
-//       req: {
-//         headers: req.headers,
-//         query: req.query,
-//         body: req.body,
-//         route: req.route,
-//       },
-//       error: {
-//         message: apiError.message,
-//         stack: apiError.stack,
-//         status: apiError.status,
-//       },
-//       user: req.user,
-//     };
-
-//     logger.error(`${moment().format("YYYY-MM-DD HH:mm:ss")}`, errObj);
-//   } else {
-//     res.locals.message = apiError.message;
-//     res.locals.error = apiError;
-//   }
-
-// render the error page
-/* return response(
-    res,
-    {
-      message: apiError.message
-    },
-    apiError.status
-  ) */
-// });
-
-app
-  .use((_req, res) => {
-    res.status(400).send(""); // 잘못된 클라이언트 요청 에러 처리
-  })
-  .use((_req, res) => {
-    res.status(404).send("no such a matching address"); // 잘못된 페이지 요청 에러 처리
-  })
-  .use((err, req, res) => {
-    console.err(err.stack);
-    res.status(500).send("internal server error"); // 내부 서버 오류 처리
-  });
-
 app.listen(8080, () => {
   console.log("listen umm..umm..um...");
 });

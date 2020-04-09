@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Table, Container, Modal } from "react-bootstrap";
-import StoreInfoAdmin from "./store_info_admin"
+import StoreInfoAdmin from "./store_info_admin";
 
 axios.defaults.withCredentials = true;
 const url = "localhost";
@@ -9,15 +9,15 @@ const headers = { withCredentials: true };
 
 function StoreInfoModal(props) {
   const [storeInfo, setStoreInfo] = useState();
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    if(props.code){
+    if (props.code) {
       getStoreDetail(props.code);
     }
-  },[props.code]); 
+  }, [props.code]);
 
   const getStoreDetail = async (code) => {
-
     const sendParam = { code, headers };
 
     await axios
@@ -26,30 +26,29 @@ function StoreInfoModal(props) {
         setStoreInfo(returnData.data.info);
       })
       .catch((err) => {
+        setIsError(true);
         console.log(err);
       });
-    
   };
-  
+
   return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-        판매처 신청 정보
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <StoreInfoAdmin storeInfo={storeInfo}></StoreInfoAdmin>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
-    </Modal>
+    <>
+      {isError ? (
+        <div>Something went wrong!</div>
+      ) : (
+        <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">판매처 신청 정보</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <StoreInfoAdmin storeInfo={storeInfo}></StoreInfoAdmin>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={props.onHide}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+      )}
+    </>
   );
 }
 
@@ -57,6 +56,8 @@ const Admin = () => {
   const [list, setList] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [code, setCode] = useState();
+
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     viewList();
@@ -78,11 +79,15 @@ const Admin = () => {
           sessionStorage.clear();
           window.location.href = "/";
         }
+      })
+      .catch((err) => {
+        setIsError(true);
+        console.log(err);
       });
   };
 
   const grantAuth = (email) => {
-    const sendParam = {email, headers};
+    const sendParam = { email, headers };
     axios
       .post(`http://${url}:8080/user/grantAuth`, sendParam)
       .then((returnData) => {
@@ -98,12 +103,13 @@ const Admin = () => {
         }
       })
       .catch((err) => {
+        setIsError(true);
         console.log(err);
       });
-  }
+  };
 
   const revokeAuth = (email) => {
-    const sendParam = {email, headers};
+    const sendParam = { email, headers };
     axios
       .post(`http://${url}:8080/user/revokeAuth`, sendParam)
       .then((returnData) => {
@@ -119,84 +125,110 @@ const Admin = () => {
         }
       })
       .catch((err) => {
+        setIsError(true);
         console.log(err);
       });
-  }
+  };
 
   const deleteList = (email) => {
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      const sendParam = { email, headers };
 
-    if(window.confirm("정말 삭제하시겠습니까?")){
-    const sendParam = { email, headers };
-
-    axios
-      .post(`http://${url}:8080/user/admindelete`, sendParam)
-      .then((returnData) => {
-        if (returnData.data.resultCode === "1") {
-          alert("삭제 되었습니다.");
-          viewList();
-        } else if (returnData.data.resultCode === "0") {
-          alert("다시 로그인 해주세요");
-          sessionStorage.clear();
-          window.location.href = "/login";
-        } else {
-          alert("삭제 실패");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      axios
+        .post(`http://${url}:8080/user/admindelete`, sendParam)
+        .then((returnData) => {
+          if (returnData.data.resultCode === "1") {
+            alert("삭제 되었습니다.");
+            viewList();
+          } else if (returnData.data.resultCode === "0") {
+            alert("다시 로그인 해주세요");
+            sessionStorage.clear();
+            window.location.href = "/login";
+          } else {
+            alert("삭제 실패");
+          }
+        })
+        .catch((err) => {
+          setIsError(true);
+          console.log(err);
+        });
     }
   };
 
   const unlockLogin = (email) => {
+    if (window.confirm(email + " 계정을 잠금해제 하시겠습니까?")) {
+      const sendParam = { email, headers };
 
-    if(window.confirm(email + " 계정을 잠금해제 하시겠습니까?")){
-    const sendParam = { email, headers };
-
-    axios
-      .post(`http://${url}:8080/user/unlockLogin`, sendParam)
-      .then((returnData) => {
-        if (returnData.data.resultCode === "1") {
-          alert("잠금해제 되었습니다.");
-          viewList();
-        } else if (returnData.data.resultCode === "0") {
-          alert("다시 로그인 해주세요");
-          sessionStorage.clear();
-          window.location.href = "/login";
-        } else {
-          alert("삭제 실패");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      axios
+        .post(`http://${url}:8080/user/unlockLogin`, sendParam)
+        .then((returnData) => {
+          if (returnData.data.resultCode === "1") {
+            alert("잠금해제 되었습니다.");
+            viewList();
+          } else if (returnData.data.resultCode === "0") {
+            alert("다시 로그인 해주세요");
+            sessionStorage.clear();
+            window.location.href = "/login";
+          } else {
+            alert("삭제 실패");
+          }
+        })
+        .catch((err) => {
+          setIsError(true);
+          console.log(err);
+        });
     }
   };
   const detailClick = (listsCode) => {
     setModalShow(true);
     setCode(listsCode);
-  }
-
+  };
 
   let listForm = list.map((lists) => {
     const listsEmail = lists.email;
-    const grantBtn = <Button onClick={()=>{grantAuth(listsEmail)}}>승인</Button>
-    const revokeBtn = <Button variant="danger" onClick={()=>{revokeAuth(listsEmail)}}>반려</Button>
-    const unlockBtn = <Button onClick={()=>{unlockLogin(listsEmail)}}>잠금해제</Button>
-    const detailBtn = <Button onClick={()=>detailClick(lists.code)}>상세보기</Button>
+    const grantBtn = (
+      <Button
+        onClick={() => {
+          grantAuth(listsEmail);
+        }}
+      >
+        승인
+      </Button>
+    );
+    const revokeBtn = (
+      <Button
+        variant="danger"
+        onClick={() => {
+          revokeAuth(listsEmail);
+        }}
+      >
+        반려
+      </Button>
+    );
+    const unlockBtn = (
+      <Button
+        onClick={() => {
+          unlockLogin(listsEmail);
+        }}
+      >
+        잠금해제
+      </Button>
+    );
+    const detailBtn = <Button onClick={() => detailClick(lists.code)}>상세보기</Button>;
 
     return (
       <tr key={listsEmail}>
         <td>{lists.user_type === "0" ? "개인" : "판매처"}</td>
         <td>{lists.email}</td>
-        <td>{lists.lockYn === true ? unlockBtn : "No" }</td>
+        <td>{lists.lockYn === true ? unlockBtn : "No"}</td>
         <td>{lists.user_type === "0" ? "" : detailBtn}</td>
         <td>
           {lists.auth === false && lists.user_type === "1" ? grantBtn : ""}
           {lists.auth === true && lists.user_type === "1" ? revokeBtn : ""}
         </td>
         <td>
-          <Button variant="danger"
+          <Button
+            variant="danger"
             onClick={() => {
               deleteList(listsEmail);
             }}
@@ -209,34 +241,39 @@ const Admin = () => {
   });
 
   const tableStyle = {
-    textAlign : "center"
-  }
+    textAlign: "center",
+  };
 
   return (
     <div>
-    <Container>
-      <Table striped hover style={tableStyle}>
-        <thead>
-          <tr>
-            <th>구분</th>
-            <th>이메일</th>
-            <th>잠금여부</th>
-            <th>신청정보</th>
-            <th>계정승인</th>
-            <th><Button variant="warning" onClick={viewList}>새로고침</Button></th>
-          </tr>
-        </thead>
-        <tbody>{listForm}</tbody>
-      </Table>
-    </Container>
-      <StoreInfoModal
-        show={modalShow}
-        code={code}
-        onHide={() => setModalShow(false)}
-      />
+      {isError ? (
+        <div>Something went wrong!</div>
+      ) : (
+        <>
+          <Container>
+            <Table striped hover style={tableStyle}>
+              <thead>
+                <tr>
+                  <th>구분</th>
+                  <th>이메일</th>
+                  <th>잠금여부</th>
+                  <th>신청정보</th>
+                  <th>계정승인</th>
+                  <th>
+                    <Button variant="warning" onClick={viewList}>
+                      새로고침
+                    </Button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>{listForm}</tbody>
+            </Table>
+          </Container>
+          <StoreInfoModal show={modalShow} code={code} onHide={() => setModalShow(false)} />
+        </>
+      )}
     </div>
   );
 };
 
 export default Admin;
-
