@@ -238,6 +238,12 @@ router.post("/login", async (req, res) => {
                 } else {
                   //없으면 로그인 실패횟수 추가
                   if (user.loginCnt > 4) {
+                    await User.updateOne(
+                      {
+                        email: req.body.email,
+                      },
+                      { $set: { lockYn: true } }
+                    );
                     res.json({
                       message:
                         "아이디나 패스워드가 5회 이상 일치하지 않아 잠겼습니다.\n고객센터에 문의 바랍니다.",
@@ -249,22 +255,9 @@ router.post("/login", async (req, res) => {
                       },
                       { $set: { loginCnt: user.loginCnt + 1 } }
                     );
-                    if (user.loginCnt >= 5) {
-                      await User.updateOne(
-                        {
-                          email: req.body.email,
-                        },
-                        { $set: { lockYn: true } }
-                      );
-                      res.json({
-                        message:
-                          "아이디나 패스워드가 5회 이상 일치하지 않아 잠겼습니다.\n고객센터에 문의 바랍니다.",
-                      });
-                    } else {
-                      res.json({
-                        message: "아이디나 패스워드가 일치하지 않습니다.",
-                      });
-                    }
+                    res.json({
+                      message: "아이디나 패스워드가 일치하지 않습니다.",
+                    });
                   }
                 }
               }
