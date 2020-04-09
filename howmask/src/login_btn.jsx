@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
@@ -8,6 +8,7 @@ const url = "localhost";
 const headers = { withCredentials: true };
 
 const LoginBtn = () => {
+  const [isError, setIsError] = useState(false);
   const navLinkStyle = {
     margin: 5,
     paddingLeft: 10,
@@ -30,6 +31,9 @@ const LoginBtn = () => {
           sessionStorage.clear();
           window.location.href = "/";
         }
+      })
+      .catch((err) => {
+        setIsError(true);
       });
   };
 
@@ -39,8 +43,7 @@ const LoginBtn = () => {
     btn = (
       <NavLink style={navLinkStyle} to="/login">
         <Button variant="light">
-          <span style={loginout}>login</span>{" "}
-          <i className="fas fa-sign-in-alt" id="iconStyle"></i>
+          <span style={loginout}>login</span> <i className="fas fa-sign-in-alt" id="iconStyle"></i>
         </Button>
       </NavLink>
     );
@@ -54,23 +57,20 @@ const LoginBtn = () => {
         <NavLink style={navLinkStyle} to="/admin">
           가입된 회원정보 보기
         </NavLink>
-        
-        
       </>
     );
   } else {
     btn = (
       <>
-      <Button style={navLinkStyle} onClick={memberLogout} variant="light">
-        <span style={loginout}>log out</span>
-        <i className="fas fa-sign-out-alt" id="iconStyle"></i>
-      </Button>
-  
+        <Button style={navLinkStyle} onClick={memberLogout} variant="light">
+          <span style={loginout}>log out</span>
+          <i className="fas fa-sign-out-alt" id="iconStyle"></i>
+        </Button>
       </>
     );
   }
 
-  return <span>{btn}</span>;
+  return <span>{isError ? <div>Something went wrong!</div> : <>{btn}</>}</span>;
 };
 
 export default LoginBtn;

@@ -18,6 +18,8 @@ const Register = () => {
   const [namestate, setNamestate] = useState({ valid: false, invalid: false });
   const [yearstate, setYearstate] = useState({ valid: false, invalid: false });
 
+  const [isError, setIsError] = useState(false);
+
   const inputNick = useRef();
   const inputEmail = useRef();
   const inputPwd = useRef();
@@ -114,13 +116,15 @@ const Register = () => {
         }
       })
       .catch((err) => {
+        setIsError(true);
+        console.log(err);
         const status = err.response.status;
         // 다수 request 응답 거부
         if (status === 429) {
           alert(err.response.data);
           window.location.href = "/";
         }
-        console.log(err.response);
+        // console.log(err.response);
       });
   };
 
@@ -221,9 +225,7 @@ const Register = () => {
               maxLength="24"
               required
             />
-            <Form.Control.Feedback type="invalid">
-              닉네임을 입력해주세요
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">닉네임을 입력해주세요</Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -240,9 +242,7 @@ const Register = () => {
               maxLength="1"
               required
             />
-            <Form.Control.Feedback type="invalid">
-              숫자만 입력해주세요
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">숫자만 입력해주세요</Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -264,7 +264,7 @@ const Register = () => {
   );
   // }
 
-  return <div>{userRegisterform}</div>;
+  return <>{isError ? <div>Something went wrong!</div> : <div>{userRegisterform}</div>}</>;
 };
 
 export default Register;
