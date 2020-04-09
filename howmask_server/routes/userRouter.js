@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../schemas/user");
+const Suggest = require("../schemas/suggest");
 const crypto = require("crypto");
 const rateLimit = require("express-rate-limit");
 const createAccountLimiter = rateLimit({
@@ -24,8 +25,10 @@ router.get("/adminViewList", async (req, res) => {
         .or([{ user_type: "0" }, { user_type: "1" }])
         .select("-_id user_type email nickname lockYn auth code createdAt")
         .sort({ createdAt: -1 });
-      res.json({ message: "관리자 확인", result });
-      console.log(result);
+      
+      const result2 = await Suggest.find();
+      res.json({ message: "관리자 확인", result, result2});
+
     }
   } catch (err) {
     console.log(err);

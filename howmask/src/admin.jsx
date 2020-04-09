@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Button, Table, Container, Modal } from "react-bootstrap";
+import { Button, Table, Container, Modal, Form } from "react-bootstrap";
 import StoreInfoAdmin from "./store_info_admin";
 
 axios.defaults.withCredentials = true;
@@ -54,10 +54,16 @@ function StoreInfoModal(props) {
 
 const Admin = () => {
   const [list, setList] = useState([]);
+  const [list2, setList2] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [code, setCode] = useState();
 
   const [isError, setIsError] = useState(false);
+  const [pwstate, setPwstate] = useState({ valid: false, invalid: false });
+
+  let adminForm;
+  const [check, setCheck] = useState(false);
+  const inputCheckPw = useRef();
 
   useEffect(() => {
     viewList();
@@ -75,6 +81,7 @@ const Admin = () => {
       .then((returnData) => {
         if (returnData.data.result) {
           setList(returnData.data.result);
+          setList2(returnData.data.result2);
         } else {
           sessionStorage.clear();
           window.location.href = "/";
@@ -184,6 +191,42 @@ const Admin = () => {
     setCode(listsCode);
   };
 
+  const checkPwInsert = (event) => {
+    event.preventDefault();
+
+    if (!pwstate.valid) {
+      alert("필수 항목을 입력하세요");
+      return;
+    }
+
+    const password = inputCheckPw.current.value;
+    const sendParam = { password, headers };
+
+    axios
+      .post(`http://${url}:8080/user/checkpw`, sendParam)
+      .then((returnData) => {
+        alert(returnData.data.message);
+        if(returnData.data.dupYn === "0"){
+
+          setCheck(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const validatePwd = (pwdEntered) => {
+    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    const pwdRegExp = "";
+
+    if (pwdEntered.match(pwdRegExp)) {
+      setPwstate({ valid: true, invalid: false });
+    } else {
+      setPwstate({ valid: false, invalid: true });
+    }
+  };
+
   let listForm = list.map((lists, index) => {
     const listsEmail = lists.email;
     const grantBtn = (
@@ -241,21 +284,81 @@ const Admin = () => {
     );
   });
 
+  let listForm2 = list2.map((lists, index) => {
+    
+    return (
+      <tbody key={lists.code}>
+        <tr>
+          <td rowSpan="3">{index + 1}</td>
+          <td>{lists.code}</td>
+          <td>{lists.email}</td>
+          <td>{lists.suggestType}</td>
+        </tr>
+        <tr>
+          <td colSpan="3">제안 상세 내용</td>
+        </tr>
+        <tr> 
+          <td colSpan="3">{lists.Text}</td>
+        </tr>
+      </tbody>
+    );
+  });
+
   const tableStyle = {
     textAlign: "center",
   };
 
-  return (
-    <div>
+  const titleStyle = {
+    textAlign:"center"
+  };
+
+  const pwCheckForm = {
+    display: "inline-block",
+    width: "45%",
+    position: "fixed",
+    top: 150,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    margin: "auto",
+  };
+
+  if (!check) {
+    adminForm = 
+      <Form style={pwCheckForm} onSubmit={checkPwInsert}>
+        <Form.Group controlId="checkPassword">
+          <Form.Label>비밀번호 입력</Form.Label>
+          <p>
+            개인정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 입력해
+            주세요.
+          </p>
+          <Form.Control
+            type="password"
+            className="pwdfont"
+            ref={inputCheckPw}
+            isInvalid={pwstate.invalid}
+            isValid={pwstate.valid}
+            onChange={(e) => validatePwd(e.target.value)}
+            required
+          ></Form.Control>
+        </Form.Group>
+        <Button variant="primary" type="submit" block>
+          확인
+        </Button>
+      </Form>
+    
+  } else {
+    adminForm = (<div>
       {isError ? (
         <div>Something went wrong!</div>
       ) : (
         <>
           <Container>
-            <Table striped hover style={tableStyle}>
+            <h2 style={titleStyle}>회원 관리</h2>
+            <Table striped style={tableStyle}>
               <thead>
                 <tr>
-                  <th>순번</th>
+                  <th>No</th>
                   <th>구분</th>
                   <th>이메일</th>
                   <th>잠금여부</th>
@@ -270,11 +373,28 @@ const Admin = () => {
               </thead>
               <tbody>{listForm}</tbody>
             </Table>
+            <br></br>
+            <h2 style={titleStyle}>판매처 수정 제안 목록</h2>
+            <Table bordered style={tableStyle}>
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>판매처 코드</th>
+                  <th>이메일</th>
+                  <th>수정 제안 항목</th>
+                </tr>
+              </thead>
+              {listForm2}
+            </Table>
           </Container>
           <StoreInfoModal show={modalShow} code={code} onHide={() => setModalShow(false)} />
         </>
       )}
-    </div>
+    </div>)
+  }
+
+  return (
+  <>{adminForm}</>
   );
 };
 

@@ -236,7 +236,6 @@ const Modify = () => {
         <Form.Group controlId="checkPassword">
           <Form.Label>비밀번호 입력</Form.Label>
           <p>
-            {" "}
             개인정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 입력해
             주세요.
           </p>
