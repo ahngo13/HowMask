@@ -24,7 +24,7 @@ router.get("/adminViewList", async (req, res) => {
       // const result = await User.find({ $or:[{user_type: "개인"},{user_type:"관리자"}] }, async (err, user) => {}
       const result = await User.find()
         .or([{ user_type: "0" }, { user_type: "1" }])
-        .select("-_id user_type email nickname lockYn auth");
+        .select("-_id user_type email nickname lockYn auth code");
       res.json({ message: "관리자 확인", result });
       console.log(result);
     }
@@ -168,6 +168,7 @@ router.post("/login", async (req, res) => {
                   },
                   { $set: { loginCnt: 0 } }
                 );
+                req.session._id = user._id
                 req.session.email = user.email;
                 req.session.user_type = user2.user_type;
                 if (user2.user_type == "7791") {
@@ -250,19 +251,74 @@ router.post("/delete", async (req, res) => {
   }
 });
 
-router.post("/modify", async (req, res) => {
+// 회원 현재 비밀번호 확인
+router.post("/modify/Checkpw", async (req, res) => {
   try {
-    await User.modify({
-      _id: req.body._id,
-      email: req.body.email,
-      password: req.body.password,
-      nick: req.body.nick,
-      year: req.body.year,
-    });
-    res.json({ message: true });
+    crypto.pbkdf2(
+      req.body.password,
+      buf.toString("base64"),
+      100000,
+      64,
+      "sha512",
+      async (err, key) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(key.toString("base64"));
+          buf.toString("base64");
+          const obj = {
+            email: req.session.email,
+            password: key.toString("base64"),
+            salt: buf.toString("base64"),
+          };
+        }
+      }
+    );
+
+    let user = await User.findOne(obj);
+
+    if (user) {
+      res.json({
+        message: true,
+        dupYn: "0",
+      });
+    } else {
+      res.json({
+        message: "비밀번호가 일치하지 않습니다. 다시 입력해 주세요",
+        dupYn: "1",
+      });
+    }
   } catch (err) {
     console.log(err);
     res.json({ message: false });
+  }
+});
+
+// 회원정보 수정
+router.post("/update", async (req, res) => {
+  try {
+    let obj = {
+      password: req.body.password,
+      nick: req.body.nick,
+      year: req.body.year,
+    };
+    console.log(obj);
+    const returnData = await User.update({ email: req.body.email }, obj);
+    console.log(returnData);
+    res.json({ message: "회원님의 정보가 수정이 완료되었습니다." });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+});
+
+router.post("/getUserInfo", async (req, res) => {
+  try {
+    const userInfo = await User.findOne({ email: req.session.email });
+    res.json({ userInfo, email: req.session.email });
+  } catch (err) {
+    console.log(err);
+    res.json({ info: false });
   }
 });
 

@@ -181,6 +181,23 @@ router.post("/getInfo", async (req, res) => {
   }
 });
 
+//관리자 판매처 신청정보 조회
+router.post("/getStoreInfo", async (req, res) => {
+  const user_type = req.session.user_type;
+  try {
+    if (user_type !== "7791") {
+      res.json({ message: "관리자가 아닙니다." });
+    } else {
+      const info = await Store.findOne({ code: req.body.code });
+      res.json({ info });
+      console.log(info);
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ message: "로그인 실패" });
+  }
+});
+
 // 판매처 계정 신청
 router.post("/join", async (req, res) => {
   try {

@@ -131,7 +131,7 @@ function Comment(props) {
     commentTag.current.value = "";
     fileTag.current.value = "";
   }
-  //댓글 수정
+  //댓글 수정진입
   async function updateComment(_id, flag) {
     console.log(_id, flag);
     const sendParam = { _id, flag };
@@ -219,7 +219,6 @@ function Comment(props) {
       setCommentCnt(result.data.list.length);
 
       setAvgGrade(result.data.avg.gradeAvg);
-
       if (result.data.list) {
         const allComments = result.data.list.map((comment) => {
           const commentId = comment._id;
@@ -272,7 +271,7 @@ function Comment(props) {
                   <tr>
                     <td colSpan="2">
                       <Badge pill variant="dark">
-                        {comment.email}
+                        {comment.commenter.nickname}
                       </Badge>
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <Moment format="YYYY-MM-DD HH:mm">{comment.updatedAt}</Moment>
