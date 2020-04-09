@@ -55,13 +55,20 @@ function RegisterSeller(props) {
       setEmailvalid(false);
     }
   };
-  async function Register(event) {
+  async function Register() {
+    const regExp = /^[가-힣0-9a-zA-Z]*$/;
+    // const phoneRegExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
+    const regNumber = /^[0-9]*$/;
+
     const storeName = inputStoreName.current.value;
     const address = inputStoreAddress.current.value;
     const bizCode = inputStoreBizCode.current.value;
     const sellerName = inputSellerName.current.value;
     const phone = inputPhoneNumber.current.value;
     const email = inputSellerEmail.current.value;
+
+    // alert(storeName + address);
+
     // const type = param.type;
     // const code = param.code;
     if (!storeName) {
@@ -88,56 +95,70 @@ function RegisterSeller(props) {
       alert("관리자 이메일을 입력하세요");
       inputSellerEmail.current.focus();
       return;
-    } else {
-      if (!emailvalid) {
-        alert("이메일 형식이 맞지 않습니다. 다시 입력해주세요.");
-        inputSellerEmail.current.focus();
-        return;
-      } else {
-        const sendParamStore = {
-          code: param.code,
-          bizCode,
-          storeType: param.type,
-          storeName,
-          address,
-          sellerName,
-          phone,
-          // type,
-          // code
-        };
-        const sendParamUser = {
-          code: param.code,
-          email,
-          nick: "seller",
-          usertype: 1,
-          password: "123",
-          year: 0,
-        };
+    }
 
-        const resultStore = await axios.post(
-          `http://${url}:8080/store/join`,
-          sendParamStore
-        );
-        const resultUser = await axios.post(
-          `http://${url}:8080/user/join`,
-          sendParamUser
-        );
-        if (resultStore.data.message && resultUser.data.dupYn === "0") {
-          alert(
-            "판매처 계정이 신청되었습니다.\n관리자 승인 후 입력하신 메일로 안내문을 전달드립니다."
-          );
-          window.location.href = "/";
-        } else if (!resultStore.data.message) {
-          alert("Store 테이블 오류");
-        } else if (resultUser.data.dupYn === "1") {
-          await axios.post(`http://${url}:8080/store/joinfail`, sendParamStore);
-          alert("중복된 이메일입니다.");
-        } else if (resultUser.data.message) {
-          alert("User 테이블 오류");
-        } else {
-          alert("Store, User 테이블 오류");
-        }
-      }
+    if (!bizCode.match(regNumber)) {
+      alert("사업자등록번호가 양식에 맞지 않습니다.");
+      return;
+    } else if (!sellerName.match(regExp)) {
+      alert("판매자명이 양식에 맞지 않습니다.");
+      return;
+    }
+    // else if (!phone.match(phoneRegExp)) {
+    //   alert("전화번호가 양식에 맞지 않습니다.");
+    //   return;
+    // }
+
+    if (!emailvalid) {
+      alert("이메일 형식이 맞지 않습니다. 다시 입력해주세요.");
+      inputSellerEmail.current.focus();
+      return;
+    }
+
+    const sendParamStore = {
+      code: param.code,
+      bizCode,
+      storeType: param.type,
+      storeName,
+      address,
+      sellerName,
+      phone,
+      // type,
+      // code
+    };
+    const sendParamUser = {
+      code: param.code,
+      email,
+      nick: "seller",
+      usertype: 1,
+      password: "123",
+      year: 0,
+    };
+
+    // alert();
+
+    const resultStore = await axios.post(
+      `http://${url}:8080/store/join`,
+      sendParamStore
+    );
+    const resultUser = await axios.post(
+      `http://${url}:8080/user/join`,
+      sendParamUser
+    );
+    if (resultStore.data.message && resultUser.data.dupYn === "0") {
+      alert(
+        "판매처 계정이 신청되었습니다.\n관리자 승인 후 입력하신 메일로 안내문을 전달드립니다."
+      );
+      window.location.href = "/";
+    } else if (!resultStore.data.message) {
+      alert("Store 테이블 오류");
+    } else if (resultUser.data.dupYn === "1") {
+      await axios.post(`http://${url}:8080/store/joinfail`, sendParamStore);
+      alert("중복된 이메일입니다.");
+    } else if (resultUser.data.message) {
+      alert("User 테이블 오류");
+    } else {
+      alert("Store, User 테이블 오류");
     }
   }
   const registerTitle = {
@@ -171,7 +192,11 @@ function RegisterSeller(props) {
             <Form.Label>
               <font color="#246dbf">판매처명</font>
             </Form.Label>
-            <Form.Control ref={inputStoreName} placeholder="판매처명" />
+            <Form.Control
+              ref={inputStoreName}
+              placeholder="판매처명"
+              readOnly="true"
+            />
           </Form.Group>
           <Form.Group as={Col} controlId="storeCode">
             <Form.Label>
@@ -180,6 +205,7 @@ function RegisterSeller(props) {
             <Form.Control
               ref={inputStoreBizCode}
               placeholder="사업자등록번호*"
+              maxLength="12"
             />
           </Form.Group>
         </Form.Row>
@@ -188,16 +214,20 @@ function RegisterSeller(props) {
             <Form.Label>
               <font color="#246dbf">주소</font>
             </Form.Label>
-            <Form.Control ref={inputStoreAddress} placeholder="판매처 주소" />
+            <Form.Control
+              ref={inputStoreAddress}
+              placeholder="판매처 주소"
+              readOnly="true"
+            />
           </Form.Group>
         </Form.Row>
-        <Button variant="info" size="lg" block>
+        {/* <Button variant="info" size="lg" block>
           사업자등록증 첨부
         </Button>
         <Form.Text className="text-muted">
           사업자등록증은 판매처 관계자임을 증명하는 자료로만 사용됩니다. 신속한
           계정 발급을 위해 꼭 첨부해주세요.
-        </Form.Text>
+        </Form.Text> */}
         <br />
         <Form.Label>관리자 정보</Form.Label>
 
@@ -206,14 +236,22 @@ function RegisterSeller(props) {
             <Form.Label>
               <font color="#246dbf">이름</font>
             </Form.Label>
-            <Form.Control ref={inputSellerName} placeholder="이름*" />
+            <Form.Control
+              ref={inputSellerName}
+              placeholder="이름*"
+              maxLength="24"
+            />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridState">
             <Form.Label>
               <font color="#246dbf">휴대전화번호</font>
             </Form.Label>
-            <Form.Control ref={inputPhoneNumber} placeholder="휴대전화번호*" />
+            <Form.Control
+              ref={inputPhoneNumber}
+              placeholder="휴대전화번호*"
+              maxLength="13"
+            />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridZip">
@@ -227,6 +265,7 @@ function RegisterSeller(props) {
               isValid={emailvalid}
               onChange={(e) => validateEmail(e.target.value)}
               placeholder="이메일*"
+              maxLength="36"
             />
             <Form.Text className="text-muted">
               입력하신 이메일로 계정정보 안내를 해드립니다.
