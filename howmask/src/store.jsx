@@ -105,6 +105,7 @@ const Store = () => {
       setBtnDefaultFlag("inline-block");
       setTitle("판매처 정보 조회");
       setTextFlag(true);
+      window.location.href = "/";
     } else {
       alert("수정실패");
     }
