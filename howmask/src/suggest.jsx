@@ -40,7 +40,10 @@ function Suggest(props) {
         Text: Text.current.value,
       };
     }
-    const result = await axios.post(`http://${url}:8080/store/suggest`, sendParam);
+    const result = await axios.post(
+      `http://${url}:8080/store/suggest`,
+      sendParam
+    );
     if (result.data.message) {
       alert("입력 완료");
       window.location.href = "/";
@@ -88,7 +91,9 @@ function Suggest(props) {
             <option value="전화번호">전화번호</option>
             <option value="진료 및 영업시간">진료 및 영업시간</option>
             <option value="마스크 종류 및 재고">마스크 종류 및 재고</option>
-            <option value="기타">기타(약국 등 판매처 정보에 대한 제보만 가능)</option>
+            <option value="기타">
+              기타(약국 등 판매처 정보에 대한 제보만 가능)
+            </option>
           </Form.Control>
           <br />
           <Form.Label>제안 상세 내용</Form.Label>
@@ -98,6 +103,7 @@ function Suggest(props) {
             rows="3"
             ref={Text}
             placeholder="(예시) 진료시간이 오후 5시까지인데 6시까지로 되어 있습니다."
+            maxLength="200"
           />
           <br />
           <Row>
@@ -114,7 +120,12 @@ function Suggest(props) {
               </Button>
             </Col>
             <Col>
-              <Button variant="info" size="lg" block onClick={registerSuggestion}>
+              <Button
+                variant="info"
+                size="lg"
+                block
+                onClick={registerSuggestion}
+              >
                 등록하기
               </Button>
             </Col>
