@@ -105,7 +105,7 @@ router.post("/unlockLogin", async (req, res) => {
       await User.update(
         { email: req.body.email },
         {
-          $set: {},
+          $set: {lockYn : false},
         }
       );
       res.json({ resultCode: "1" });
