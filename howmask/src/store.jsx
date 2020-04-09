@@ -79,6 +79,21 @@ const Store = () => {
     setTextFlag(false);
   }
   async function updateInfo() {
+    const timeRegExp = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$/;
+    const phoneRegExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
+    if (
+      !startTime.current.value.match(timeRegExp) ||
+      !endTime.current.value.match(timeRegExp) ||
+      !soldTime.current.value.match(timeRegExp)
+    ) {
+      alert("시간 형식은 HH:MM입니다.");
+      return;
+    }
+    if (!phone.current.value.match(phoneRegExp)) {
+      alert("전화번호를 정확히 입력해주세요");
+      return;
+    }
+
     const sendParam = {
       code,
       name: storeName.current.value,
@@ -127,7 +142,6 @@ const Store = () => {
       setNoticeState(info.notice);
       setTimestate({ start: info.startTime, end: info.endTime });
     } else {
-      
     }
   }
 
@@ -161,9 +175,10 @@ const Store = () => {
     axios
       .post(`http://${url}:8080/store/checkpw`, sendParam)
       .then((returnData) => {
-        alert(returnData.data.message);
         if (returnData.data.dupYn === "0") {
           setCheck(true);
+        } else {
+          alert(returnData.data.message);
         }
       })
       .catch((err) => {
@@ -241,6 +256,7 @@ const Store = () => {
                 ref={bizCode}
                 readOnly={textFlag}
                 defaultValue={bizCodeState}
+                maxLength="12"
               />
             </Form.Group>
           </Form.Row>
@@ -267,6 +283,7 @@ const Store = () => {
                 ref={startTime}
                 readOnly={textFlag}
                 defaultValue={timestate.start}
+                maxLength="5"
               />
             </Form.Group>
             <Form.Group as={Col} controlId="storeLocation">
@@ -277,6 +294,7 @@ const Store = () => {
                 ref={endTime}
                 readOnly={textFlag}
                 defaultValue={timestate.end}
+                maxLength="5"
               />
             </Form.Group>
           </Form.Row>
@@ -291,6 +309,7 @@ const Store = () => {
                 ref={sellerName}
                 readOnly={textFlag}
                 defaultValue={sellerNameState}
+                maxLength="24"
               />
             </Form.Group>
 
@@ -302,6 +321,7 @@ const Store = () => {
                 ref={phone}
                 readOnly={textFlag}
                 defaultValue={phoneState}
+                maxLength="13"
               />
             </Form.Group>
 
@@ -313,6 +333,7 @@ const Store = () => {
                 ref={email}
                 readOnly={textFlag}
                 defaultValue={emailState}
+                maxLength="36"
               />
             </Form.Group>
           </Form.Row>
@@ -327,6 +348,7 @@ const Store = () => {
                 ref={soldTime}
                 readOnly={textFlag}
                 defaultValue={soldTimeState}
+                maxLength="5"
               />
             </Form.Group>
             <Form.Group as={Col} controlId="formGridState">
@@ -337,6 +359,7 @@ const Store = () => {
                 ref={stockAverage}
                 readOnly={textFlag}
                 defaultValue={stockAverageState}
+                maxLength="4"
               />
             </Form.Group>
 
@@ -365,6 +388,7 @@ const Store = () => {
                 as="textarea"
                 readOnly={textFlag}
                 defaultValue={noticeState}
+                maxLength="300"
               />
             </Form.Group>
           </Form.Row>
