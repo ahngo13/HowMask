@@ -33,6 +33,8 @@ function StoreInfoModal(props) {
     endTime: "",
   });
 
+  const [formstate, setFormstate] = useState(false);
+
   const registerSeller = useRef();
 
   function howMany() {
@@ -86,7 +88,6 @@ function StoreInfoModal(props) {
   }
 
   const loadSellerdata = async (code) => {
-
     const sendParam = { headers, code };
     axios
       .post(`http://${url}:8080/store/loadsellerdata`, sendParam)
@@ -110,6 +111,7 @@ function StoreInfoModal(props) {
             startTime: returnData.data.startTime + "~",
             endTime: returnData.data.endTime,
           });
+          setFormstate(true);
         }
       })
       .catch((err) => {
@@ -127,20 +129,10 @@ function StoreInfoModal(props) {
     loadSellerdata(props.info.code);
   }, [props.info.code]);
 
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          {props.info.name}
-          &nbsp;&nbsp;&nbsp;<Badge variant={stockColor}>{stockText}</Badge>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+  let sellerform;
+  if (formstate) {
+    sellerform = (
+      <>
         <Table responsive borderless>
           <tbody>
             <tr>
@@ -217,6 +209,58 @@ function StoreInfoModal(props) {
             </tr>
           </tbody>
         </Table>
+      </>
+    );
+  } else {
+    sellerform = (
+      <>
+        <Table responsive borderless>
+          <tbody>
+            <tr>
+              <td>
+                <strong>
+                  <font color="#1a0066">판매처 종류</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; {stockType}
+              </td>
+              <td>
+                <strong>
+                  <font color="#1a0066">주소</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; {props.info.addr}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <strong>
+                  <font color="#1a0066">입고시간</font>
+                </strong>
+                &nbsp;&nbsp;&nbsp; {props.info.stockAt}
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </Table>
+      </>
+    );
+  }
+
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          {props.info.name}
+          &nbsp;&nbsp;&nbsp;<Badge variant={stockColor}>{stockText}</Badge>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {sellerform}
+
         <Container>
           <Row>
             <Col>

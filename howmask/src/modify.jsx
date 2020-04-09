@@ -84,7 +84,10 @@ const Modify = () => {
     const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
     // const pwdRegExp = "";
 
-    if (confirmpwdEntered.match(inputNewpwd.current.value) && confirmpwdEntered.match(pwdRegExp)) {
+    if (
+      confirmpwdEntered.match(inputNewpwd.current.value) &&
+      confirmpwdEntered.match(pwdRegExp)
+    ) {
       // setConfirmpwdinvalid(false);
       // setConfirmpwdvalid(true);
       setConfirmpwdstate({ valid: true, invalid: false });
@@ -139,7 +142,10 @@ const Modify = () => {
       password: inputNewpwd.current.value,
     };
 
-    const returnData = await axios.post(`http://${url}:8080/user/updatepw`, sendParam);
+    const returnData = await axios.post(
+      `http://${url}:8080/user/updatepw`,
+      sendParam
+    );
 
     if (returnData.data.dupYn === "0") {
       alert(returnData.data.message);
@@ -158,7 +164,10 @@ const Modify = () => {
       year: inputYear.current.value,
     };
 
-    const returnData = await axios.post(`http://${url}:8080/user/update`, sendParam);
+    const returnData = await axios.post(
+      `http://${url}:8080/user/update`,
+      sendParam
+    );
     if (returnData.data.message) {
       alert(returnData.data.message);
       setBtnSuccessFlag("none");
@@ -213,7 +222,7 @@ const Modify = () => {
   };
   const modifyForm = {
     display: "inline-block",
-    width: "40%",
+    width: "45%",
     position: "fixed",
     top: 150,
     right: 0,
@@ -227,7 +236,11 @@ const Modify = () => {
       <Form style={modifyForm} onSubmit={checkPwInsert}>
         <Form.Group controlId="checkPassword">
           <Form.Label>비밀번호 입력</Form.Label>
-          <p> 개인정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 입력해 주세요.</p>
+          <p>
+            {" "}
+            개인정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 입력해
+            주세요.
+          </p>
           <Form.Control
             type="password"
             className="pwdfont"
@@ -280,7 +293,11 @@ const Modify = () => {
               이메일
             </Form.Label>
             <Col>
-              <Form.Control ref={email} readOnly="true" defaultValue={userstate.email} />
+              <Form.Control
+                ref={email}
+                readOnly="true"
+                defaultValue={userstate.email}
+              />
             </Col>
           </Form.Group>
 
@@ -318,7 +335,9 @@ const Modify = () => {
                 maxLength="1"
                 required
               />
-              <Form.Control.Feedback type="invalid">숫자만 입력해주세요</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                숫자만 입력해주세요
+              </Form.Control.Feedback>
             </Col>
           </Form.Group>
           <Button
@@ -329,7 +348,12 @@ const Modify = () => {
           >
             수정하기
           </Button>
-          <Button variant="success" style={btnSuccessStyle} onClick={updateInfo} block>
+          <Button
+            variant="success"
+            style={btnSuccessStyle}
+            onClick={updateInfo}
+            block
+          >
             수정완료
           </Button>
           <br></br>
