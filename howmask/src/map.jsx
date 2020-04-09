@@ -54,7 +54,6 @@ const Map = () => {
         });
       });
     }
-    console.log(result.data.storeList);
     setPositions(info);
   }
   async function getInfoByAddr(keyWord) {
@@ -135,7 +134,6 @@ const Map = () => {
       // 현재 위치에 표시될 마커의 위치입니다
       var markerPosition = new kakao.maps.LatLng(latitude, longitude);
       let imageSrc;
-      console.log(positions);
 
       if (positions) {
         for (var i = 0; i < positions.length; i++) {
