@@ -178,7 +178,7 @@ const Admin = () => {
   }
 
 
-  let listForm = list.map((lists) => {
+  let listForm = list.map((lists,index) => {
     const listsEmail = lists.email;
     const grantBtn = <Button onClick={()=>{grantAuth(listsEmail)}}>승인</Button>
     const revokeBtn = <Button variant="danger" onClick={()=>{revokeAuth(listsEmail)}}>반려</Button>
@@ -187,6 +187,7 @@ const Admin = () => {
 
     return (
       <tr key={listsEmail}>
+        <td>{index+1}</td>
         <td>{lists.user_type === "0" ? "개인" : "판매처"}</td>
         <td>{lists.email}</td>
         <td>{lists.lockYn === true ? unlockBtn : "No" }</td>
@@ -218,6 +219,7 @@ const Admin = () => {
       <Table striped hover style={tableStyle}>
         <thead>
           <tr>
+            <th>순번</th>
             <th>구분</th>
             <th>이메일</th>
             <th>잠금여부</th>
