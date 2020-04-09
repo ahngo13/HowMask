@@ -8,6 +8,7 @@ const path = require("path");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const { stream } = require("./winston");
+const cookieParser = require("cookie-parser");
 
 connect();
 
@@ -42,6 +43,8 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser()); // cookie parser 추가
 
 app.disable("x-powered-by"); // 공격자에게 Express 사용된 것을 숨김
 app.use(helmet.xssFilter()); // XSS 보안 헤더 적용

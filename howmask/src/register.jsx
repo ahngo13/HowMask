@@ -116,15 +116,15 @@ const Register = () => {
         }
       })
       .catch((err) => {
-        setIsError(true);
-        console.log(err);
         const status = err.response.status;
         // 다수 request 응답 거부
         if (status === 429) {
           alert(err.response.data);
           window.location.href = "/";
+        } else {
+          setIsError(true);
+          console.log(err);
         }
-        // console.log(err.response);
       });
   };
 
@@ -249,10 +249,7 @@ const Register = () => {
         <Form.Group as={Row}>
           <Form.Label column sm={3}></Form.Label>
           <Col sm={9}>
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey="6Ld7CucUAAAAAIx2bAazLyMpGWYpusA7tStIGokY"
-            />
+            <ReCAPTCHA ref={recaptchaRef} sitekey="6Ld7CucUAAAAAIx2bAazLyMpGWYpusA7tStIGokY" />
           </Col>
         </Form.Group>
 
