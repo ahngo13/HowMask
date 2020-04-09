@@ -1,11 +1,10 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { InputGroup, Form, Button, Badge, FormControl, Table } from "react-bootstrap";
 import axios from "axios";
 import Moment from "react-moment";
 import "./css/grade.css";
 import "./css/comment.css";
 import "./js/grade.js";
-import { useState } from "react";
 
 const url = "localhost";
 
