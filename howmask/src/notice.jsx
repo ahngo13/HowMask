@@ -28,7 +28,7 @@ const Notice = (props) => {
                 <div className="mainContentLeft">신분증 or 주민등록등본 or 장애인복지카드</div><br/>
                 <div className="mainContentLeft">서비스되는 재고 현황 정보는 데이터 처리 및 전송으로 인해 실제 현장 판매처의 현황과 5분~10분 정도의 차이가 있습니다.</div><br/>
                 <div className="mainContentLeft">저희 "마스크 어때?" 팀은 공적 마스크 서비스 시 어려운 환경에서도 일선에서 공헌해 주시는 약사님, 우체국 종사자분, 하나로마트 분들께 감사와 응원을 드립니다.</div><br/>
-                <div className="mainContent"><a href="http://blog.naver.com/kfdazzang/221839489769">식약처 공적마스크 구매안내 링크</a></div>
+                <div className="mainContent"><a href="http://blog.naver.com/kfdazzang/221839489769" target="_blank">식약처 공적마스크 구매안내 링크</a></div>
 
             </Modal.Body>
         </Modal>

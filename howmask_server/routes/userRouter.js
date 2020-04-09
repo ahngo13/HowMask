@@ -3,11 +3,10 @@ const router = express.Router();
 const User = require("../schemas/user");
 const crypto = require("crypto");
 const rateLimit = require("express-rate-limit");
-
 const createAccountLimiter = rateLimit({
   status: 429,
   windowMs: 30 * 30 * 1000, // 15 min window
-  max: 15, // start blocking after 5 requests
+  max: 5, // start blocking after 5 requests
   message:
     "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
 });
@@ -16,7 +15,6 @@ const createAccountLimiter = rateLimit({
 router.get("/adminViewList", async (req, res) => {
   try {
     let user_type = req.session.user_type;
-
     console.log(user_type);
     if (user_type !== "7791") {
       res.json({ message: "관리자가 아닙니다." });
@@ -38,7 +36,6 @@ router.get("/adminViewList", async (req, res) => {
 router.post("/admindelete", async (req, res) => {
   try {
     let user_type = req.session.user_type;
-
     console.log(user_type);
     if (user_type !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
@@ -53,12 +50,10 @@ router.post("/admindelete", async (req, res) => {
     res.json({ resultCode: "2" });
   }
 });
-
 //관리자 판매처 계정 승인
 router.post("/grantAuth", async (req, res) => {
   try {
     let user_type = req.session.user_type;
-
     console.log(user_type);
     if (user_type !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
@@ -78,12 +73,10 @@ router.post("/grantAuth", async (req, res) => {
     res.json({ resultCode: "2" });
   }
 });
-
 //관리자 판매처 계정 반려
 router.post("/revokeAuth", async (req, res) => {
   try {
     let user_type = req.session.user_type;
-
     console.log(user_type);
     if (user_type !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
@@ -91,9 +84,7 @@ router.post("/revokeAuth", async (req, res) => {
       await User.update(
         { email: req.body.email },
         {
-          $set: {
-            auth: false,
-          },
+          $set: { auth: false },
         }
       );
       res.json({ resultCode: "1" });
@@ -103,12 +94,10 @@ router.post("/revokeAuth", async (req, res) => {
     res.json({ resultCode: "2" });
   }
 });
-
 //관리자 로그인 잠금 해제
 router.post("/unlockLogin", async (req, res) => {
   try {
     let user_type = req.session.user_type;
-
     console.log(user_type);
     if (user_type !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
@@ -116,10 +105,7 @@ router.post("/unlockLogin", async (req, res) => {
       await User.update(
         { email: req.body.email },
         {
-          $set: {
-            lockYn: false,
-            loginCnt: 0,
-          },
+          $set: {},
         }
       );
       res.json({ resultCode: "1" });
@@ -129,15 +115,12 @@ router.post("/unlockLogin", async (req, res) => {
     res.json({ resultCode: "2" });
   }
 });
-
 //회원가입
 router.post("/join", createAccountLimiter, async (req, res) => {
   try {
     let obj = { email: req.body.email };
-
     let user = await User.findOne(obj);
     console.log(user);
-
     if (user) {
       res.json({
         message: "이메일이 중복되었습니다. 새로운 이메일을 입력해주세요.",
@@ -185,7 +168,6 @@ router.post("/join", createAccountLimiter, async (req, res) => {
     res.json({ message: false });
   }
 });
-
 //로그인
 router.post("/login", async (req, res) => {
   try {
@@ -298,14 +280,12 @@ router.post("/login", async (req, res) => {
     res.json({ message: "로그인 실패" });
   }
 });
-
 router.get("/logout", (req, res) => {
   console.log("/logout" + req.sessionID);
   req.session.destroy(() => {
     res.json({ message: "logout 되었습니다." });
   });
 });
-
 router.post("/delete", async (req, res) => {
   try {
     await User.remove({
@@ -317,7 +297,6 @@ router.post("/delete", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 // 회원 현재 비밀번호 확인
 router.post("/checkpw", async (req, res) => {
   try {
@@ -380,7 +359,6 @@ router.post("/checkpw", async (req, res) => {
     res.json({ message: "로그인 오류" });
   }
 });
-
 // 회원정보 수정
 router.post("/update", async (req, res) => {
   try {
@@ -480,7 +458,6 @@ router.post("/getUserInfo", async (req, res) => {
     res.json({ info: false });
   }
 });
-
 router.post("/add", async (req, res) => {
   try {
     const user = new User(req.body);
@@ -491,7 +468,6 @@ router.post("/add", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 router.post("/getAllMember", async (req, res) => {
   try {
     const user = await User.find({});
@@ -501,5 +477,4 @@ router.post("/getAllMember", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 module.exports = router;

@@ -44,26 +44,35 @@ router.post("/delete", async (req, res) => {
 
 router.post("/update", upload.single("img"), async (req, res) => {
   try {
+    const comment = await Comment.find({ _id: req.body._id });
+    // 수정 후 입력버튼 클릭 (DB에 수정된 값 저장)
     if (req.body.flag) {
-      // 수정 후 입력버튼 클릭 (DB에 수정된 값 저장)
-      await Comment.update(
-        { _id: req.body._id },
-        {
-          $set: {
-            text: req.body.text,
-            grade: req.body.grade,
-            updatedAt: Date.now(),
-          },
-        }
-      );
-      res.json({ message: true });
+      // 빈 문자열을 댓글로 입력할 경우
+      if (req.body.text === "") {
+        res.json({ resultCode: 3, comment: comment });
+      }
+      // 내용의 변경사항이 없는 경우
+      else if (req.body.text === comment[0].text) {
+        res.json({ resultCode: 2 });
+      } else {
+        await Comment.update(
+          { _id: req.body._id },
+          {
+            $set: {
+              text: req.body.text,
+              grade: req.body.grade,
+              updatedAt: Date.now(),
+            },
+          }
+        );
+        res.json({ resultCode: 1, comment: comment });
+      }
     } else {
       // 수정버튼 클릭  (DB에서 수정할 값 조회)
-      const comment = await Comment.find({ _id: req.body._id });
       res.json({ comment: comment });
     }
   } catch (err) {
-    res.json({ message: false });
+    res.json({ resultCode: 0 });
   }
 });
 
@@ -72,16 +81,21 @@ router.post("/write", upload.single("img"), async (req, res) => {
     let obj;
     if (req.session.email) {
       if (req.file) {
-        const test = req.file.path.split("public");
-
-        obj = {
-          commenter: req.session._id,
-          email: req.session.email,
-          code: req.body.code,
-          grade: req.body.grade,
-          text: req.body.text,
-          image: test[1],
-        };
+        // 5MB 이상의 파일 크기 불허
+        if (req.file.size > 5000000) {
+          res.json({ fileCode: 0 });
+          res.status(400).send();
+        } else {
+          const test = req.file.path.split("public");
+          obj = {
+            commenter: req.session._id,
+            email: req.session.email,
+            code: req.body.code,
+            grade: req.body.grade,
+            text: req.body.text,
+            image: test[1],
+          };
+        }
       } else {
         obj = {
           commenter: req.session._id,
@@ -97,6 +111,7 @@ router.post("/write", upload.single("img"), async (req, res) => {
       res.json({ resultCode: 1 });
     } else {
       res.json({ resultCode: 0 });
+      res.status(400).send();
     }
   } catch (err) {
     console.log(err);
@@ -110,7 +125,7 @@ router.post("/getCommentList", async (req, res) => {
     let gradeSum = 0;
     const comment = await Comment.find({ code: req.body.code }, null, {
       sort: { createdAt: -1 },
-    }).populate('commenter');
+    }).populate("commenter");
 
     console.log("comment" + comment);
 

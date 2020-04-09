@@ -37,7 +37,6 @@ function StoreInfoModal(props) {
 
   function howMany() {
     const stock = props.info.stock;
-    console.log(props.info);
     return (
       <div>
         {(() => {
@@ -87,16 +86,11 @@ function StoreInfoModal(props) {
   }
 
   const loadSellerdata = async (code) => {
-    // console.log(props.info.code);
 
     const sendParam = { headers, code };
     axios
       .post(`http://${url}:8080/store/loadsellerdata`, sendParam)
       .then((returnData) => {
-        // console.log(returnData.data.soldTime);
-        // console.log(returnData.data.stockAverage);
-        // console.log(returnData.data.kidsMask);
-        // console.log(returnData.data.notice);
         switch (returnData.data.kidsMask) {
           case "무":
             kidsMaskColor = "danger";

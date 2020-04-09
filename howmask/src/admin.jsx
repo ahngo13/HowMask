@@ -20,12 +20,9 @@ function StoreInfoModal(props) {
 
     const sendParam = { code, headers };
 
-    console.log("code:" + code);
-
     await axios
       .post(`http://${url}:8080/store/getStoreInfo`, sendParam)
       .then((returnData) => {
-        console.log(returnData.data.info);
         setStoreInfo(returnData.data.info);
       })
       .catch((err) => {
@@ -43,7 +40,7 @@ function StoreInfoModal(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-        판매처 정보
+        판매처 신청 정보
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -75,8 +72,6 @@ const Admin = () => {
     axios
       .get(`http://${url}:8080/user/adminViewList`, { headers })
       .then((returnData) => {
-        // alert(returnData.data.message);
-        // console.log(returnData.data.result);
         if (returnData.data.result) {
           setList(returnData.data.result);
         } else {
@@ -183,7 +178,7 @@ const Admin = () => {
   }
 
 
-  let listForm = list.map((lists) => {
+  let listForm = list.map((lists,index) => {
     const listsEmail = lists.email;
     const grantBtn = <Button onClick={()=>{grantAuth(listsEmail)}}>승인</Button>
     const revokeBtn = <Button variant="danger" onClick={()=>{revokeAuth(listsEmail)}}>반려</Button>
@@ -192,14 +187,15 @@ const Admin = () => {
 
     return (
       <tr key={listsEmail}>
+        <td>{index+1}</td>
         <td>{lists.user_type === "0" ? "개인" : "판매처"}</td>
         <td>{lists.email}</td>
         <td>{lists.lockYn === true ? unlockBtn : "No" }</td>
+        <td>{lists.user_type === "0" ? "" : detailBtn}</td>
         <td>
           {lists.auth === false && lists.user_type === "1" ? grantBtn : ""}
           {lists.auth === true && lists.user_type === "1" ? revokeBtn : ""}
         </td>
-        <td>{lists.user_type === "0" ? "" : detailBtn}</td>
         <td>
           <Button variant="danger"
             onClick={() => {
@@ -213,18 +209,23 @@ const Admin = () => {
     );
   });
 
+  const tableStyle = {
+    textAlign : "center"
+  }
+
   return (
     <div>
     <Container>
-      <Table striped hover>
+      <Table striped hover style={tableStyle}>
         <thead>
           <tr>
+            <th>순번</th>
             <th>구분</th>
             <th>이메일</th>
             <th>잠금여부</th>
+            <th>신청정보</th>
             <th>계정승인</th>
-            <th></th>
-            <th><Button onClick={viewList}>새로고침</Button></th>
+            <th><Button variant="warning" onClick={viewList}>새로고침</Button></th>
           </tr>
         </thead>
         <tbody>{listForm}</tbody>
