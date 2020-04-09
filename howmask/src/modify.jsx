@@ -43,6 +43,7 @@ const Modify = () => {
 
   const inputCheckPw = useRef();
   const inputOriginPw = useRef();
+
   let userForm;
 
   const btnDefaultStyle = {

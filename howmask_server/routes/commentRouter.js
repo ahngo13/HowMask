@@ -38,6 +38,7 @@ router.post("/delete", async (req, res) => {
   } catch (err) {
     // 시스템 에러
     console.log(err);
+    res.status(400).send();
     res.json({ message: false });
   }
 });
@@ -73,6 +74,7 @@ router.post("/update", upload.single("img"), async (req, res) => {
     }
   } catch (err) {
     res.json({ resultCode: 0 });
+    res.status(400).send();
   }
 });
 
@@ -127,8 +129,6 @@ router.post("/getCommentList", async (req, res) => {
       sort: { createdAt: -1 },
     }).populate("commenter");
 
-    console.log("comment" + comment);
-
     if (comment.length > 0) {
       for (i = 0; i < comment.length; i++) {
         gradeSum += comment[i].grade;
@@ -145,12 +145,11 @@ router.post("/getCommentList", async (req, res) => {
           comment[i].mine = false;
         }
       }
-    } else {
     }
-
     res.json({ list: comment, avg: { gradeAvg } });
   } catch (err) {
     res.json({ message: false });
+    res.status(400).send();
   }
 });
 
