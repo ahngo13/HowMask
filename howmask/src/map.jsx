@@ -229,27 +229,19 @@ const Map = () => {
   let modal;
   if (modalShow) {
     modal = (
-<<<<<<< HEAD
       <StoreModal
         show={modalShow}
         storeInfo={storeInfo}
         onHide={() => setModalShow(false)}
       />
-=======
-      <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
->>>>>>> 8b7ffd009e6b1ad8c53be8a82c86ad5c94e3a9de
     );
   }
 
   let noticeModal;
   if (noticeShow) {
-<<<<<<< HEAD
     noticeModal = (
       <Notice show={noticeShow} onHide={() => setNoticeShow(false)}></Notice>
     );
-=======
-    noticeModal = <Notice show={noticeShow} onHide={() => setNoticeShow(false)}></Notice>;
->>>>>>> 8b7ffd009e6b1ad8c53be8a82c86ad5c94e3a9de
   }
 
   return (
