@@ -12,11 +12,9 @@ const url = "localhost";
 function Comment(props) {
   let flag = false;
   const code = props.code; // 판매처코드
-  // const [code, setCode] = useState(); // 판매처코드
   const [comments, setComments] = useState(); // 댓글 리스트
   const [commentId, setCommentId] = useState(); // 댓글 id
   const [selectedFile, setSelectedFile] = useState(null); // 파일
-  const [imgBase64, setImgBase64] = useState(null); // 파일 base64
   const [imagePreviewUrl, setImagePreviewUrl] = useState(""); // 미리보기 파일 경로
   const [gradeValue, setGradeValue] = useState(5);
   const [commentCnt, setCommentCnt] = useState();
@@ -96,9 +94,6 @@ function Comment(props) {
       reader.onloadend = function (e) {
         // 파일 load가 성공인 경우
         const base64 = e.target.result;
-        if (base64) {
-          setImgBase64(base64.toString()); // 파일 base64 상태 업데이트
-        }
         setImagePreviewUrl(base64);
       };
       if (file) {
@@ -133,7 +128,6 @@ function Comment(props) {
   }
   //댓글 수정진입
   async function updateComment(_id, flag) {
-    console.log(_id, flag);
     const sendParam = { _id, flag };
     const result = axios.post(`http://${url}:8080/comment/update`, sendParam);
     if ((await result).data.comment) {
@@ -148,22 +142,22 @@ function Comment(props) {
   //댓글 입력
   async function insertComment() {
     let formData = new FormData();
-    if (!commentTag.current.value) {
-      alert("댓글 내용을 입력하세요");
-      commentTag.current.focus();
-      return;
-    } else {
-      if (selectedFile) {
-        formData.append("img", selectedFile);
-      }
-      formData.append("code", code);
-      formData.append("grade", gradeValue);
-      formData.append("text", commentTag.current.value);
 
-      //새로운 댓글 등록
-      if (functionName === "insert") {
+    formData.append("code", code);
+    formData.append("grade", gradeValue);
+    formData.append("text", commentTag.current.value);
+    if (selectedFile) {
+      formData.append("img", selectedFile);
+    }
+
+    //새로운 댓글 등록
+    if (functionName === "insert") {
+      if (!commentTag.current.value) {
+        alert("댓글 내용을 입력하세요");
+        commentTag.current.focus();
+        return;
+      } else {
         const resultWrite = await axios.post(`http://${url}:8080/comment/write`, formData);
-
         if ((await resultWrite).data.resultCode === 0) {
           sessionStorage.clear(); // 세션스토리지 삭제
           alert("로그인이 필요합니다.");
@@ -180,29 +174,40 @@ function Comment(props) {
           alert("에러");
           setSelectedFile(null);
           setImagePreviewUrl("");
-        }
-      } // 수정한 댓글 등록
-      else if (functionName === "update") {
-        flag = true;
-        formData.append("_id", commentId);
-        formData.append("flag", flag);
-
-        const resultUpdate = await axios.post(`http://${url}:8080/comment/update`, formData);
-        if (resultUpdate.data.message) {
-          alert("댓글 수정 성공");
-          setCancelStyle("none");
+        } else if (resultWrite.data.fileCode === 0) {
+          alert("업로드 파일이 너무 큽니다.\n적절한 크기의 파일을 업로드해주세요.");
           setSelectedFile(null);
-          showComment();
-          commentTag.current.value = "";
-          fileTag.current.value = "";
-          commentTag.current.focus();
-          flag = false;
-        } else {
-          alert("에러");
-          flag = false;
+          setImagePreviewUrl("");
         }
       }
-      setInsertBtn("댓글 등록");
+    } // 수정한 댓글 등록
+    else if (functionName === "update") {
+      flag = true;
+      formData.append("_id", commentId);
+      formData.append("flag", flag);
+
+      const resultUpdate = await axios.post(`http://${url}:8080/comment/update`, formData);
+      if (resultUpdate.data.resultCode === 1) {
+        alert("댓글 수정 성공");
+        setCancelStyle("none");
+        setSelectedFile(null);
+        setFunctionName("insert");
+        setInsertBtn("댓글 등록");
+        commentTag.current.value = "";
+        fileTag.current.value = "";
+        commentTag.current.focus();
+      } else if (resultUpdate.data.resultCode === 2) {
+        alert("다른 댓글 내용을 입력하세요");
+        commentTag.current.focus();
+      } else if (resultUpdate.data.resultCode === 3) {
+        alert("수정할 댓글 내용을 입력해주세요");
+        commentTag.current.value = resultUpdate.data.comment[0].text;
+        commentTag.current.focus();
+      } else if (resultUpdate.data.resultCode === 0) {
+        alert("에러");
+      }
+      flag = false;
+      showComment();
     }
   }
 
@@ -300,7 +305,11 @@ function Comment(props) {
       <Form>
         {gradeForm}
         <InputGroup>
-          <FormControl placeholder="댓글을 입력하세요" ref={commentTag}></FormControl>
+          <FormControl
+            placeholder="댓글을 입력하세요"
+            ref={commentTag}
+            maxLength="200"
+          ></FormControl>
           <InputGroup.Append>
             <Button
               style={{ display: cancelStyle }}
@@ -320,7 +329,12 @@ function Comment(props) {
             </Button>
           </InputGroup.Append>
         </InputGroup>
-        <img src={imagePreviewUrl} />
+        <Form.Text className="text-muted">
+          *댓글은 200자 이내로 작성할 수 있습니다.
+          <br />
+          *파일은 최대 5KB 까지 업로드할 수 있습니다. (jpg, gif, png)
+        </Form.Text>
+        <img src={imagePreviewUrl} style={({ height: 500 }, { width: 500 })} />
         <br />
         <InputGroup>
           <Form.File>
