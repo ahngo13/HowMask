@@ -167,7 +167,9 @@ const Modify = () => {
   
   useEffect(() => {
     console.log("useEffect");
-    getUserInfo();
+    if(check){
+      getUserInfo();
+    }
   },[]);
   
     const checkPwInsert = (event) => {
@@ -181,7 +183,7 @@ const Modify = () => {
       const sendParam = { password, headers};
 
       axios 
-        .post(`http://${url}:8000/store/checkpw`, sendParam)
+        .post(`http://${url}:8080/store/checkpw`, sendParam)
         .then((returnData) => {
           alert(returnData.data.message);
           if(returnData.data.dupYn === "0") {
@@ -195,9 +197,9 @@ const Modify = () => {
 
     if (!check) {
       userForm = (
-        <Form style={userFormStyle} >
+        <Form style={userFormStyle} onSubmit={checkPwInsert} >
           <Form.Group controlId="checkPassword">
-           <Form.Lable> 비밀번호 입력</Form.Lable>
+          <Form.Label>비밀번호 입력</Form.Label>
            <p> 개인정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 입력해 주세요.</p>
            <Form.Control
              type="password"
@@ -205,14 +207,14 @@ const Modify = () => {
              ref={inputCheckPw}
              isInvalid={pwstate.invalid}
              isValid={pwstate.valid}
-             onChange={(e) => validatePwd(e.targe.value)}
+             onChange={(e) => validatePwd(e.target.value)}
              required>
             </Form.Control>
           </Form.Group>
           <Button variant="light" type="submit">
            취소 
           </Button>
-          <Button variant="primary" type="submit" onSubmit={checkPwInsert}>
+          <Button variant="primary" type="submit" >
             확인
           </Button>
         </Form>

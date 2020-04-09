@@ -90,6 +90,12 @@ const Register = () => {
     const year = inputYear.current.value;
 
     // alert(usertype + ":" + email + ":" + pwd + ":" + nick + ":" + year);
+    let auth;
+    if (usertype == "1") {
+      auth = false;
+    } else {
+      auth = true;
+    }
     const sendParam = {
       headers,
       usertype,
@@ -97,6 +103,7 @@ const Register = () => {
       password,
       nick,
       year,
+      auth,
     };
 
     axios

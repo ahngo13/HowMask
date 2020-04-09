@@ -86,9 +86,9 @@ function StoreInfoModal(props) {
     );
   }
 
-  const loadSellerdata = () => {
+  const loadSellerdata = async (code) => {
     // console.log(props.info.code);
-    const code = props.info.code;
+
     const sendParam = { headers, code };
     axios
       .post(`http://${url}:8080/store/loadsellerdata`, sendParam)
@@ -130,8 +130,8 @@ function StoreInfoModal(props) {
   });
 
   useEffect(() => {
-    loadSellerdata();
-  }, [props]);
+    loadSellerdata(props.info.code);
+  }, [props.info.code]);
 
   return (
     <Modal

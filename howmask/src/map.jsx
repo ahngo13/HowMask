@@ -32,7 +32,10 @@ const Map = () => {
       lng,
       m: 5000,
     };
-    const result = await axios.post("http://localhost:8080/mask/storesByGeo", send_param);
+    const result = await axios.post(
+      "http://localhost:8080/mask/storesByGeo",
+      send_param
+    );
     if (result.data.storeList) {
       result.data.storeList.forEach((item) => {
         info.push({
@@ -60,7 +63,10 @@ const Map = () => {
       headers,
       address: keyWord,
     };
-    const result = await axios.post("http://localhost:8080/mask/storesByAddr", send_param);
+    const result = await axios.post(
+      "http://localhost:8080/mask/storesByAddr",
+      send_param
+    );
     if (result.data.storeList) {
       result.data.storeList.forEach((item) => {
         info.push({
@@ -223,13 +229,19 @@ const Map = () => {
   let modal;
   if (modalShow) {
     modal = (
-      <StoreModal show={modalShow} storeInfo={storeInfo} onHide={() => setModalShow(false)} />
+      <StoreModal
+        show={modalShow}
+        storeInfo={storeInfo}
+        onHide={() => setModalShow(false)}
+      />
     );
   }
 
   let noticeModal;
   if (noticeShow) {
-    noticeModal = <Notice show={noticeShow} onHide={() => setNoticeShow(false)}></Notice>;
+    noticeModal = (
+      <Notice show={noticeShow} onHide={() => setNoticeShow(false)}></Notice>
+    );
   }
 
   return (

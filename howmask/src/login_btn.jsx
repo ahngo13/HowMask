@@ -54,14 +54,19 @@ const LoginBtn = () => {
         <NavLink style={navLinkStyle} to="/admin">
           가입된 회원정보 보기
         </NavLink>
+        
+        
       </>
     );
   } else {
     btn = (
+      <>
       <Button style={navLinkStyle} onClick={memberLogout} variant="light">
         <span style={loginout}>log out</span>
         <i className="fas fa-sign-out-alt" id="iconStyle"></i>
       </Button>
+  
+      </>
     );
   }
 

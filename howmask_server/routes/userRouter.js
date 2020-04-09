@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require("../schemas/user");
 const crypto = require("crypto");
 const rateLimit = require("express-rate-limit");
-
 const createAccountLimiter = rateLimit({
   status: 429,
   windowMs: 30 * 30 * 1000, // 15 min window
@@ -12,11 +11,9 @@ const createAccountLimiter = rateLimit({
 });
 
 //관리자 회원 리스트 보기
-
 router.get("/adminViewList", async (req, res) => {
   try {
     let user_type = req.session.user_type;
-
     console.log(user_type);
     if (user_type !== "7791") {
       res.json({ message: "관리자가 아닙니다." });
@@ -37,7 +34,6 @@ router.get("/adminViewList", async (req, res) => {
 router.post("/admindelete", async (req, res) => {
   try {
     let user_type = req.session.user_type;
-
     console.log(user_type);
     if (user_type !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
@@ -52,12 +48,10 @@ router.post("/admindelete", async (req, res) => {
     res.json({ resultCode: "2" });
   }
 });
-
 //관리자 판매처 계정 승인
 router.post("/grantAuth", async (req, res) => {
   try {
     let user_type = req.session.user_type;
-
     console.log(user_type);
     if (user_type !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
@@ -77,15 +71,54 @@ router.post("/grantAuth", async (req, res) => {
     res.json({ resultCode: "2" });
   }
 });
-
+//관리자 판매처 계정 반려
+router.post("/revokeAuth", async (req, res) => {
+  try {
+    let user_type = req.session.user_type;
+    console.log(user_type);
+    if (user_type !== "7791" || !req.session.email) {
+      res.json({ resultCode: "0" });
+    } else {
+      await User.update(
+        { email: req.body.email },
+        {
+          $set: { auth: false },
+        }
+      );
+      res.json({ resultCode: "1" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ resultCode: "2" });
+  }
+});
+//관리자 로그인 잠금 해제
+router.post("/unlockLogin", async (req, res) => {
+  try {
+    let user_type = req.session.user_type;
+    console.log(user_type);
+    if (user_type !== "7791" || !req.session.email) {
+      res.json({ resultCode: "0" });
+    } else {
+      await User.update(
+        { email: req.body.email },
+        {
+          $set: {},
+        }
+      );
+      res.json({ resultCode: "1" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ resultCode: "2" });
+  }
+});
 //회원가입
 router.post("/join", createAccountLimiter, async (req, res) => {
   try {
     let obj = { email: req.body.email };
-
     let user = await User.findOne(obj);
     console.log(user);
-
     if (user) {
       res.json({
         message: "이메일이 중복되었습니다. 새로운 이메일을 입력해주세요.",
@@ -118,6 +151,7 @@ router.post("/join", createAccountLimiter, async (req, res) => {
                   password: key.toString("base64"),
                   salt: buf.toString("base64"),
                   code,
+                  auth: req.body.auth,
                 };
                 user = new User(obj);
                 await user.save();
@@ -132,7 +166,6 @@ router.post("/join", createAccountLimiter, async (req, res) => {
     res.json({ message: false });
   }
 });
-
 //로그인
 router.post("/login", async (req, res) => {
   try {
@@ -159,32 +192,39 @@ router.post("/login", async (req, res) => {
 
               const user2 = await User.findOne(obj);
               console.log(user2);
+
               if (user2) {
                 // 있으면 로그인 처리
                 // console.log(req.body._id);
-                await User.updateOne(
-                  {
-                    email: req.body.email,
-                  },
-                  { $set: { loginCnt: 0 } }
-                );
-                req.session._id = user._id;
-                req.session.email = user.email;
-                req.session.user_type = user2.user_type;
-                if (user2.user_type == "7791") {
-                  res.json({
-                    message: "관리자님 로그인 되었습니다!",
-                    _id: user2._id,
-                    email: user2.email,
-                    dupYn: "2",
-                  });
+                if (user2.auth) {
+                  await User.updateOne(
+                    {
+                      email: req.body.email,
+                    },
+                    { $set: { loginCnt: 0 } }
+                  );
+                  req.session._id = user._id;
+                  req.session.email = user.email;
+                  req.session.user_type = user2.user_type;
+                  if (user2.user_type == "7791") {
+                    res.json({
+                      message: "관리자님 로그인 되었습니다!",
+                      _id: user2._id,
+                      email: user2.email,
+                      dupYn: "2",
+                    });
+                  } else {
+                    res.json({
+                      message: "로그인 되었습니다!",
+                      _id: user2._id,
+                      email: user2.email,
+                      type: user2.user_type,
+                      dupYn: "0",
+                    });
+                  }
                 } else {
                   res.json({
-                    message: "로그인 되었습니다!",
-                    _id: user2._id,
-                    email: user2.email,
-                    type: user2.user_type,
-                    dupYn: "0",
+                    message: "미승인 계정입니다.",
                   });
                 }
               } else {
@@ -231,14 +271,12 @@ router.post("/login", async (req, res) => {
     res.json({ message: "로그인 실패" });
   }
 });
-
 router.get("/logout", (req, res) => {
   console.log("/logout" + req.sessionID);
   req.session.destroy(() => {
     res.json({ message: "logout 되었습니다." });
   });
 });
-
 router.post("/delete", async (req, res) => {
   try {
     await User.remove({
@@ -250,7 +288,6 @@ router.post("/delete", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 // 회원 현재 비밀번호 확인
 router.post("/modify/Checkpw", async (req, res) => {
   try {
@@ -274,9 +311,7 @@ router.post("/modify/Checkpw", async (req, res) => {
         }
       }
     );
-
     let user = await User.findOne(obj);
-
     if (user) {
       res.json({
         message: true,
@@ -293,7 +328,6 @@ router.post("/modify/Checkpw", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 // 회원정보 수정
 router.post("/update", async (req, res) => {
   try {
@@ -311,7 +345,6 @@ router.post("/update", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 router.post("/getUserInfo", async (req, res) => {
   try {
     const userInfo = await User.findOne({ email: req.session.email });
@@ -321,7 +354,6 @@ router.post("/getUserInfo", async (req, res) => {
     res.json({ info: false });
   }
 });
-
 router.post("/add", async (req, res) => {
   try {
     const user = new User(req.body);
@@ -332,7 +364,6 @@ router.post("/add", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 router.post("/getAllMember", async (req, res) => {
   try {
     const user = await User.find({});
@@ -342,5 +373,4 @@ router.post("/getAllMember", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 module.exports = router;
