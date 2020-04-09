@@ -125,7 +125,7 @@ const Modify = () => {
   }
 
   async function pwUpdateForm() {
-    alert(inputNewpwd.current.value);
+    // alert(inputNewpwd.current.value);
     if (inputNewpwd.current.value !== inputConfirmpwd.current.value) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
