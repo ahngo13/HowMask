@@ -73,7 +73,6 @@ const Store = () => {
     display: btnSuccessFlag,
   };
   function goToUpdateForm() {
-    console.log("수정하기");
     setBtnSuccessFlag("inline-block");
     setBtnDefaultFlag("none");
     setTitle("판매처 정보 수정");
@@ -112,7 +111,6 @@ const Store = () => {
   }
 
   async function getInfo() {
-    console.log("getInfo");
     const result = await axios.post(`http://${url}:8080/store/getInfo`);
     if (result.data.info) {
       const info = result.data.info;
@@ -129,12 +127,11 @@ const Store = () => {
       setNoticeState(info.notice);
       setTimestate({ start: info.startTime, end: info.endTime });
     } else {
-      console.log("setting fail");
+      
     }
   }
 
   useEffect(() => {
-    console.log("useEffect");
     getInfo();
   }, []);
 

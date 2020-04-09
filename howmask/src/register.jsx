@@ -124,10 +124,6 @@ const Register = () => {
       });
   };
 
-  function onChange(value) {
-    console.log("Captcha value:", value);
-  }
-
   const registerTitle = {
     display: "inline-block",
     width: "50%",
@@ -256,7 +252,6 @@ const Register = () => {
             <ReCAPTCHA
               ref={recaptchaRef}
               sitekey="6Ld7CucUAAAAAIx2bAazLyMpGWYpusA7tStIGokY"
-              onChange={onChange}
             />
           </Col>
         </Form.Group>
