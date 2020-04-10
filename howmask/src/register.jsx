@@ -41,8 +41,8 @@ const Register = () => {
   };
 
   const validatePwd = (pwdEntered) => {
-    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-    const pwdRegExp = "";
+    const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    // const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
       setPwstate({ valid: true, invalid: false });
@@ -51,7 +51,8 @@ const Register = () => {
     }
   };
   const validateName = (nameEntered) => {
-    if (nameEntered.length > 1) {
+    const regExp = /^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$/;
+    if (nameEntered.length > 1 && nameEntered.match(regExp)) {
       setNamestate({ valid: true, invalid: false });
     } else {
       setNamestate({ valid: false, invalid: true });
@@ -164,7 +165,6 @@ const Register = () => {
               onChange={(e) => changeUsertype(e.target.value)}
             >
               <option value="0">개인</option>
-              {/* 관리자, 판매처 옵션은 임시로 만듬 */}
               <option value="7791">관리자</option>
             </Form.Control>
           </Col>

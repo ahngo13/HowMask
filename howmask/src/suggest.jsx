@@ -14,7 +14,6 @@ function RouterStore() {
 
 // 판매처 정보수정 제안 Form
 function Suggest(props) {
-  const [isError, setIsError] = useState(false);
   const [suggesttypestate, setSuggesttypestate] = useState({ value: "폐업" });
   const Text = useRef();
 
@@ -47,7 +46,7 @@ function Suggest(props) {
       window.location.href = "/";
       Text.current.value = "";
     } else {
-      window.location.href = "/error";
+      window.location.href = "/#/error";
     }
   }
 

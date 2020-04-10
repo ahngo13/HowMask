@@ -14,13 +14,12 @@ const Login = () => {
   const [pwdinvalid, setPwdinvalid] = useState(false);
   const [pwdvalid, setPwdvalid] = useState(false);
 
-  const [isError, setIsError] = useState(false);
-
   const inputEmail = useRef();
   const inputPwd = useRef();
 
   const validateEmail = (emailEntered) => {
     const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
+
     if (emailEntered.match(emailRegExp)) {
       setEmailinvalid(false);
       setEmailvalid(true);
@@ -31,8 +30,8 @@ const Login = () => {
   };
 
   const validatePwd = (pwdEntered) => {
-    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-    const pwdRegExp = "";
+    const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    // const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
       setPwdinvalid(false);
@@ -73,9 +72,7 @@ const Login = () => {
         }
       })
       .catch((err) => {
-        // setIsError(true);
-        console.log(err);
-        // window.location.href = "/error";
+        window.location.href = "/error";
       });
   };
 

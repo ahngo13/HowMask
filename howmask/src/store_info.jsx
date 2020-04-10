@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Modal,
-  Button,
-  Badge,
-  Table,
-  Card,
-  Container,
-  Col,
-  Row,
-} from "react-bootstrap";
+import { Modal, Button, Badge, Table, Card, Container, Col, Row } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import Comment from "./comment";
 import axios from "axios";
@@ -115,7 +106,7 @@ function StoreInfoModal(props) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        window.location.href = "/error";
       });
     return;
   };
@@ -187,8 +178,7 @@ function StoreInfoModal(props) {
                 <font color="#1a0066">
                   <strong>유아용 마스크 판매여부</strong>
                 </font>
-                &nbsp;&nbsp;&nbsp;{" "}
-                <Badge variant={kidsMaskColor}>{sellerstate.kidsMask}</Badge>
+                &nbsp;&nbsp;&nbsp; <Badge variant={kidsMaskColor}>{sellerstate.kidsMask}</Badge>
               </td>
             </tr>
           </tbody>
@@ -246,12 +236,7 @@ function StoreInfoModal(props) {
   }
 
   return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
+    <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {props.info.name}
@@ -292,13 +277,7 @@ function StoreInfoModal(props) {
                   },
                 }}
               >
-                <Button
-                  className="register"
-                  ref={registerSeller}
-                  variant="info"
-                  size="lg"
-                  block
-                >
+                <Button className="register" ref={registerSeller} variant="info" size="lg" block>
                   무료 판매처계정 생성하기
                 </Button>
               </NavLink>
@@ -315,13 +294,7 @@ function StoreInfoModal(props) {
 function StoreInfo(props) {
   let modal;
   if (props.storeInfo) {
-    modal = (
-      <StoreInfoModal
-        show={props.show}
-        info={props.storeInfo}
-        onHide={props.onHide}
-      />
-    );
+    modal = <StoreInfoModal show={props.show} info={props.storeInfo} onHide={props.onHide} />;
   }
 
   return <>{modal}</>;

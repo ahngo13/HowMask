@@ -305,67 +305,61 @@ function Comment(props) {
 
   return (
     <div>
-      {isError ? (
-        <div>Error page</div>
-      ) : (
-        <>
-          <Form>
-            {gradeForm}
-            <InputGroup>
-              <FormControl
-                placeholder="댓글을 입력하세요"
-                ref={commentTag}
-                maxLength="200"
-              ></FormControl>
-              <InputGroup.Append>
-                <Button
-                  style={{ display: cancelStyle }}
-                  onClick={() => {
-                    cancelUpdate(true);
-                  }}
-                >
-                  수정취소
-                </Button>
-                <Button
-                  onClick={() => {
-                    insertComment(true);
-                  }}
-                  variant="outline-dark"
-                >
-                  {insertBtn}
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-            <Form.Text className="text-muted">
-              *댓글은 200자 이내로 작성할 수 있습니다.
-              <br />
-              *파일은 최대 5KB 까지 업로드할 수 있습니다. (jpg, gif, png)
-            </Form.Text>
-            <img src={imagePreviewUrl} style={({ height: 500 }, { width: 500 })} />
-            <br />
-            <InputGroup>
-              <Form.File>
-                <Form.File.Input
-                  accept=".gif, .jpg, .png"
-                  ref={fileTag}
-                  onChange={(e) => handleFileInput(e)}
-                />
-              </Form.File>
-            </InputGroup>
-          </Form>
+      <Form>
+        {gradeForm}
+        <InputGroup>
+          <FormControl
+            placeholder="댓글을 입력하세요"
+            ref={commentTag}
+            maxLength="200"
+          ></FormControl>
+          <InputGroup.Append>
+            <Button
+              style={{ display: cancelStyle }}
+              onClick={() => {
+                cancelUpdate(true);
+              }}
+            >
+              수정취소
+            </Button>
+            <Button
+              onClick={() => {
+                insertComment(true);
+              }}
+              variant="outline-dark"
+            >
+              {insertBtn}
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
+        <Form.Text className="text-muted">
+          *댓글은 200자 이내로 작성할 수 있습니다.
           <br />
-          <span>
-            총 댓글 갯수 : {commentCnt} &nbsp;&nbsp;&nbsp;
-            <h1 style={{ float: "right" }}>
-              <font color="yellow">★</font>
-              <Badge pill variant="success">
-                {avgGrade}
-              </Badge>
-            </h1>
-          </span>
-          {comments}
-        </>
-      )}
+          *파일은 최대 5KB 까지 업로드할 수 있습니다. (jpg, gif, png)
+        </Form.Text>
+        <img src={imagePreviewUrl} style={({ height: 500 }, { width: 500 })} />
+        <br />
+        <InputGroup>
+          <Form.File>
+            <Form.File.Input
+              accept=".gif, .jpg, .png"
+              ref={fileTag}
+              onChange={(e) => handleFileInput(e)}
+            />
+          </Form.File>
+        </InputGroup>
+      </Form>
+      <br />
+      <span>
+        총 댓글 갯수 : {commentCnt} &nbsp;&nbsp;&nbsp;
+        <h1 style={{ float: "right" }}>
+          <font color="yellow">★</font>
+          <Badge pill variant="success">
+            {avgGrade}
+          </Badge>
+        </h1>
+      </span>
+      {comments}
     </div>
   );
 }
