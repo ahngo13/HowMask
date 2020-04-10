@@ -14,6 +14,7 @@ import StoreInfo from "./store_info";
 import RegisterSeller from "./register_seller";
 import Suggest from "./suggest";
 import Admin from "./admin";
+import ErrorPage from "./error_page";
 
 const Router = () => {
   return (
@@ -32,6 +33,7 @@ const Router = () => {
       <Route path="/registerSeller" component={RegisterSeller}></Route>
       <Route path="/suggest" component={Suggest}></Route>
       <Route path="/admin" component={Admin}></Route>
+      <Route path="/error" component={ErrorPage}></Route>
     </>
   );
 };

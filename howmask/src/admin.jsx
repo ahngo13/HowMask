@@ -9,7 +9,6 @@ const headers = { withCredentials: true };
 
 function StoreInfoModal(props) {
   const [storeInfo, setStoreInfo] = useState();
-  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (props.code) {
@@ -26,16 +25,12 @@ function StoreInfoModal(props) {
         setStoreInfo(returnData.data.info);
       })
       .catch((err) => {
-        setIsError(true);
-        console.log(err);
+        window.location.href="/#/error";
       });
   };
 
   return (
     <>
-      {isError ? (
-        <div>Something went wrong!</div>
-      ) : (
         <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">판매처 신청 정보</Modal.Title>
@@ -47,9 +42,8 @@ function StoreInfoModal(props) {
             <Button onClick={props.onHide}>Close</Button>
           </Modal.Footer>
         </Modal>
-      )}
     </>
-  );
+  )
 }
 
 const Admin = () => {
@@ -88,8 +82,7 @@ const Admin = () => {
         }
       })
       .catch((err) => {
-        setIsError(true);
-        console.log(err);
+        window.location.href="/#/error";
       });
   };
 
@@ -110,8 +103,7 @@ const Admin = () => {
         }
       })
       .catch((err) => {
-        setIsError(true);
-        console.log(err);
+        window.location.href="/#/error";
       });
   };
 
@@ -132,8 +124,7 @@ const Admin = () => {
         }
       })
       .catch((err) => {
-        setIsError(true);
-        console.log(err);
+        window.location.href="/#/error";
       });
   };
 
@@ -156,8 +147,7 @@ const Admin = () => {
           }
         })
         .catch((err) => {
-          setIsError(true);
-          console.log(err);
+          window.location.href="/#/error";
         });
     }
   };
@@ -181,8 +171,7 @@ const Admin = () => {
           }
         })
         .catch((err) => {
-          setIsError(true);
-          console.log(err);
+          window.location.href="/#/error";
         });
     }
   };
@@ -212,7 +201,7 @@ const Admin = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        window.location.href="/#/error";
       });
   };
 
@@ -351,9 +340,6 @@ const Admin = () => {
     
   } else {
     adminForm = (<div>
-      {isError ? (
-        <div>Something went wrong!</div>
-      ) : (
         <>
           <Container>
             <h2 style={titleStyle}>회원 관리</h2>
@@ -391,7 +377,6 @@ const Admin = () => {
           </Container>
           <StoreInfoModal show={modalShow} code={code} onHide={() => setModalShow(false)} />
         </>
-      )}
     </div>)
   }
 
