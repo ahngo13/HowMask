@@ -139,6 +139,7 @@ const Modify = () => {
     const sendParam = {
       passwordOrigin: inputOriginPw.current.value,
       password: inputNewpwd.current.value,
+      _csrf: sessionStorage.getItem('token'),
     };
 
     const returnData = await axios.post(
@@ -161,6 +162,7 @@ const Modify = () => {
       email: userstate.email,
       nick: inputNick.current.value,
       year: inputYear.current.value,
+      _csrf: sessionStorage.getItem('token'),
     };
 
     const returnData = await axios.post(

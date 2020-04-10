@@ -43,7 +43,7 @@ const Login = () => {
     }
   };
 
-  const loginInsert = (event) => {
+  const loginInsert = async (event) => {
     event.preventDefault();
     if (!emailvalid || !pwdvalid) {
       alert("필수 항목을 입력하세요");
@@ -58,7 +58,10 @@ const Login = () => {
       email,
       password,
     };
-
+    const token = await axios.get(`http://${url}:8080/user/getToken`);
+    if(token.data.csrfToken){
+      sessionStorage.setItem('token', token.data.csrfToken);
+    }
     axios
       .post(`http://${url}:8080/user/login`, sendParam)
       .then((returnData) => {

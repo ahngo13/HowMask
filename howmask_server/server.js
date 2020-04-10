@@ -8,8 +8,11 @@ const path = require("path");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const { stream } = require("./winston");
+const cookieParser = require('cookie-parser');
 
 connect();
+
+app.use(cookieParser());
 
 const corsOptions = {
   origin: true,

@@ -2,14 +2,18 @@ const express = require("express");
 const router = express.Router();
 const User = require("../schemas/user");
 const crypto = require("crypto");
+const csrf = require("csurf");
+
 const rateLimit = require("express-rate-limit");
 const createAccountLimiter = rateLimit({
   status: 429,
   windowMs: 30 * 30 * 1000, // 15 min window
   max: 5, // start blocking after 5 requests
   message:
-    "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
+  "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
 });
+
+csrfProtection = csrf({ cookie: true });
 
 //관리자 회원 리스트 보기
 router.get("/adminViewList", async (req, res) => {
@@ -169,6 +173,11 @@ router.post("/join", createAccountLimiter, async (req, res) => {
   }
 });
 //로그인
+
+router.get('/getToken', csrfProtection, (req, res) => {
+  req.session.csrfToken = req.csrfToken();
+  res.json({csrfToken: req.session.csrfToken});
+});
 router.post("/login", async (req, res) => {
   try {
     //이메일 값으로 아이디가 존재하는지 확인
@@ -228,6 +237,7 @@ router.post("/login", async (req, res) => {
                         email: user2.email,
                         type: user2.user_type,
                         dupYn: "0",
+                        
                       });
                     }
                   } else {
@@ -353,7 +363,7 @@ router.post("/checkpw", async (req, res) => {
   }
 });
 // 회원정보 수정
-router.post("/update", async (req, res) => {
+router.post("/update", csrfProtection, async (req, res) => {
   try {
     let obj = {
       nick: req.body.nick,
@@ -369,7 +379,7 @@ router.post("/update", async (req, res) => {
   }
 });
 //비밀번호 수정
-router.post("/updatepw", async (req, res) => {
+router.post("/updatepw", csrfProtection, async (req, res) => {
   try {
     let sEmail = req.session.email;
     await User.findOne({ email: sEmail }, async (err, user) => {
