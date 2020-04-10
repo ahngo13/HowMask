@@ -136,15 +136,15 @@ function RegisterSeller(props) {
 
     // alert();
 
-    const resultStore = await axios.post(`http://${url}:8080/store/join`, sendParamStore);
-    const resultUser = await axios.post(`http://${url}:8080/user/join`, sendParamUser);
+    const resultStore = await axios.post(process.env.REACT_APP_URL+`store/join`, sendParamStore);
+    const resultUser = await axios.post(process.env.REACT_APP_URL+`user/join`, sendParamUser);
     if (resultStore.data.message && resultUser.data.dupYn === "0") {
       alert("판매처 계정이 신청되었습니다.\n관리자 승인 후 입력하신 메일로 안내문을 전달드립니다.");
       window.location.href = "/";
     } else if (!resultStore.data.message) {
       alert("Store 테이블 오류");
     } else if (resultUser.data.dupYn === "1") {
-      await axios.post(`http://${url}:8080/store/joinfail`, sendParamStore);
+      await axios.post(process.env.REACT_APP_URL+`store/joinfail`, sendParamStore);
       alert("중복된 이메일입니다.");
     } else if (resultUser.data.message) {
       alert("입력 오류");

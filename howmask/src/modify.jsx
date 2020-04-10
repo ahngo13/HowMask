@@ -134,7 +134,7 @@ const Modify = () => {
       _csrf: sessionStorage.getItem('token'),
     };
 
-    const returnData = await axios.post(`http://${url}:8080/user/updatepw`, sendParam);
+    const returnData = await axios.post(process.env.REACT_APP_URL+`user/updatepw`, sendParam);
 
     if (returnData.data.dupYn === "0") {
       alert(returnData.data.message);
@@ -165,7 +165,7 @@ const Modify = () => {
       _csrf: sessionStorage.getItem('token'),
     };
 
-    const returnData = await axios.post(`http://${url}:8080/user/update`, sendParam);
+    const returnData = await axios.post(process.env.REACT_APP_URL+`user/update`, sendParam);
     if (returnData.data.message) {
       alert(returnData.data.message);
       setBtnSuccessFlag("none");
@@ -188,7 +188,7 @@ const Modify = () => {
     const sendParam = { password, headers };
 
     axios
-      .post(`http://${url}:8080/user/checkpw`, sendParam)
+      .post(process.env.REACT_APP_URL+`user/checkpw`, sendParam)
       .then((returnData) => {
         if (returnData.data.dupYn === "0") {
           setUserstate({

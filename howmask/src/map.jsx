@@ -5,6 +5,8 @@ import axios from "axios";
 import StoreModal from "./store_info";
 import Search from "./search";
 import Notice from "./notice";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const { kakao } = window;
 const { daum } = window;
@@ -33,7 +35,7 @@ const Map = () => {
       m: 5000,
     };
     const result = await axios.post(
-      "http://localhost:8080/mask/storesByGeo",
+      process.env.REACT_APP_URL+"mask/storesByGeo",
       send_param
     );
     if (result.data.storeList) {
@@ -63,7 +65,7 @@ const Map = () => {
       address: keyWord,
     };
     const result = await axios.post(
-      "http://localhost:8080/mask/storesByAddr",
+      process.env.REACT_APP_URL+"mask/storesByAddr",
       send_param
     );
     if (result.data.storeList) {
@@ -244,6 +246,7 @@ const Map = () => {
 
   return (
     <div id="mapPage">
+      <div>{process.env.REACT_APP_URL}</div>
       <div id="searchDiv">
         <Search page={"map"} clickSearch={clickSearch} />
         <Button id="current" onClick={current}>

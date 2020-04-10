@@ -109,7 +109,7 @@ const Store = () => {
       startTime: startTime.current.value,
       endTime: endTime.current.value,
     };
-    const result = await axios.post(`http://${url}:8080/store/update`, sendParam);
+    const result = await axios.post(process.env.REACT_APP_URL+`store/update`, sendParam);
     if (result.data.message) {
       alert(result.data.message);
       setBtnSuccessFlag("none");
@@ -123,7 +123,7 @@ const Store = () => {
   }
 
   async function getInfo() {
-    const result = await axios.post(`http://${url}:8080/store/getInfo`);
+    const result = await axios.post(process.env.REACT_APP_URL+`store/getInfo`);
     if (result.data.info) {
       const info = result.data.info;
       setCode(info.code);
@@ -168,7 +168,7 @@ const Store = () => {
     const sendParam = { password, headers };
 
     axios
-      .post(`http://${url}:8080/store/checkpw`, sendParam)
+      .post(process.env.REACT_APP_URL+`store/checkpw`, sendParam)
       .then((returnData) => {
         if (returnData.data.dupYn === "0") {
           setCheck(true);

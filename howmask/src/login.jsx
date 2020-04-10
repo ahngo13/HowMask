@@ -57,12 +57,12 @@ const Login = () => {
       email,
       password,
     };
-    const token = await axios.get(`http://${url}:8080/user/getToken`);
+    const token = await axios.get(process.env.REACT_APP_URL+`user/getToken`);
     if(token.data.csrfToken){
       sessionStorage.setItem('token', token.data.csrfToken);
     }
     axios
-      .post(`http://${url}:8080/user/login`, sendParam)
+      .post(process.env.REACT_APP_URL+`user/login`, sendParam)
       .then((returnData) => {
         alert(returnData.data.message);
         if (returnData.data.dupYn === "0") {

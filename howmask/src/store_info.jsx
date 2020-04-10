@@ -81,7 +81,7 @@ function StoreInfoModal(props) {
   const loadSellerdata = async (code) => {
     const sendParam = { headers, code };
     axios
-      .post(`http://${url}:8080/store/loadsellerdata`, sendParam)
+      .post(process.env.REACT_APP_URL+`store/loadsellerdata`, sendParam)
       .then((returnData) => {
         switch (returnData.data.kidsMask) {
           case "무":

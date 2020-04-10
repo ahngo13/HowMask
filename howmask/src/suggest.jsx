@@ -40,7 +40,7 @@ function Suggest(props) {
         Text: Text.current.value,
       };
     }
-    const result = await axios.post(`http://${url}:8080/store/suggest`, sendParam);
+    const result = await axios.post(process.env.REACT_APP_URL+`store/suggest`, sendParam);
     if (result.data.message) {
       alert("입력 완료");
       window.location.href = "/";

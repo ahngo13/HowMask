@@ -107,7 +107,7 @@ const Register = () => {
     };
 
     axios
-      .post(`http://${url}:8080/user/join`, sendParam)
+      .post(process.env.REACT_APP_URL+`user/join`, sendParam)
       .then((returnData) => {
         alert(returnData.data.message);
         if (returnData.data.dupYn === "0") {

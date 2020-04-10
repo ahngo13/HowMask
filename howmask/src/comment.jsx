@@ -105,7 +105,7 @@ function Comment(props) {
   //댓글 삭제
   async function deleteComment(_id, imageUrl) {
     const sendParam = { _id, imageUrl };
-    const result = axios.post(`http://${url}:8080/comment/delete`, sendParam);
+    const result = axios.post(process.env.REACT_APP_URL+`comment/delete`, sendParam);
     if ((await result).data.session === true) {
       showComment();
     } else if ((await result).data.session === false) {
@@ -129,7 +129,7 @@ function Comment(props) {
   //댓글 수정진입
   async function updateComment(_id, flag) {
     const sendParam = { _id, flag };
-    const result = axios.post(`http://${url}:8080/comment/update`, sendParam);
+    const result = axios.post(process.env.REACT_APP_URL+`comment/update`, sendParam);
     if ((await result).data.comment) {
       commentTag.current.value = (await result).data.comment[0].text;
       commentTag.current.focus();
@@ -159,7 +159,7 @@ function Comment(props) {
         commentTag.current.focus();
         return;
       } else {
-        const resultWrite = await axios.post(`http://${url}:8080/comment/write`, formData);
+        const resultWrite = await axios.post(process.env.REACT_APP_URL+`comment/write`, formData);
         if ((await resultWrite).data.resultCode === 0) {
           sessionStorage.clear(); // 세션스토리지 삭제
           alert("로그인이 필요합니다.");
@@ -188,7 +188,7 @@ function Comment(props) {
       formData.append("_id", commentId);
       formData.append("flag", flag);
 
-      const resultUpdate = await axios.post(`http://${url}:8080/comment/update`, formData);
+      const resultUpdate = await axios.post(process.env.REACT_APP_URL+`comment/update`, formData);
       if (resultUpdate.data.resultCode === 1) {
         alert("댓글 수정 성공");
         setCancelStyle("none");
@@ -217,7 +217,7 @@ function Comment(props) {
   async function showComment(props) {
     try {
       const sendParam = { code };
-      const result = await axios.post(`http://${url}:8080/comment/getCommentList`, sendParam);
+      const result = await axios.post(process.env.REACT_APP_URL+`comment/getCommentList`, sendParam);
       const imageStyle = {
         width: "250px",
         height: "auto",
@@ -229,7 +229,7 @@ function Comment(props) {
       if (result.data.list) {
         const allComments = result.data.list.map((comment) => {
           const commentId = comment._id;
-          const imageUrl = `http://${url}:8080/` + comment.image;
+          const imageUrl = process.env.REACT_APP_URL+ + comment.image;
 
           if (comment.mine) {
             showBtn = "inline-block";

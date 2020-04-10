@@ -24,7 +24,7 @@ const LoginBtn = () => {
 
   const memberLogout = () => {
     axios
-      .get(`http://${url}:8080/user/logout`, { headers })
+      .get(process.env.REACT_APP_URL+`user/logout`, { headers })
       .then((returnData) => {
         if (returnData.data.message) {
           alert(returnData.data.message);
