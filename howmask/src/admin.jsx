@@ -52,7 +52,6 @@ const Admin = () => {
   const [modalShow, setModalShow] = useState(false);
   const [code, setCode] = useState();
 
-  const [isError, setIsError] = useState(false);
   const [pwstate, setPwstate] = useState({ valid: false, invalid: false });
 
   let adminForm;
