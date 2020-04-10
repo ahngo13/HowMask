@@ -55,8 +55,8 @@ const Modify = () => {
   };
 
   const validatePwd = (pwdEntered) => {
-    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-    const pwdRegExp = "";
+    const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    // const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
       setPwstate({ valid: true, invalid: false });
@@ -70,12 +70,8 @@ const Modify = () => {
     // const pwdRegExp = "";
 
     if (newpwdEntered.match(pwdRegExp)) {
-      // setNewpwdinvalid(false);
-      // setNewpwdvalid(true);
       setNewpwdstate({ valid: true, invalid: false });
     } else {
-      // setNewpwdinvalid(true);
-      // setNewpwdvalid(false);
       setNewpwdstate({ valid: false, invalid: true });
     }
   };
@@ -88,12 +84,8 @@ const Modify = () => {
       confirmpwdEntered.match(inputNewpwd.current.value) &&
       confirmpwdEntered.match(pwdRegExp)
     ) {
-      // setConfirmpwdinvalid(false);
-      // setConfirmpwdvalid(true);
       setConfirmpwdstate({ valid: true, invalid: false });
     } else {
-      // setConfirmpwdinvalid(true);
-      // setConfirmpwdvalid(false);
       setConfirmpwdstate({ valid: false, invalid: true });
     }
   };
@@ -156,7 +148,6 @@ const Modify = () => {
   }
 
   async function updateInfo() {
-    // alert(inputNick.current.value + ":" + inputYear.current.value);
     // alert(userstate.email);
     const sendParam = {
       email: userstate.email,
@@ -232,7 +223,7 @@ const Modify = () => {
   };
 
   const titleStyle = {
-    textAlign:"center"
+    textAlign: "center",
   };
 
   if (!check) {
@@ -265,28 +256,6 @@ const Modify = () => {
     userForm = (
       <>
         <h2 style={modifyTitle}>내 정보 수정</h2>
-        {/* <div
-          style={{
-            position: "absolute",
-            left: "60%",
-            top: "8%",
-          }}
-        >
-          <Button
-            variant="warning"
-            style={btnDefaultStyle}
-            onClick={() => userUpdateForm(true)}
-          >
-            수정하기
-          </Button>
-          <Button
-            variant="success"
-            style={btnSuccessStyle}
-            onClick={() => updateInfo(true)}
-          >
-            수정완료
-          </Button>
-        </div> */}
 
         <Form style={modifyForm}>
           <Form.Text className="text-muted"></Form.Text>

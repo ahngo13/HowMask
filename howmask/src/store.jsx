@@ -80,7 +80,7 @@ const Store = () => {
   }
   async function updateInfo() {
     const timeRegExp = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$/;
-    const phoneRegExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
+    const phoneRegExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})?$/;
     if (
       !startTime.current.value.match(timeRegExp) ||
       !endTime.current.value.match(timeRegExp) ||
@@ -150,8 +150,8 @@ const Store = () => {
   }, []);
 
   const validatePwd = (pwdEntered) => {
-    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-    const pwdRegExp = "";
+    const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    // const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
       setPwstate({ valid: true, invalid: false });

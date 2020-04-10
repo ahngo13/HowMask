@@ -43,8 +43,8 @@ const Register = () => {
   };
 
   const validatePwd = (pwdEntered) => {
-    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-    const pwdRegExp = "";
+    const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    // const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
       setPwstate({ valid: true, invalid: false });
@@ -225,7 +225,9 @@ const Register = () => {
               maxLength="24"
               required
             />
-            <Form.Control.Feedback type="invalid">닉네임을 입력해주세요</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              닉네임을 입력해주세요
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
@@ -242,14 +244,19 @@ const Register = () => {
               maxLength="1"
               required
             />
-            <Form.Control.Feedback type="invalid">숫자만 입력해주세요</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              숫자만 입력해주세요
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
 
         <Form.Group as={Row}>
           <Form.Label column sm={3}></Form.Label>
           <Col sm={9}>
-            <ReCAPTCHA ref={recaptchaRef} sitekey="6Ld7CucUAAAAAIx2bAazLyMpGWYpusA7tStIGokY" />
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey="6Ld7CucUAAAAAIx2bAazLyMpGWYpusA7tStIGokY"
+            />
           </Col>
         </Form.Group>
 
@@ -261,7 +268,15 @@ const Register = () => {
   );
   // }
 
-  return <>{isError ? <div>Something went wrong!</div> : <div>{userRegisterform}</div>}</>;
+  return (
+    <>
+      {isError ? (
+        <div>Something went wrong!</div>
+      ) : (
+        <div>{userRegisterform}</div>
+      )}
+    </>
+  );
 };
 
 export default Register;

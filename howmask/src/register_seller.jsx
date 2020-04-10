@@ -56,8 +56,8 @@ function RegisterSeller(props) {
     }
   };
   async function Register() {
-    const regExp = /^[가-힣0-9a-zA-Z]*$/;
-    // const phoneRegExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
+    const regExp = /^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$/;
+    const phoneRegExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})?$/;
     const regNumber = /^[0-9]*$/;
 
     const storeName = inputStoreName.current.value;
@@ -103,11 +103,10 @@ function RegisterSeller(props) {
     } else if (!sellerName.match(regExp)) {
       alert("판매자명이 양식에 맞지 않습니다.");
       return;
+    } else if (!phone.match(phoneRegExp)) {
+      alert("전화번호가 양식에 맞지 않습니다.");
+      return;
     }
-    // else if (!phone.match(phoneRegExp)) {
-    //   alert("전화번호가 양식에 맞지 않습니다.");
-    //   return;
-    // }
 
     if (!emailvalid) {
       alert("이메일 형식이 맞지 않습니다. 다시 입력해주세요.");
@@ -131,7 +130,7 @@ function RegisterSeller(props) {
       email,
       nick: "seller",
       usertype: 1,
-      password: "123",
+      password: "123456789*",
       year: 0,
     };
 
