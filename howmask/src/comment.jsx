@@ -137,6 +137,8 @@ function Comment(props) {
       setFunctionName("update");
       setInsertBtn("댓글 수정");
       setCancelStyle("inline-block");
+    } else {
+      alert("수정 진입 에러");
     }
   }
   //댓글 입력

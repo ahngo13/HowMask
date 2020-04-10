@@ -18,8 +18,6 @@ const Register = () => {
   const [namestate, setNamestate] = useState({ valid: false, invalid: false });
   const [yearstate, setYearstate] = useState({ valid: false, invalid: false });
 
-  const [isError, setIsError] = useState(false);
-
   const inputNick = useRef();
   const inputEmail = useRef();
   const inputPwd = useRef();
@@ -116,14 +114,15 @@ const Register = () => {
         }
       })
       .catch((err) => {
-        const status = err.response.status;
-        // 다수 request 응답 거부
-        if (status === 429) {
-          alert(err.response.data);
-          window.location.href = "/";
+        if (err.response.status) {
+          if (err.response.status === 429) {
+            // 다수 request 응답 거부
+            alert(err.response.data);
+            window.location.href = "/";
+            console.log(err);
+          }
         } else {
-          setIsError(true);
-          console.log(err);
+          window.location.href = "/#/error ";
         }
       });
   };
@@ -261,7 +260,7 @@ const Register = () => {
   );
   // }
 
-  return <>{isError ? <div>Something went wrong!</div> : <div>{userRegisterform}</div>}</>;
+  return <div>{userRegisterform}</div>;
 };
 
 export default Register;

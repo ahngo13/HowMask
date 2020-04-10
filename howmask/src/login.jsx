@@ -45,10 +45,10 @@ const Login = () => {
 
   const loginInsert = (event) => {
     event.preventDefault();
-    if (!emailvalid || !pwdvalid) {
+    /* if (!emailvalid || !pwdvalid) {
       alert("필수 항목을 입력하세요");
       return;
-    }
+    } */
     const email = inputEmail.current.value;
     const password = inputPwd.current.value;
 
@@ -73,8 +73,9 @@ const Login = () => {
         }
       })
       .catch((err) => {
-        setIsError(true);
+        // setIsError(true);
         console.log(err);
+        // window.location.href = "/error";
       });
   };
 
@@ -120,47 +121,43 @@ const Login = () => {
 
   return (
     <div>
-      {isError ? (
-        <div>Something went wrong!</div>
-      ) : (
-        <Container style={loginType}>
-          <h2 style={loginTitle}>로그인</h2>
-          <Form noValidate style={loginForm} onSubmit={loginInsert}>
-            <Form.Group controlId="formEmail">
-              <Form.Label>이메일</Form.Label>
-              <Form.Control
-                type="email"
-                isInvalid={emailinvalid}
-                isValid={emailvalid}
-                ref={inputEmail}
-                onChange={(e) => validateEmail(e.target.value)}
-                required
-              />
-            </Form.Group>
+      <Container style={loginType}>
+        <h2 style={loginTitle}>로그인</h2>
+        <Form noValidate style={loginForm} onSubmit={loginInsert}>
+          <Form.Group controlId="formEmail">
+            <Form.Label>이메일</Form.Label>
+            <Form.Control
+              type="email"
+              isInvalid={emailinvalid}
+              isValid={emailvalid}
+              ref={inputEmail}
+              onChange={(e) => validateEmail(e.target.value)}
+              required
+            />
+          </Form.Group>
 
-            <Form.Group controlId="formPassword">
-              <Form.Label>비밀번호</Form.Label>
-              <Form.Control
-                type="password"
-                className="pwdfont"
-                isInvalid={pwdinvalid}
-                isValid={pwdvalid}
-                ref={inputPwd}
-                onChange={(e) => validatePwd(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Button variant="info" type="submit" size="lg" block>
-              로그인
+          <Form.Group controlId="formPassword">
+            <Form.Label>비밀번호</Form.Label>
+            <Form.Control
+              type="password"
+              className="pwdfont"
+              isInvalid={pwdinvalid}
+              isValid={pwdvalid}
+              ref={inputPwd}
+              onChange={(e) => validatePwd(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Button variant="info" type="submit" size="lg" block>
+            로그인
+          </Button>
+          <NavLink to="/register" style={registerBtn}>
+            <Button variant="warning" size="lg" block>
+              회원가입
             </Button>
-            <NavLink to="/register" style={registerBtn}>
-              <Button variant="warning" size="lg" block>
-                회원가입
-              </Button>
-            </NavLink>
-          </Form>
-        </Container>
-      )}
+          </NavLink>
+        </Form>
+      </Container>
     </div>
   );
 };
