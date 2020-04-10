@@ -151,13 +151,18 @@ const Modify = () => {
 
   async function updateInfo() {
     // alert(userstate.email);
-    if (!yearvalid) {
-      alert("생년 끝자리는 숫자입니다.");
+    const regExp = /^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$/;
+    const yearRegExp = /^\d{1}$/;
+    if (
+      inputNick.current.value.length < 2 ||
+      !inputNick.current.value.match(regExp)
+    ) {
+      alert("닉네임은 특수문자를 제외하고 입력가능합니다");
       return;
     }
 
-    if (!namevalid) {
-      alert("닉네임은 특수문자를 제외하고 입력가능합니다");
+    if (!inputYear.current.value.match(yearRegExp)) {
+      alert("생년 끝자리는 숫자입니다.");
       return;
     }
 
@@ -195,7 +200,6 @@ const Modify = () => {
     axios
       .post(`http://${url}:8080/user/checkpw`, sendParam)
       .then((returnData) => {
-        alert(returnData.data.message);
         if (returnData.data.dupYn === "0") {
           setUserstate({
             type: returnData.data.user_type,
@@ -205,6 +209,8 @@ const Modify = () => {
           });
           setPwstate({ valid: false, invalid: false });
           setCheck(true);
+        } else {
+          alert(returnData.data.message);
         }
       })
       .catch((err) => {
