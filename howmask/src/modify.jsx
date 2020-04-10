@@ -91,7 +91,9 @@ const Modify = () => {
   };
 
   const validateName = (nameEntered) => {
-    if (nameEntered.length > 1) {
+    const regExp = /^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$/;
+
+    if (nameEntered.length > 1 && nameEntered.match(regExp)) {
       setNameinvalid(false);
       setNamevalid(true);
     } else {
@@ -149,6 +151,16 @@ const Modify = () => {
 
   async function updateInfo() {
     // alert(userstate.email);
+    if (!yearvalid) {
+      alert("생년 끝자리는 숫자입니다.");
+      return;
+    }
+
+    if (!namevalid) {
+      alert("닉네임은 특수문자를 제외하고 입력가능합니다");
+      return;
+    }
+
     const sendParam = {
       email: userstate.email,
       nick: inputNick.current.value,

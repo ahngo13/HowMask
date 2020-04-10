@@ -53,7 +53,8 @@ const Register = () => {
     }
   };
   const validateName = (nameEntered) => {
-    if (nameEntered.length > 1) {
+    const regExp = /^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$/;
+    if (nameEntered.length > 1 && nameEntered.match(regExp)) {
       setNamestate({ valid: true, invalid: false });
     } else {
       setNamestate({ valid: false, invalid: true });

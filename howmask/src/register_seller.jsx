@@ -130,7 +130,7 @@ function RegisterSeller(props) {
       email,
       nick: "seller",
       usertype: 1,
-      password: "123456789*",
+      password: "a123456789*",
       year: 0,
     };
 
