@@ -11,12 +11,7 @@ const createAccountLimiter = rateLimit({
   // status: 429,
   windowMs: 30 * 30 * 1000, // 15 min window
   max: 5, // start blocking after 5 requests
-<<<<<<< HEAD
-  message:
-  "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
-=======
   message: "해당 IP로 너무 많은 계정이 생성되었습니다.\n15분 뒤 다시 만들어주세요.",
->>>>>>> 68c4cf63b760f09067e86c9ce7906c029d9619a0
 });
 
 csrfProtection = csrf({ cookie: true });
