@@ -22,6 +22,7 @@ function Comment(props) {
   const [cancelStyle, setCancelStyle] = useState("none");
 
   const [avgGrade, setAvgGrade] = useState("평점 없음");
+  const [isError, setIsError] = useState(false);
 
   const imgExp = /([^\s]+(?=\.(jpg|gif|png|jpeg))\.\2)/;
 
@@ -136,6 +137,8 @@ function Comment(props) {
       setFunctionName("update");
       setInsertBtn("댓글 수정");
       setCancelStyle("inline-block");
+    } else {
+      alert("수정 진입 에러");
     }
   }
   //댓글 입력
@@ -293,6 +296,7 @@ function Comment(props) {
       }
     } catch (err) {
       console.log(err);
+      setIsError(false);
     }
   }
 
@@ -355,7 +359,6 @@ function Comment(props) {
           </Badge>
         </h1>
       </span>
-
       {comments}
     </div>
   );

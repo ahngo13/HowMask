@@ -14,13 +14,12 @@ const Login = () => {
   const [pwdinvalid, setPwdinvalid] = useState(false);
   const [pwdvalid, setPwdvalid] = useState(false);
 
-  const [isError, setIsError] = useState(false);
-
   const inputEmail = useRef();
   const inputPwd = useRef();
 
   const validateEmail = (emailEntered) => {
     const emailRegExp = /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/;
+
     if (emailEntered.match(emailRegExp)) {
       setEmailinvalid(false);
       setEmailvalid(true);
@@ -31,8 +30,8 @@ const Login = () => {
   };
 
   const validatePwd = (pwdEntered) => {
-    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-    const pwdRegExp = "";
+    const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    // const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
       setPwdinvalid(false);
@@ -45,10 +44,10 @@ const Login = () => {
 
   const loginInsert = async (event) => {
     event.preventDefault();
-    if (!emailvalid || !pwdvalid) {
+    /* if (!emailvalid || !pwdvalid) {
       alert("필수 항목을 입력하세요");
       return;
-    }
+    } */
     const email = inputEmail.current.value;
     const password = inputPwd.current.value;
 
@@ -76,8 +75,7 @@ const Login = () => {
         }
       })
       .catch((err) => {
-        setIsError(true);
-        console.log(err);
+        window.location.href = "/error";
       });
   };
 
@@ -123,47 +121,43 @@ const Login = () => {
 
   return (
     <div>
-      {isError ? (
-        <div>Something went wrong!</div>
-      ) : (
-        <Container style={loginType}>
-          <h2 style={loginTitle}>로그인</h2>
-          <Form noValidate style={loginForm} onSubmit={loginInsert}>
-            <Form.Group controlId="formEmail">
-              <Form.Label>이메일</Form.Label>
-              <Form.Control
-                type="email"
-                isInvalid={emailinvalid}
-                isValid={emailvalid}
-                ref={inputEmail}
-                onChange={(e) => validateEmail(e.target.value)}
-                required
-              />
-            </Form.Group>
+      <Container style={loginType}>
+        <h2 style={loginTitle}>로그인</h2>
+        <Form noValidate style={loginForm} onSubmit={loginInsert}>
+          <Form.Group controlId="formEmail">
+            <Form.Label>이메일</Form.Label>
+            <Form.Control
+              type="email"
+              isInvalid={emailinvalid}
+              isValid={emailvalid}
+              ref={inputEmail}
+              onChange={(e) => validateEmail(e.target.value)}
+              required
+            />
+          </Form.Group>
 
-            <Form.Group controlId="formPassword">
-              <Form.Label>비밀번호</Form.Label>
-              <Form.Control
-                type="password"
-                className="pwdfont"
-                isInvalid={pwdinvalid}
-                isValid={pwdvalid}
-                ref={inputPwd}
-                onChange={(e) => validatePwd(e.target.value)}
-                required
-              />
-            </Form.Group>
-            <Button variant="info" type="submit" size="lg" block>
-              로그인
+          <Form.Group controlId="formPassword">
+            <Form.Label>비밀번호</Form.Label>
+            <Form.Control
+              type="password"
+              className="pwdfont"
+              isInvalid={pwdinvalid}
+              isValid={pwdvalid}
+              ref={inputPwd}
+              onChange={(e) => validatePwd(e.target.value)}
+              required
+            />
+          </Form.Group>
+          <Button variant="info" type="submit" size="lg" block>
+            로그인
+          </Button>
+          <NavLink to="/register" style={registerBtn}>
+            <Button variant="warning" size="lg" block>
+              회원가입
             </Button>
-            <NavLink to="/register" style={registerBtn}>
-              <Button variant="warning" size="lg" block>
-                회원가입
-              </Button>
-            </NavLink>
-          </Form>
-        </Container>
-      )}
+          </NavLink>
+        </Form>
+      </Container>
     </div>
   );
 };

@@ -43,6 +43,7 @@ const Modify = () => {
 
   const inputCheckPw = useRef();
   const inputOriginPw = useRef();
+
   let userForm;
 
   const btnDefaultStyle = {
@@ -54,8 +55,8 @@ const Modify = () => {
   };
 
   const validatePwd = (pwdEntered) => {
-    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-    const pwdRegExp = "";
+    const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    // const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
       setPwstate({ valid: true, invalid: false });
@@ -69,12 +70,8 @@ const Modify = () => {
     // const pwdRegExp = "";
 
     if (newpwdEntered.match(pwdRegExp)) {
-      // setNewpwdinvalid(false);
-      // setNewpwdvalid(true);
       setNewpwdstate({ valid: true, invalid: false });
     } else {
-      // setNewpwdinvalid(true);
-      // setNewpwdvalid(false);
       setNewpwdstate({ valid: false, invalid: true });
     }
   };
@@ -83,22 +80,17 @@ const Modify = () => {
     const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
     // const pwdRegExp = "";
 
-    if (
-      confirmpwdEntered.match(inputNewpwd.current.value) &&
-      confirmpwdEntered.match(pwdRegExp)
-    ) {
-      // setConfirmpwdinvalid(false);
-      // setConfirmpwdvalid(true);
+    if (confirmpwdEntered.match(inputNewpwd.current.value) && confirmpwdEntered.match(pwdRegExp)) {
       setConfirmpwdstate({ valid: true, invalid: false });
     } else {
-      // setConfirmpwdinvalid(true);
-      // setConfirmpwdvalid(false);
       setConfirmpwdstate({ valid: false, invalid: true });
     }
   };
 
   const validateName = (nameEntered) => {
-    if (nameEntered.length > 1) {
+    const regExp = /^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$/;
+
+    if (nameEntered.length > 1 && nameEntered.match(regExp)) {
       setNameinvalid(false);
       setNamevalid(true);
     } else {
@@ -142,10 +134,7 @@ const Modify = () => {
       _csrf: sessionStorage.getItem('token'),
     };
 
-    const returnData = await axios.post(
-      `http://${url}:8080/user/updatepw`,
-      sendParam
-    );
+    const returnData = await axios.post(`http://${url}:8080/user/updatepw`, sendParam);
 
     if (returnData.data.dupYn === "0") {
       alert(returnData.data.message);
@@ -156,8 +145,19 @@ const Modify = () => {
   }
 
   async function updateInfo() {
-    // alert(inputNick.current.value + ":" + inputYear.current.value);
     // alert(userstate.email);
+    const regExp = /^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$/;
+    const yearRegExp = /^\d{1}$/;
+    if (inputNick.current.value.length < 2 || !inputNick.current.value.match(regExp)) {
+      alert("닉네임은 특수문자를 제외하고 입력가능합니다");
+      return;
+    }
+
+    if (!inputYear.current.value.match(yearRegExp)) {
+      alert("생년 끝자리는 숫자입니다.");
+      return;
+    }
+
     const sendParam = {
       email: userstate.email,
       nick: inputNick.current.value,
@@ -165,10 +165,7 @@ const Modify = () => {
       _csrf: sessionStorage.getItem('token'),
     };
 
-    const returnData = await axios.post(
-      `http://${url}:8080/user/update`,
-      sendParam
-    );
+    const returnData = await axios.post(`http://${url}:8080/user/update`, sendParam);
     if (returnData.data.message) {
       alert(returnData.data.message);
       setBtnSuccessFlag("none");
@@ -193,7 +190,6 @@ const Modify = () => {
     axios
       .post(`http://${url}:8080/user/checkpw`, sendParam)
       .then((returnData) => {
-        alert(returnData.data.message);
         if (returnData.data.dupYn === "0") {
           setUserstate({
             type: returnData.data.user_type,
@@ -203,10 +199,12 @@ const Modify = () => {
           });
           setPwstate({ valid: false, invalid: false });
           setCheck(true);
+        } else {
+          alert(returnData.data.message);
         }
       })
       .catch((err) => {
-        console.log(err);
+        alert("패스워드 인증 에러");
       });
   };
 
@@ -232,16 +230,18 @@ const Modify = () => {
     margin: "auto",
   };
 
+  const titleStyle = {
+    textAlign: "center",
+  };
+
   if (!check) {
     userForm = (
       <Form style={modifyForm} onSubmit={checkPwInsert}>
         <Form.Group controlId="checkPassword">
+          <h2 style={titleStyle}>회원정보수정</h2>
+          <br></br>
           <Form.Label>비밀번호 입력</Form.Label>
-          <p>
-            {" "}
-            개인정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 입력해
-            주세요.
-          </p>
+          <p>개인정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 입력해 주세요.</p>
           <Form.Control
             type="password"
             className="pwdfont"
@@ -261,28 +261,6 @@ const Modify = () => {
     userForm = (
       <>
         <h2 style={modifyTitle}>내 정보 수정</h2>
-        {/* <div
-          style={{
-            position: "absolute",
-            left: "60%",
-            top: "8%",
-          }}
-        >
-          <Button
-            variant="warning"
-            style={btnDefaultStyle}
-            onClick={() => userUpdateForm(true)}
-          >
-            수정하기
-          </Button>
-          <Button
-            variant="success"
-            style={btnSuccessStyle}
-            onClick={() => updateInfo(true)}
-          >
-            수정완료
-          </Button>
-        </div> */}
 
         <Form style={modifyForm}>
           <Form.Text className="text-muted"></Form.Text>
@@ -294,11 +272,7 @@ const Modify = () => {
               이메일
             </Form.Label>
             <Col>
-              <Form.Control
-                ref={email}
-                readOnly="true"
-                defaultValue={userstate.email}
-              />
+              <Form.Control ref={email} readOnly="true" defaultValue={userstate.email} />
             </Col>
           </Form.Group>
 
@@ -336,9 +310,7 @@ const Modify = () => {
                 maxLength="1"
                 required
               />
-              <Form.Control.Feedback type="invalid">
-                숫자만 입력해주세요
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">숫자만 입력해주세요</Form.Control.Feedback>
             </Col>
           </Form.Group>
           <Button
@@ -349,12 +321,7 @@ const Modify = () => {
           >
             수정하기
           </Button>
-          <Button
-            variant="success"
-            style={btnSuccessStyle}
-            onClick={updateInfo}
-            block
-          >
+          <Button variant="success" style={btnSuccessStyle} onClick={updateInfo} block>
             수정완료
           </Button>
           <br></br>

@@ -80,7 +80,7 @@ const Store = () => {
   }
   async function updateInfo() {
     const timeRegExp = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$/;
-    const phoneRegExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/g;
+    const phoneRegExp = /(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})?$/;
     if (
       !startTime.current.value.match(timeRegExp) ||
       !endTime.current.value.match(timeRegExp) ||
@@ -109,10 +109,7 @@ const Store = () => {
       startTime: startTime.current.value,
       endTime: endTime.current.value,
     };
-    const result = await axios.post(
-      `http://${url}:8080/store/update`,
-      sendParam
-    );
+    const result = await axios.post(`http://${url}:8080/store/update`, sendParam);
     if (result.data.message) {
       alert(result.data.message);
       setBtnSuccessFlag("none");
@@ -150,8 +147,8 @@ const Store = () => {
   }, []);
 
   const validatePwd = (pwdEntered) => {
-    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-    const pwdRegExp = "";
+    const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    // const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
       setPwstate({ valid: true, invalid: false });
@@ -170,8 +167,6 @@ const Store = () => {
     const password = inputCheckPw.current.value;
     const sendParam = { password, headers };
 
-    // alert(password);
-
     axios
       .post(`http://${url}:8080/store/checkpw`, sendParam)
       .then((returnData) => {
@@ -182,7 +177,7 @@ const Store = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        alert("패스워드 체크 오류");
       });
   };
 
@@ -217,18 +212,10 @@ const Store = () => {
             top: "8%",
           }}
         >
-          <Button
-            variant="warning"
-            style={btnDefaultStyle}
-            onClick={() => goToUpdateForm(true)}
-          >
+          <Button variant="warning" style={btnDefaultStyle} onClick={() => goToUpdateForm(true)}>
             수정하기
           </Button>
-          <Button
-            variant="success"
-            style={btnSuccessStyle}
-            onClick={() => updateInfo(true)}
-          >
+          <Button variant="success" style={btnSuccessStyle} onClick={() => updateInfo(true)}>
             수정완료
           </Button>
         </div>
@@ -265,12 +252,7 @@ const Store = () => {
               <Form.Label>
                 <font color="#246dbf">주소</font>
               </Form.Label>
-              <Form.Control
-                ref={addr}
-                readOnly={textFlag}
-                defaultValue={addrState}
-                disabled
-              />
+              <Form.Control ref={addr} readOnly={textFlag} defaultValue={addrState} disabled />
             </Form.Group>
           </Form.Row>
           <Form.Label>영업시간</Form.Label>

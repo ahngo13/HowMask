@@ -18,8 +18,6 @@ const Register = () => {
   const [namestate, setNamestate] = useState({ valid: false, invalid: false });
   const [yearstate, setYearstate] = useState({ valid: false, invalid: false });
 
-  const [isError, setIsError] = useState(false);
-
   const inputNick = useRef();
   const inputEmail = useRef();
   const inputPwd = useRef();
@@ -43,8 +41,8 @@ const Register = () => {
   };
 
   const validatePwd = (pwdEntered) => {
-    // const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-    const pwdRegExp = "";
+    const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+    // const pwdRegExp = "";
 
     if (pwdEntered.match(pwdRegExp)) {
       setPwstate({ valid: true, invalid: false });
@@ -53,7 +51,8 @@ const Register = () => {
     }
   };
   const validateName = (nameEntered) => {
-    if (nameEntered.length > 1) {
+    const regExp = /^[ㄱ-ㅎ가-힣0-9a-zA-Z]*$/;
+    if (nameEntered.length > 1 && nameEntered.match(regExp)) {
       setNamestate({ valid: true, invalid: false });
     } else {
       setNamestate({ valid: false, invalid: true });
@@ -116,15 +115,16 @@ const Register = () => {
         }
       })
       .catch((err) => {
-        setIsError(true);
-        console.log(err);
-        const status = err.response.status;
-        // 다수 request 응답 거부
-        if (status === 429) {
-          alert(err.response.data);
-          window.location.href = "/";
+        if (err.response.status) {
+          if (err.response.status === 429) {
+            // 다수 request 응답 거부
+            alert(err.response.data);
+            window.location.href = "/";
+            console.log(err);
+          }
+        } else {
+          window.location.href = "/#/error ";
         }
-        // console.log(err.response);
       });
   };
 
@@ -165,7 +165,6 @@ const Register = () => {
               onChange={(e) => changeUsertype(e.target.value)}
             >
               <option value="0">개인</option>
-              {/* 관리자, 판매처 옵션은 임시로 만듬 */}
               <option value="7791">관리자</option>
             </Form.Control>
           </Col>
@@ -249,10 +248,7 @@ const Register = () => {
         <Form.Group as={Row}>
           <Form.Label column sm={3}></Form.Label>
           <Col sm={9}>
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey="6Ld7CucUAAAAAIx2bAazLyMpGWYpusA7tStIGokY"
-            />
+            <ReCAPTCHA ref={recaptchaRef} sitekey="6Ld7CucUAAAAAIx2bAazLyMpGWYpusA7tStIGokY" />
           </Col>
         </Form.Group>
 
@@ -264,7 +260,7 @@ const Register = () => {
   );
   // }
 
-  return <>{isError ? <div>Something went wrong!</div> : <div>{userRegisterform}</div>}</>;
+  return <div>{userRegisterform}</div>;
 };
 
 export default Register;
