@@ -51,6 +51,7 @@ ReactDOM.render(
       </Navbar>
       <Router />
     </HashRouter>{" "}
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?libraries=services&appkey=%REACT_APP_KAKAO_MAP_KEY%"></script>
   </React.StrictMode>,
   document.getElementById("container")
 );

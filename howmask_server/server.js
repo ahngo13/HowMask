@@ -11,6 +11,8 @@ const morgan = require("morgan");
 const { stream } = require("./winston");
 const cookieParser = require('cookie-parser');
 
+require('dotenv').config();
+
 connect();
 
 app.use(cookieParser());
@@ -32,7 +34,7 @@ app.use(
   session({
     resave: false,
     saveUninitialized: true,
-    secret: "hamletshu",
+    secret: process.env.session_secret_key,
     rolling: true, // 로그인 상태에서 페이지 이동시마다 세션 값 변경 여부
     cookie: {
       httpOnly: true,
