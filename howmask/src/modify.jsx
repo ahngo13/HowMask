@@ -192,7 +192,7 @@ const Modify = () => {
       .then((returnData) => {
         if (returnData.data.dupYn === "0") {
           setUserstate({
-            type: returnData.data.user_type,
+            type: returnData.data.userType,
             email: returnData.data.email,
             nick: returnData.data.nickname,
             year: returnData.data.year,
