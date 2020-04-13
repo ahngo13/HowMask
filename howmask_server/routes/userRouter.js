@@ -19,15 +19,15 @@ csrfProtection = csrf({ cookie: true });
 //관리자 회원 리스트 보기
 router.get("/adminViewList", async (req, res) => {
   try {
-    let user_type = req.session.user_type;
-    console.log(user_type);
-    if (user_type !== "7791") {
+    let userType = req.session.userType;
+    console.log(userType);
+    if (userType !== "7791") {
       res.json({ message: "관리자가 아닙니다." });
     } else {
-      // const result = await User.find({ $or:[{user_type: "개인"},{user_type:"관리자"}] }, async (err, user) => {}
+      // const result = await User.find({ $or:[{userType: "개인"},{userType:"관리자"}] }, async (err, user) => {}
       const result = await User.find()
-        .or([{ user_type: "0" }, { user_type: "1" }])
-        .select("-_id user_type email nickname lockYn auth code createdAt")
+        .or([{ userType: "0" }, { userType: "1" }])
+        .select("-_id userType email nickname lockYn auth code createdAt")
         .sort({ createdAt: -1 });
       
       const result2 = await Suggest.find();
@@ -42,9 +42,9 @@ router.get("/adminViewList", async (req, res) => {
 //관리자 회원 삭제
 router.post("/admindelete", async (req, res) => {
   try {
-    let user_type = req.session.user_type;
-    console.log(user_type);
-    if (user_type !== "7791" || !req.session.email) {
+    let userType = req.session.userType;
+    console.log(userType);
+    if (userType !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
     } else {
       await User.remove({
@@ -60,9 +60,9 @@ router.post("/admindelete", async (req, res) => {
 //관리자 판매처 계정 승인
 router.post("/grantAuth", async (req, res) => {
   try {
-    let user_type = req.session.user_type;
-    console.log(user_type);
-    if (user_type !== "7791" || !req.session.email) {
+    let userType = req.session.userType;
+    console.log(userType);
+    if (userType !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
     } else {
       await User.update(
@@ -83,9 +83,9 @@ router.post("/grantAuth", async (req, res) => {
 //관리자 판매처 계정 반려
 router.post("/revokeAuth", async (req, res) => {
   try {
-    let user_type = req.session.user_type;
-    console.log(user_type);
-    if (user_type !== "7791" || !req.session.email) {
+    let userType = req.session.userType;
+    console.log(userType);
+    if (userType !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
     } else {
       await User.update(
@@ -104,9 +104,9 @@ router.post("/revokeAuth", async (req, res) => {
 //관리자 로그인 잠금 해제
 router.post("/unlockLogin", async (req, res) => {
   try {
-    let user_type = req.session.user_type;
-    console.log(user_type);
-    if (user_type !== "7791" || !req.session.email) {
+    let userType = req.session.userType;
+    console.log(userType);
+    if (userType !== "7791" || !req.session.email) {
       res.json({ resultCode: "0" });
     } else {
       await User.update(
@@ -155,7 +155,7 @@ router.post("/join", createAccountLimiter, async (req, res) => {
                 obj = {
                   email: req.body.email,
                   nickname: req.body.nick,
-                  user_type: req.body.usertype,
+                  userType: req.body.usertype,
                   year: req.body.year,
                   password: key.toString("base64"),
                   salt: buf.toString("base64"),
@@ -219,8 +219,8 @@ router.post("/login", async (req, res) => {
                   );
                   req.session._id = user._id;
                   req.session.email = user.email;
-                  req.session.user_type = user2.user_type;
-                  if (user2.user_type == "7791") {
+                  req.session.userType = user2.userType;
+                  if (user2.userType == "7791") {
                     res.json({
                       message: "관리자님 로그인 되었습니다!",
                       _id: user2._id,
@@ -232,7 +232,7 @@ router.post("/login", async (req, res) => {
                       message: "로그인 되었습니다!",
                       _id: user2._id,
                       email: user2.email,
-                      type: user2.user_type,
+                      type: user2.userType,
                       dupYn: "0",
                     });
                   }
@@ -328,7 +328,7 @@ router.post("/checkpw", async (req, res) => {
                 // console.log(req.body._id);
                 res.json({
                   message: "확인 되었습니다!",
-                  user_type: user2.user_type,
+                  userType: user2.userType,
                   email: user2.email,
                   nickname: user2.nickname,
                   year: user2.year,

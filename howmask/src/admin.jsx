@@ -250,13 +250,13 @@ const Admin = () => {
     return (
       <tr key={listsEmail}>
         <td>{index + 1}</td>
-        <td>{lists.user_type === "0" ? "개인" : "판매처"}</td>
+        <td>{lists.userType === "0" ? "개인" : "판매처"}</td>
         <td>{lists.email}</td>
         <td>{lists.lockYn === true ? unlockBtn : "No"}</td>
-        <td>{lists.user_type === "0" ? "" : detailBtn}</td>
+        <td>{lists.userType === "0" ? "" : detailBtn}</td>
         <td>
-          {lists.auth === false && lists.user_type === "1" ? grantBtn : ""}
-          {lists.auth === true && lists.user_type === "1" ? revokeBtn : ""}
+          {lists.auth === false && lists.userType === "1" ? grantBtn : ""}
+          {lists.auth === true && lists.userType === "1" ? revokeBtn : ""}
         </td>
         <td>
           <Button

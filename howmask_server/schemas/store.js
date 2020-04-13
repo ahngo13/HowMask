@@ -35,12 +35,9 @@ const storeSchema = new Schema({
   },
   // 관리자 휴대전화번호
   phone: {
-    type: Number,
-  },
-  stockAverage: {
     type: String,
   },
-  operating_time: {
+  stockAverage: {
     type: String,
   },
   notice: {

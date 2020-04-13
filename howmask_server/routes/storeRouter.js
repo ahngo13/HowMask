@@ -183,9 +183,9 @@ router.post("/getInfo", async (req, res) => {
 
 //관리자 판매처 신청정보 조회
 router.post("/getStoreInfo", async (req, res) => {
-  const user_type = req.session.user_type;
+  const userType = req.session.userType;
   try {
-    if (user_type !== "7791") {
+    if (userType !== "7791") {
       res.json({ message: "관리자가 아닙니다." });
     } else {
       const info = await Store.findOne({ code: req.body.code });
