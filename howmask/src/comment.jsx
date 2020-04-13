@@ -229,7 +229,7 @@ function Comment(props) {
       if (result.data.list) {
         const allComments = result.data.list.map((comment) => {
           const commentId = comment._id;
-          const imageUrl = process.env.REACT_APP_URL+ + comment.image;
+          const imageUrl = process.env.REACT_APP_URL + comment.image;
 
           if (comment.mine) {
             showBtn = "inline-block";

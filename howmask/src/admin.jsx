@@ -70,7 +70,7 @@ const Admin = () => {
     }
 
     axios
-      .get(`http://${url}:8080/user/adminViewList`, { headers })
+      .get(process.env.REACT_APP_URL+`user/adminViewList`, { headers })
       .then((returnData) => {
         if (returnData.data.result) {
           setList(returnData.data.result);
@@ -88,7 +88,7 @@ const Admin = () => {
   const grantAuth = (email) => {
     const sendParam = { email, headers };
     axios
-      .post(`http://${url}:8080/user/grantAuth`, sendParam)
+      .post(process.env.REACT_APP_URL+`user/grantAuth`, sendParam)
       .then((returnData) => {
         if (returnData.data.resultCode === "1") {
           alert("판매처가 승인 되었습니다.");
@@ -109,7 +109,7 @@ const Admin = () => {
   const revokeAuth = (email) => {
     const sendParam = { email, headers };
     axios
-      .post(`http://${url}:8080/user/revokeAuth`, sendParam)
+      .post(process.env.REACT_APP_URL+`user/revokeAuth`, sendParam)
       .then((returnData) => {
         if (returnData.data.resultCode === "1") {
           alert("판매처가 반려 되었습니다.");
@@ -132,7 +132,7 @@ const Admin = () => {
       const sendParam = { email, headers };
 
       axios
-        .post(`http://${url}:8080/user/admindelete`, sendParam)
+        .post(process.env.REACT_APP_URL+`user/admindelete`, sendParam)
         .then((returnData) => {
           if (returnData.data.resultCode === "1") {
             alert("삭제 되었습니다.");
@@ -156,7 +156,7 @@ const Admin = () => {
       const sendParam = { email, headers };
 
       axios
-        .post(`http://${url}:8080/user/unlockLogin`, sendParam)
+        .post(process.env.REACT_APP_URL+`user/unlockLogin`, sendParam)
         .then((returnData) => {
           if (returnData.data.resultCode === "1") {
             alert("잠금해제 되었습니다.");
@@ -191,7 +191,7 @@ const Admin = () => {
     const sendParam = { password, headers };
 
     axios
-      .post(`http://${url}:8080/user/checkpw`, sendParam)
+      .post(process.env.REACT_APP_URL+`user/checkpw`, sendParam)
       .then((returnData) => {
         alert(returnData.data.message);
         if(returnData.data.dupYn === "0"){

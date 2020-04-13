@@ -5,8 +5,6 @@ import axios from "axios";
 import StoreModal from "./store_info";
 import Search from "./search";
 import Notice from "./notice";
-import dotenv from 'dotenv';
-dotenv.config();
 
 const { kakao } = window;
 const { daum } = window;
@@ -14,7 +12,7 @@ axios.defaults.withCredentials = true;
 const headers = { withCredentials: true };
 
 const Map = () => {
-  const { latitude, longitude } = usePosition();
+  let { latitude, longitude } = usePosition();
   const [positions, setPositions] = useState();
   const [coords, setCoords] = useState({
     lat: null,
@@ -118,8 +116,11 @@ const Map = () => {
   }, [coords, word, coords.lat, coords.lng]);
 
   useEffect(() => {
+    latitude=36.7850103;
+    longitude=127.2346184;
     if (latitude && longitude) {
       // 지도의 중심 위치 지정
+      
       let lat, lng;
       if (coords.lat === null) {
         lat = latitude;
@@ -246,7 +247,6 @@ const Map = () => {
 
   return (
     <div id="mapPage">
-      <div>{process.env.REACT_APP_URL}</div>
       <div id="searchDiv">
         <Search page={"map"} clickSearch={clickSearch} />
         <Button id="current" onClick={current}>
