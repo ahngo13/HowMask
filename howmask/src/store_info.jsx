@@ -5,7 +5,6 @@ import Comment from "./comment";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-const url = "localhost";
 const headers = { withCredentials: true };
 
 let kidsMaskColor = "";

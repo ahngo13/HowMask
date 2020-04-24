@@ -4,7 +4,6 @@ import axios from "axios";
 import "./css/registerlogin.css";
 
 axios.defaults.withCredentials = true;
-const url = "localhost";
 const headers = { withCredentials: true };
 
 const Modify = () => {

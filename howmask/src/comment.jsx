@@ -6,8 +6,6 @@ import "./css/grade.css";
 import "./css/comment.css";
 import "./js/grade.js";
 
-const url = "localhost";
-
 function Comment(props) {
   let flag = false;
   const code = props.code; // 판매처코드

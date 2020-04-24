@@ -5,7 +5,6 @@ import "./css/registerlogin.css";
 import { NavLink } from "react-router-dom";
 
 axios.defaults.withCredentials = true;
-const url = "localhost";
 const headers = { withCredentials: true };
 
 const Login = () => {

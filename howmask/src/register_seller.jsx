@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import axios from "axios";
 
-const url = "localhost";
 
 // 판매처 조회화면 돌아가기
 function RouterStore() {

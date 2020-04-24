@@ -5,7 +5,6 @@ import "./css/registerlogin.css";
 import ReCAPTCHA from "react-google-recaptcha";
 
 axios.defaults.withCredentials = true;
-const url = "localhost";
 const headers = { withCredentials: true };
 
 const Register = () => {

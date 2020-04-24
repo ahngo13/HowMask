@@ -4,7 +4,6 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-const url = "localhost";
 const headers = { withCredentials: true };
 
 const LoginBtn = () => {

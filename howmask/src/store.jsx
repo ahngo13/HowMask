@@ -3,7 +3,6 @@ import { Form, Col, Button } from "react-bootstrap";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-const url = "localhost";
 const headers = { withCredentials: true };
 
 // 판매처 정보 관리 Form

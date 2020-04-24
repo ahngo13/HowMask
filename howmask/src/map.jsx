@@ -116,8 +116,8 @@ const Map = () => {
   }, [coords, word, coords.lat, coords.lng]);
 
   useEffect(() => {
-    latitude=36.7850103;
-    longitude=127.2346184;
+    // latitude=36.7850103;
+    // longitude=127.2346184;
     if (latitude && longitude) {
       // 지도의 중심 위치 지정
       
