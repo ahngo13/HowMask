@@ -22,7 +22,7 @@
     "fs": "0.0.1-security",
     "helmet": "^3.22.0",
     "hpp": "^0.2.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.6",
     "morgan": "^1.10.0",
